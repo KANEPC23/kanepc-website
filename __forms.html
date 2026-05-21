@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Form detection</title>
+</head>
+<body>
+<!--
+  This file exists ONLY so Netlify can detect the "contact" form at deploy time.
+  It is never linked from the site and excluded from search indexing.
+  The real form lives in index.html and is submitted via JS fetch() to '/'.
+  Do not delete unless you have verified the form in index.html is being detected.
+  See: https://answers.netlify.com/t/support-guide-form-problems-form-debugging-404-when-submitting/92
+-->
+<form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="contact" />
+  <input name="bot-field" />
+  <input type="text" name="name" />
+  <input type="text" name="company" />
+  <input type="email" name="email" />
+  <input type="tel" name="phone" />
+  <select name="service">
+    <option>Managed IT Services</option>
+    <option>Security Awareness Training</option>
+    <option>Camera and Surveillance Systems</option>
+    <option>Control4 Smart Systems</option>
+    <option>POS Installation and Support</option>
+    <option>Website and App Development</option>
+    <option>Multiple / Not sure</option>
+  </select>
+  <textarea name="message"></textarea>
+</form>
+</body>
+</html>
