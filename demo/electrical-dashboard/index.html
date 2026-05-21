@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apex Electrical Co. — Operations Dashboard — Kane PC Sample Build</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --amber:#FFB627;
+    --amber-2:#F59E0B;
+    --amber-dark:#B8540E;
+    --amber-glow:rgba(255,182,39,0.15);
+    --dark:#0F1419;
+    --dark2:#161B22;
+    --dark3:#1C232C;
+    --dark4:#252D38;
+    --border:#2A3340;
+    --border-2:#374050;
+    --text:#E8ECEF;
+    --muted:#7E8A99;
+    --muted-2:#5A6573;
+    --green:#22C55E;
+    --red:#EF4444;
+    --blue:#3B82F6;
+    --purple:#A855F7;
+    --card-bg:#1A2129;
+  }
+  body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;font-size:14px;overflow-x:hidden}
+  .mono{font-family:'JetBrains Mono',monospace}
+
+  /* TOP BAR */
+  .topbar{background:var(--dark2);border-bottom:1px solid var(--border);height:58px;display:flex;align-items:center;padding:0 20px;position:sticky;top:0;z-index:50;backdrop-filter:blur(8px)}
+  .brand{display:flex;align-items:center;gap:12px;padding-right:24px;border-right:1px solid var(--border);height:100%}
+  .logo-mark{width:36px;height:36px;background:var(--amber);position:relative;clip-path:polygon(15% 0,100% 0,85% 100%,0 100%);display:flex;align-items:center;justify-content:center}
+  .logo-mark svg{width:20px;height:20px;fill:var(--dark)}
+  .logo-text{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;letter-spacing:1.5px;line-height:1}
+  .logo-sub{font-size:9px;color:var(--muted);letter-spacing:2px;font-weight:600;text-transform:uppercase}
+  .top-nav{display:flex;height:100%;margin-left:8px}
+  .top-nav a{padding:0 18px;display:flex;align-items:center;color:var(--muted);font-weight:600;font-size:13px;text-decoration:none;letter-spacing:0.5px;border-bottom:2px solid transparent;height:100%}
+  .top-nav a.active{color:var(--amber);border-bottom-color:var(--amber)}
+  .top-nav a:hover{color:var(--text)}
+  .top-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .live-pill{background:rgba(34,197,94,0.12);border:1px solid var(--green);color:var(--green);font-size:10px;font-weight:700;padding:5px 10px;border-radius:2px;letter-spacing:1.5px;display:flex;align-items:center;gap:6px}
+  .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{50%{opacity:0.4}}
+  .search-box{background:var(--dark3);border:1px solid var(--border);padding:7px 12px;border-radius:2px;font-size:12px;color:var(--text);width:240px;font-family:inherit}
+  .search-box::placeholder{color:var(--muted-2)}
+  .icon-btn{width:34px;height:34px;background:var(--dark3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:2px;color:var(--muted);position:relative}
+  .icon-btn:hover{color:var(--amber);border-color:var(--amber)}
+  .icon-btn svg{width:16px;height:16px;fill:currentColor}
+  .badge-dot{position:absolute;top:6px;right:7px;width:7px;height:7px;background:var(--red);border-radius:50%;border:2px solid var(--dark2)}
+  .avatar{width:32px;height:32px;background:var(--amber);color:var(--dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+
+  /* LAYOUT */
+  .main{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 58px)}
+  .sidebar{background:var(--dark2);border-right:1px solid var(--border);padding:18px 0}
+  .side-section{padding:0 14px 18px;margin-bottom:14px;border-bottom:1px solid var(--border)}
+  .side-section:last-child{border-bottom:none}
+  .side-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);font-weight:700;padding:0 8px;margin-bottom:10px}
+  .side-item{display:flex;align-items:center;gap:10px;padding:9px 10px;color:var(--muted);text-decoration:none;font-size:13px;border-radius:3px;font-weight:500;letter-spacing:0.2px;margin-bottom:1px}
+  .side-item:hover{background:var(--dark3);color:var(--text)}
+  .side-item.active{background:var(--amber);color:var(--dark);font-weight:700}
+  .side-item svg{width:16px;height:16px;fill:currentColor;flex-shrink:0}
+  .side-badge{margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;min-width:18px;text-align:center}
+  .side-item.active .side-badge{background:var(--dark);color:var(--amber)}
+
+  /* CONTENT */
+  .content{padding:24px;max-width:100%;overflow:hidden}
+  .page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;gap:16px}
+  .page-title{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;letter-spacing:1px;line-height:1}
+  .page-title em{color:var(--amber);font-style:normal}
+  .page-sub{color:var(--muted);font-size:13px;margin-top:6px;letter-spacing:0.3px}
+  .page-actions{display:flex;gap:8px}
+  .btn{padding:9px 16px;border-radius:2px;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+  .btn-amber{background:var(--amber);color:var(--dark)}
+  .btn-amber:hover{background:#FFC547}
+  .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border-2)}
+  .btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+
+  /* KPI ROW */
+  .kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px}
+  .kpi{background:var(--card-bg);border:1px solid var(--border);padding:18px;border-radius:3px;position:relative;overflow:hidden}
+  .kpi::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--amber)}
+  .kpi.green::before{background:var(--green)}
+  .kpi.red::before{background:var(--red)}
+  .kpi.blue::before{background:var(--blue)}
+  .kpi.purple::before{background:var(--purple)}
+  .kpi-label{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:10px}
+  .kpi-value{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:800;line-height:1;letter-spacing:1px}
+  .kpi-delta{font-size:11px;color:var(--green);font-weight:700;margin-top:8px;display:flex;align-items:center;gap:4px}
+  .kpi-delta.down{color:var(--red)}
+  .kpi-meta{font-size:11px;color:var(--muted);margin-top:8px}
+
+  /* GRID */
+  .grid-main{display:grid;grid-template-columns:1.7fr 1fr;gap:18px;margin-bottom:18px}
+  .grid-sec{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+
+  /* PANEL */
+  .panel{background:var(--card-bg);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+  .panel-head{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--dark3)}
+  .panel-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+  .panel-title em{color:var(--amber);font-style:normal;margin-left:8px}
+  .panel-action{font-size:11px;color:var(--amber);text-decoration:none;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+  .panel-action:hover{color:#FFC547}
+  .panel-body{padding:14px 18px}
+
+  /* JOBS LIST */
+  .job{display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+  .job:last-child{border-bottom:none}
+  .job-marker{width:6px;height:48px;border-radius:1px}
+  .m-active{background:var(--green);box-shadow:0 0 12px rgba(34,197,94,0.5)}
+  .m-rough{background:var(--amber)}
+  .m-finish{background:var(--blue)}
+  .m-pending{background:var(--muted-2)}
+  .m-urgent{background:var(--red);box-shadow:0 0 12px rgba(239,68,68,0.5)}
+  .job-info h4{font-size:14px;font-weight:700;margin-bottom:3px;letter-spacing:0.3px}
+  .job-info .meta{font-size:11px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+  .job-info .meta span{display:flex;align-items:center;gap:4px}
+  .job-progress{min-width:120px}
+  .progress-bar{height:5px;background:var(--dark);border-radius:3px;overflow:hidden;margin-bottom:5px}
+  .progress-fill{height:100%;background:var(--amber);border-radius:3px}
+  .progress-fill.green{background:var(--green)}
+  .progress-fill.red{background:var(--red)}
+  .progress-text{font-size:10px;color:var(--muted);letter-spacing:1px;font-weight:700;text-transform:uppercase}
+  .job-status{padding:5px 11px;border-radius:2px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-align:center;min-width:90px}
+  .s-active{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid var(--green)}
+  .s-rough{background:rgba(255,182,39,0.15);color:var(--amber);border:1px solid var(--amber)}
+  .s-finish{background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid var(--blue)}
+  .s-pending{background:rgba(126,138,153,0.15);color:var(--muted);border:1px solid var(--border-2)}
+  .s-urgent{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid var(--red)}
+
+  /* SCHEDULE */
+  .sched-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+  .sched-item:last-child{border-bottom:none}
+  .sched-time{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--amber);min-width:78px;letter-spacing:1px;line-height:1}
+  .sched-time .am{font-size:11px;color:var(--muted);letter-spacing:1px}
+  .sched-detail h5{font-size:13px;font-weight:700;margin-bottom:3px}
+  .sched-detail .who{font-size:11px;color:var(--muted)}
+  .sched-detail .addr{font-size:11px;color:var(--muted-2);margin-top:2px}
+
+  /* CREW */
+  .crew-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+  .crew-row:last-child{border-bottom:none}
+  .crew-avatar{width:34px;height:34px;border-radius:50%;background:var(--dark4);color:var(--amber);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;position:relative;flex-shrink:0}
+  .crew-avatar .stat-dot{position:absolute;bottom:-1px;right:-1px;width:10px;height:10px;border-radius:50%;border:2px solid var(--card-bg)}
+  .stat-dot.online{background:var(--green)}
+  .stat-dot.lunch{background:var(--amber)}
+  .stat-dot.off{background:var(--muted-2)}
+  .stat-dot.travel{background:var(--blue)}
+  .crew-info{flex:1;min-width:0}
+  .crew-name{font-size:13px;font-weight:700;line-height:1.2}
+  .crew-role{font-size:11px;color:var(--muted);margin-top:2px}
+  .crew-loc{font-size:11px;color:var(--amber);margin-top:2px;font-weight:600}
+  .crew-cert{font-size:10px;padding:2px 6px;background:var(--dark4);border:1px solid var(--border);border-radius:2px;color:var(--muted);font-weight:700;letter-spacing:0.5px}
+
+  /* INVENTORY */
+  .inv-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:center}
+  .inv-row:last-child{border-bottom:none}
+  .inv-name{font-size:13px;font-weight:600}
+  .inv-name .code{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);display:block;margin-top:1px}
+  .inv-qty{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;min-width:50px;text-align:right}
+  .inv-stock{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:2px;min-width:70px;text-align:center}
+  .stock-ok{background:rgba(34,197,94,0.12);color:var(--green)}
+  .stock-low{background:rgba(255,182,39,0.12);color:var(--amber)}
+  .stock-out{background:rgba(239,68,68,0.12);color:var(--red)}
+
+  /* PERMITS */
+  .permit{padding:12px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+  .permit:last-child{border-bottom:none}
+  .permit-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);font-weight:700;padding:5px 8px;background:var(--dark);border:1px solid var(--border);border-radius:2px}
+  .permit-info h5{font-size:13px;font-weight:700;line-height:1.2}
+  .permit-info .desc{font-size:11px;color:var(--muted);margin-top:3px}
+  .permit-stage{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 9px;border-radius:2px}
+  .stage-filed{background:rgba(59,130,246,0.15);color:var(--blue)}
+  .stage-scheduled{background:rgba(255,182,39,0.15);color:var(--amber)}
+  .stage-passed{background:rgba(34,197,94,0.15);color:var(--green)}
+  .stage-failed{background:rgba(239,68,68,0.15);color:var(--red)}
+
+  /* FLEET */
+  .truck{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:center}
+  .truck:last-child{border-bottom:none}
+  .truck-icon{width:42px;height:42px;background:var(--dark);border:1px solid var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .truck-icon svg{width:22px;height:22px;fill:var(--amber)}
+  .truck-info{flex:1;min-width:0}
+  .truck-name{font-size:13px;font-weight:700}
+  .truck-detail{font-size:11px;color:var(--muted);margin-top:2px}
+  .truck-loc{font-size:11px;color:var(--amber);margin-top:2px;font-weight:600}
+
+  /* SERVICE QUEUE */
+  .queue-item{padding:11px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
+  .queue-item:last-child{border-bottom:none}
+  .queue-pri{width:34px;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;line-height:1;text-align:center}
+  .pri-1{color:var(--red)}
+  .pri-2{color:var(--amber)}
+  .pri-3{color:var(--green)}
+  .queue-detail{flex:1;min-width:0}
+  .queue-detail h5{font-size:13px;font-weight:700;margin-bottom:3px}
+  .queue-detail .meta{font-size:11px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap}
+  .queue-detail .meta span{display:flex;align-items:center;gap:3px}
+
+  /* ALERTS BAR */
+  .alerts{background:linear-gradient(90deg,rgba(239,68,68,0.1) 0%,transparent 100%);border:1px solid var(--red);border-left:3px solid var(--red);padding:12px 18px;margin-bottom:18px;border-radius:2px;display:flex;align-items:center;gap:16px}
+  .alerts-label{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--red);text-transform:uppercase}
+  .alerts-text{font-size:13px;color:var(--text);flex:1}
+  .alerts-action{font-size:11px;color:var(--amber);text-decoration:none;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--dark2);border:1px solid var(--green);border-left:3px solid var(--green);padding:14px 18px;border-radius:3px;font-size:13px;display:none;z-index:200;box-shadow:0 12px 32px rgba(0,0,0,0.4)}
+  .toast.show{display:flex;align-items:center;gap:10px}
+  .toast::before{content:'✓';color:var(--green);font-weight:700;font-size:16px}
+
+  @media (max-width:1280px){
+    .kpi-row{grid-template-columns:repeat(3,1fr)}
+    .grid-main,.grid-sec{grid-template-columns:1fr}
+  }
+  @media (max-width:880px){
+    .main{grid-template-columns:1fr}
+    .sidebar{display:none}
+    .top-nav{display:none}
+    .search-box{display:none}
+    .kpi-row{grid-template-columns:repeat(2,1fr)}
+  }
+</style>
+
+<style id="kpc-protect">
+  body {
+    -webkit-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text; -moz-user-select: text;
+    -ms-user-select: text; user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img, svg {
+    -webkit-user-drag: none; user-drag: none;
+    -webkit-touch-callout: none;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21z"/></svg></div>
+    <div>
+      <div class="logo-text">APEX</div>
+      <div class="logo-sub">Operations Hub</div>
+    </div>
+  </div>
+  <nav class="top-nav">
+    <a href="#" class="active">Dashboard</a>
+    <a href="#">Jobs</a>
+    <a href="#">Schedule</a>
+    <a href="#">Crew</a>
+    <a href="#">Customers</a>
+    <a href="#">Inventory</a>
+    <a href="#">Invoicing</a>
+    <a href="#">Reports</a>
+  </nav>
+  <div class="top-right">
+    <span class="live-pill"><span class="live-dot"></span> LIVE</span>
+    <input class="search-box" placeholder="Search jobs, customers, addresses…">
+    <button class="icon-btn" title="Notifications"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg><span class="badge-dot"></span></button>
+    <button class="icon-btn" title="Settings"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
+    <div class="avatar">BS</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <aside class="sidebar">
+    <div class="side-section">
+      <div class="side-label">Today</div>
+      <a href="#" class="side-item active"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg> Dashboard</a>
+      <a href="#" class="side-item"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg> Active Jobs <span class="side-badge">17</span></a>
+      <a href="#" class="side-item"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM7 12h5v5H7z"/></svg> Schedule</a>
+      <a href="#" class="side-item"><svg viewBox="0 0 24 24"><path d="M11 17h2v-1h1c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1h-3v-1h4V8h-2V7h-2v1h-1c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1h3v1H9v2h2v1zm9-13H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4V6h16v12z"/></svg> Quotes <span class="side-badge">4</span></a>
+    </div>
+    <div class="side-section">
+      <div class="side-label">Operations</div>
+      <a href="#" class="side-item"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg> Crew</a>
+      <a href="#" class="side-item"><svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg> Inventory <span class="side-badge">3</span></a>
+      <a href="#" class="side-item"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> Permits</a>
+      <a href="#" class="side-item"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-1.5-5.5H8v-2h8.5V13z"/></svg> Fleet</a>
+    </div>
+    <div class="side-section">
+      <div class="side-label">Money</div>
+      <a href="#" class="side-item"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg> Invoicing</a>
+      <a href="#" class="side-item"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.11-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Payments</a>
+      <a href="#" class="side-item"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Reports</a>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">DASHBOARD <em>/</em> TODAY</h1>
+        <div class="page-sub">Tuesday, May 19, 2026 · 9:47 AM · 17 active jobs · 12 techs deployed</div>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-ghost">+ NEW QUOTE</button>
+        <button class="btn btn-amber" onclick="t('New job created — assigned to Crew A')">+ NEW JOB</button>
+      </div>
+    </div>
+
+    <div class="alerts">
+      <span class="alerts-label">ATTENTION</span>
+      <div class="alerts-text"><strong>3 items need attention:</strong> Carlson residence panel inspection failed (re-inspection needed), 250ft #6 THHN below reorder threshold, Truck 04 due for service in 2 days.</div>
+      <a href="#" class="alerts-action">REVIEW →</a>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi green">
+        <div class="kpi-label">Revenue This Week</div>
+        <div class="kpi-value">$48.2K</div>
+        <div class="kpi-delta">▲ 12.4% vs last week</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Active Jobs</div>
+        <div class="kpi-value">17</div>
+        <div class="kpi-meta">8 rough · 6 finish · 3 service</div>
+      </div>
+      <div class="kpi blue">
+        <div class="kpi-label">Quotes Open</div>
+        <div class="kpi-value">14</div>
+        <div class="kpi-meta">$284K pipeline value</div>
+      </div>
+      <div class="kpi purple">
+        <div class="kpi-label">Permits Pending</div>
+        <div class="kpi-value">9</div>
+        <div class="kpi-meta">3 scheduled this week</div>
+      </div>
+      <div class="kpi red">
+        <div class="kpi-label">Overdue Invoices</div>
+        <div class="kpi-value">$11.4K</div>
+        <div class="kpi-delta down">▲ 2 new this week</div>
+      </div>
+    </div>
+
+    <div class="grid-main">
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">ACTIVE JOBS <em>· 17</em></div>
+          <a href="#" class="panel-action">VIEW ALL →</a>
+        </div>
+        <div class="panel-body">
+
+          <div class="job">
+            <div class="job-marker m-urgent"></div>
+            <div class="job-info">
+              <h4>Carlson Residence — Panel Upgrade & Service Change</h4>
+              <div class="meta">
+                <span>📍 14 Walnut Rd, Scarsdale</span>
+                <span>👷 Mike T. + 1</span>
+                <span>🔌 200A → 400A</span>
+                <span>📅 Day 3 of 3</span>
+              </div>
+            </div>
+            <div class="job-progress">
+              <div class="progress-bar"><div class="progress-fill red" style="width:85%"></div></div>
+              <div class="progress-text">85% · INSPECTION FAILED</div>
+            </div>
+            <div class="job-status s-urgent">RE-INSPECT</div>
+          </div>
+
+          <div class="job">
+            <div class="job-marker m-active"></div>
+            <div class="job-info">
+              <h4>Hartman Industrial — 480V Service Entrance</h4>
+              <div class="meta">
+                <span>📍 88 Commerce Ave, White Plains</span>
+                <span>👷 Crew B (3 techs)</span>
+                <span>🔌 3-Phase 480V</span>
+                <span>📅 Day 8 of 12</span>
+              </div>
+            </div>
+            <div class="job-progress">
+              <div class="progress-bar"><div class="progress-fill green" style="width:67%"></div></div>
+              <div class="progress-text">67% · ON SCHEDULE</div>
+            </div>
+            <div class="job-status s-active">ACTIVE</div>
+          </div>
+
+          <div class="job">
+            <div class="job-marker m-rough"></div>
+            <div class="job-info">
+              <h4>Kim Renovation — Kitchen & Bath Rough-In</h4>
+              <div class="meta">
+                <span>📍 22 Lakeview Dr, Rye</span>
+                <span>👷 Anthony D.</span>
+                <span>🔌 14 circuits</span>
+                <span>📅 Day 2 of 4</span>
+              </div>
+            </div>
+            <div class="job-progress">
+              <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+              <div class="progress-text">45% · ROUGH-IN</div>
+            </div>
+            <div class="job-status s-rough">ROUGH-IN</div>
+          </div>
+
+          <div class="job">
+            <div class="job-marker m-finish"></div>
+            <div class="job-info">
+              <h4>Levine — Tesla Wall Connector + Sub-Panel</h4>
+              <div class="meta">
+                <span>📍 7 Hickory Ln, Larchmont</span>
+                <span>👷 Diego R.</span>
+                <span>🔌 60A circuit</span>
+                <span>📅 Day 1 of 1</span>
+              </div>
+            </div>
+            <div class="job-progress">
+              <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
+              <div class="progress-text">78% · TRIM-OUT</div>
+            </div>
+            <div class="job-status s-finish">FINISH</div>
+          </div>
+
+          <div class="job">
+            <div class="job-marker m-active"></div>
+            <div class="job-info">
+              <h4>Mt. Vernon Animal Hospital — Generator Install</h4>
+              <div class="meta">
+                <span>📍 412 Gramatan Ave, Mt. Vernon</span>
+                <span>👷 Crew C (2 techs)</span>
+                <span>🔌 Generac 22kW + ATS</span>
+                <span>📅 Day 1 of 2</span>
+              </div>
+            </div>
+            <div class="job-progress">
+              <div class="progress-bar"><div class="progress-fill green" style="width:30%"></div></div>
+              <div class="progress-text">30% · PAD POURED</div>
+            </div>
+            <div class="job-status s-active">ACTIVE</div>
+          </div>
+
+          <div class="job">
+            <div class="job-marker m-pending"></div>
+            <div class="job-info">
+              <h4>D'Angelo Pizzeria — Equipment Circuits</h4>
+              <div class="meta">
+                <span>📍 156 Commerce Ave, White Plains</span>
+                <span>👷 Awaiting permit</span>
+                <span>🔌 8 dedicated circuits</span>
+                <span>📅 Starts Mon</span>
+              </div>
+            </div>
+            <div class="job-progress">
+              <div class="progress-bar"><div class="progress-fill" style="width:10%"></div></div>
+              <div class="progress-text">10% · PERMIT FILED</div>
+            </div>
+            <div class="job-status s-pending">PENDING</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">TODAY <em>· 9 STOPS</em></div>
+          <a href="#" class="panel-action">FULL SCHED →</a>
+        </div>
+        <div class="panel-body">
+
+          <div class="sched-item">
+            <div class="sched-time">7:30<div class="am">AM</div></div>
+            <div class="sched-detail">
+              <h5>Crew B Roll Call · Yard</h5>
+              <div class="who">Materials check + dispatch</div>
+            </div>
+          </div>
+
+          <div class="sched-item">
+            <div class="sched-time">8:00<div class="am">AM</div></div>
+            <div class="sched-detail">
+              <h5>Carlson Re-Inspection</h5>
+              <div class="who">Mike T. · w/ Inspector Romero</div>
+              <div class="addr">14 Walnut Rd, Scarsdale</div>
+            </div>
+          </div>
+
+          <div class="sched-item">
+            <div class="sched-time">10:00<div class="am">AM</div></div>
+            <div class="sched-detail">
+              <h5>Hartman Industrial · Site Day 8</h5>
+              <div class="who">Crew B continues conduit run</div>
+              <div class="addr">88 Commerce Ave, White Plains</div>
+            </div>
+          </div>
+
+          <div class="sched-item">
+            <div class="sched-time">11:30<div class="am">AM</div></div>
+            <div class="sched-detail">
+              <h5>Tesla Install · Levine Residence</h5>
+              <div class="who">Diego R. · trim & energize</div>
+              <div class="addr">7 Hickory Ln, Larchmont</div>
+            </div>
+          </div>
+
+          <div class="sched-item">
+            <div class="sched-time">1:00<div class="am">PM</div></div>
+            <div class="sched-detail">
+              <h5>Quote Visit · Property Mgr.</h5>
+              <div class="who">Bill S. · 4-unit lighting retrofit</div>
+              <div class="addr">300 South Broadway, Yonkers</div>
+            </div>
+          </div>
+
+          <div class="sched-item">
+            <div class="sched-time">2:30<div class="am">PM</div></div>
+            <div class="sched-detail">
+              <h5>Service Call · Power Loss</h5>
+              <div class="who">Anthony D. · diagnostic</div>
+              <div class="addr">22 Spring St, Tarrytown</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="grid-sec">
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">CREW <em>· 12 / 14</em></div>
+          <a href="#" class="panel-action">DEPLOY →</a>
+        </div>
+        <div class="panel-body">
+
+          <div class="crew-row">
+            <div class="crew-avatar">MT<div class="stat-dot online"></div></div>
+            <div class="crew-info">
+              <div class="crew-name">Mike Torres</div>
+              <div class="crew-role">Master Electrician · Lead</div>
+              <div class="crew-loc">📍 Carlson · Scarsdale</div>
+            </div>
+            <div class="crew-cert">M-LIC</div>
+          </div>
+
+          <div class="crew-row">
+            <div class="crew-avatar">DR<div class="stat-dot travel"></div></div>
+            <div class="crew-info">
+              <div class="crew-name">Diego Reyes</div>
+              <div class="crew-role">Journeyman · Solo</div>
+              <div class="crew-loc">📍 En route to Larchmont</div>
+            </div>
+            <div class="crew-cert">JM</div>
+          </div>
+
+          <div class="crew-row">
+            <div class="crew-avatar">AD<div class="stat-dot online"></div></div>
+            <div class="crew-info">
+              <div class="crew-name">Anthony DeLuca</div>
+              <div class="crew-role">Journeyman · Solo</div>
+              <div class="crew-loc">📍 Kim Reno · Rye</div>
+            </div>
+            <div class="crew-cert">JM</div>
+          </div>
+
+          <div class="crew-row">
+            <div class="crew-avatar">CM<div class="stat-dot online"></div></div>
+            <div class="crew-info">
+              <div class="crew-name">Carlos Mendez</div>
+              <div class="crew-role">Foreman · Crew B</div>
+              <div class="crew-loc">📍 Hartman · White Plains</div>
+            </div>
+            <div class="crew-cert">M-LIC</div>
+          </div>
+
+          <div class="crew-row">
+            <div class="crew-avatar">TB<div class="stat-dot online"></div></div>
+            <div class="crew-info">
+              <div class="crew-name">Tanya Brooks</div>
+              <div class="crew-role">Journeyman · Crew B</div>
+              <div class="crew-loc">📍 Hartman · White Plains</div>
+            </div>
+            <div class="crew-cert">JM</div>
+          </div>
+
+          <div class="crew-row">
+            <div class="crew-avatar">JW<div class="stat-dot lunch"></div></div>
+            <div class="crew-info">
+              <div class="crew-name">Jaylen Williams</div>
+              <div class="crew-role">Apprentice Yr 3</div>
+              <div class="crew-loc">⏸ Lunch break</div>
+            </div>
+            <div class="crew-cert">APP</div>
+          </div>
+
+          <div class="crew-row">
+            <div class="crew-avatar">RF<div class="stat-dot off"></div></div>
+            <div class="crew-info">
+              <div class="crew-name">Rui Fonseca</div>
+              <div class="crew-role">Foreman · Crew C</div>
+              <div class="crew-loc">PTO · returns Thu</div>
+            </div>
+            <div class="crew-cert">M-LIC</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">INVENTORY <em>· 3 LOW</em></div>
+          <a href="#" class="panel-action">REORDER →</a>
+        </div>
+        <div class="panel-body">
+
+          <div class="inv-row">
+            <div class="inv-name">#6 THHN Stranded Black<span class="code">WIR-6-THHN-BK</span></div>
+            <div class="inv-qty">180 <span style="font-size:11px;color:var(--muted)">ft</span></div>
+            <div class="inv-stock stock-out">REORDER</div>
+          </div>
+
+          <div class="inv-row">
+            <div class="inv-name">200A Main Breaker Panel<span class="code">PNL-200A-OD</span></div>
+            <div class="inv-qty">2 <span style="font-size:11px;color:var(--muted)">ea</span></div>
+            <div class="inv-stock stock-low">LOW</div>
+          </div>
+
+          <div class="inv-row">
+            <div class="inv-name">3/4" EMT Conduit (10ft)<span class="code">EMT-075-10</span></div>
+            <div class="inv-qty">14 <span style="font-size:11px;color:var(--muted)">ea</span></div>
+            <div class="inv-stock stock-low">LOW</div>
+          </div>
+
+          <div class="inv-row">
+            <div class="inv-name">Tesla Wall Connector Gen 3<span class="code">EVS-TSL-G3</span></div>
+            <div class="inv-qty">6 <span style="font-size:11px;color:var(--muted)">ea</span></div>
+            <div class="inv-stock stock-ok">IN STOCK</div>
+          </div>
+
+          <div class="inv-row">
+            <div class="inv-name">Generac 22kW Standby<span class="code">GEN-GNRC-22K</span></div>
+            <div class="inv-qty">3 <span style="font-size:11px;color:var(--muted)">ea</span></div>
+            <div class="inv-stock stock-ok">IN STOCK</div>
+          </div>
+
+          <div class="inv-row">
+            <div class="inv-name">20A GFCI Receptacle<span class="code">RCP-20A-GFCI</span></div>
+            <div class="inv-qty">142 <span style="font-size:11px;color:var(--muted)">ea</span></div>
+            <div class="inv-stock stock-ok">IN STOCK</div>
+          </div>
+
+          <div class="inv-row">
+            <div class="inv-name">Square D QO 20A 1P Breaker<span class="code">BRK-QO-20-1P</span></div>
+            <div class="inv-qty">88 <span style="font-size:11px;color:var(--muted)">ea</span></div>
+            <div class="inv-stock stock-ok">IN STOCK</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">PERMITS <em>· 9 OPEN</em></div>
+          <a href="#" class="panel-action">VIEW ALL →</a>
+        </div>
+        <div class="panel-body">
+
+          <div class="permit">
+            <div class="permit-num">EL-26-0418</div>
+            <div class="permit-info">
+              <h5>Carlson · Service Upgrade 400A</h5>
+              <div class="desc">Scarsdale Bldg Dept · Re-inspect today</div>
+            </div>
+            <div class="permit-stage stage-failed">FAILED</div>
+          </div>
+
+          <div class="permit">
+            <div class="permit-num">EL-26-0411</div>
+            <div class="permit-info">
+              <h5>Hartman · 480V Commercial</h5>
+              <div class="desc">White Plains Bldg · Rough inspect 5/22</div>
+            </div>
+            <div class="permit-stage stage-scheduled">SCHEDULED</div>
+          </div>
+
+          <div class="permit">
+            <div class="permit-num">EL-26-0426</div>
+            <div class="permit-info">
+              <h5>Kim Reno · Kitchen/Bath</h5>
+              <div class="desc">Rye Bldg Dept · Awaiting rough complete</div>
+            </div>
+            <div class="permit-stage stage-filed">FILED</div>
+          </div>
+
+          <div class="permit">
+            <div class="permit-num">EL-26-0431</div>
+            <div class="permit-info">
+              <h5>D'Angelo Pizzeria · Equipment</h5>
+              <div class="desc">White Plains Bldg · Filed 5/15</div>
+            </div>
+            <div class="permit-stage stage-filed">FILED</div>
+          </div>
+
+          <div class="permit">
+            <div class="permit-num">EL-26-0405</div>
+            <div class="permit-info">
+              <h5>Mt. Vernon Animal Hosp · Genny</h5>
+              <div class="desc">Mt. Vernon Bldg · Final passed 5/12</div>
+            </div>
+            <div class="permit-stage stage-passed">PASSED</div>
+          </div>
+
+          <div class="permit">
+            <div class="permit-num">EL-26-0428</div>
+            <div class="permit-info">
+              <h5>Levine · Tesla Charger</h5>
+              <div class="desc">Larchmont Bldg · Final inspect 5/21</div>
+            </div>
+            <div class="permit-stage stage-scheduled">SCHEDULED</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="grid-sec" style="margin-top:18px">
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">SERVICE QUEUE <em>· 6</em></div>
+          <a href="#" class="panel-action">DISPATCH →</a>
+        </div>
+        <div class="panel-body">
+
+          <div class="queue-item">
+            <div class="queue-pri pri-1">P1</div>
+            <div class="queue-detail">
+              <h5>Power Loss — Half House</h5>
+              <div class="meta">
+                <span>📍 22 Spring St, Tarrytown</span>
+                <span>👤 Sarah W.</span>
+                <span>⏱ Called 9:02 AM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="queue-item">
+            <div class="queue-pri pri-1">P1</div>
+            <div class="queue-detail">
+              <h5>Burning Smell — Kitchen</h5>
+              <div class="meta">
+                <span>📍 18 Park Ave, Bronxville</span>
+                <span>👤 D. Singh</span>
+                <span>⏱ Called 9:34 AM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="queue-item">
+            <div class="queue-pri pri-2">P2</div>
+            <div class="queue-detail">
+              <h5>Breaker Tripping Repeatedly</h5>
+              <div class="meta">
+                <span>📍 91 Main St, Pleasantville</span>
+                <span>👤 R. Olsen</span>
+                <span>⏱ Called 8:12 AM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="queue-item">
+            <div class="queue-pri pri-2">P2</div>
+            <div class="queue-detail">
+              <h5>GFCI Won't Reset — Bathroom</h5>
+              <div class="meta">
+                <span>📍 4 Forest Ave, Hartsdale</span>
+                <span>👤 J. Park</span>
+                <span>⏱ Called Mon PM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="queue-item">
+            <div class="queue-pri pri-3">P3</div>
+            <div class="queue-detail">
+              <h5>Add Ceiling Fan + Switch Leg</h5>
+              <div class="meta">
+                <span>📍 67 Oak Rd, Chappaqua</span>
+                <span>👤 L. Martinez</span>
+                <span>⏱ Sched. 5/22</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">FLEET <em>· 5 / 6 ROLLING</em></div>
+          <a href="#" class="panel-action">TRACK →</a>
+        </div>
+        <div class="panel-body">
+
+          <div class="truck">
+            <div class="truck-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></div>
+            <div class="truck-info">
+              <div class="truck-name">Truck 01 · Mike T.</div>
+              <div class="truck-detail">2022 Ford Transit 250 · NY DRH-4218</div>
+              <div class="truck-loc">📍 Scarsdale</div>
+            </div>
+          </div>
+
+          <div class="truck">
+            <div class="truck-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></div>
+            <div class="truck-info">
+              <div class="truck-name">Truck 02 · Diego R.</div>
+              <div class="truck-detail">2023 Ram ProMaster · NY KLM-7755</div>
+              <div class="truck-loc">📍 En route Larchmont</div>
+            </div>
+          </div>
+
+          <div class="truck">
+            <div class="truck-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></div>
+            <div class="truck-info">
+              <div class="truck-name">Truck 03 · Crew B</div>
+              <div class="truck-detail">2020 Ford F-350 + Trailer · NY BPT-3301</div>
+              <div class="truck-loc">📍 Hartman site</div>
+            </div>
+          </div>
+
+          <div class="truck">
+            <div class="truck-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></div>
+            <div class="truck-info">
+              <div class="truck-name">Truck 04 · Anthony D.</div>
+              <div class="truck-detail">2021 Ford Transit 350 · NY FRT-2244</div>
+              <div class="truck-loc">⚠ Service due in 2 days</div>
+            </div>
+          </div>
+
+          <div class="truck">
+            <div class="truck-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></div>
+            <div class="truck-info">
+              <div class="truck-name">Truck 05 · Bill S.</div>
+              <div class="truck-detail">2024 Ford F-250 · NY WGT-8801</div>
+              <div class="truck-loc">📍 Yard / Quote visits</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">INVOICING <em>· THIS WEEK</em></div>
+          <a href="#" class="panel-action">A/R →</a>
+        </div>
+        <div class="panel-body">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
+            <div style="padding:14px;background:var(--dark);border:1px solid var(--border);border-radius:2px">
+              <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Invoiced</div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:var(--green)">$52.8K</div>
+            </div>
+            <div style="padding:14px;background:var(--dark);border:1px solid var(--border);border-radius:2px">
+              <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Collected</div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800">$41.4K</div>
+            </div>
+          </div>
+
+          <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;font-weight:700">Recent Activity</div>
+
+          <div class="permit" style="grid-template-columns:1fr auto">
+            <div class="permit-info"><h5>INV-3847 · Carlson Residence</h5><div class="desc">Sent 5/19 · $18,400 · Net 15</div></div>
+            <div class="permit-stage stage-filed">SENT</div>
+          </div>
+          <div class="permit" style="grid-template-columns:1fr auto">
+            <div class="permit-info"><h5>INV-3845 · Hartman Industrial</h5><div class="desc">Progress 60% · $14,200 · Net 30</div></div>
+            <div class="permit-stage stage-filed">SENT</div>
+          </div>
+          <div class="permit" style="grid-template-columns:1fr auto">
+            <div class="permit-info"><h5>INV-3841 · Mt. Vernon Animal Hosp</h5><div class="desc">Final · $9,800 · Paid 5/16</div></div>
+            <div class="permit-stage stage-passed">PAID</div>
+          </div>
+          <div class="permit" style="grid-template-columns:1fr auto">
+            <div class="permit-info"><h5>INV-3829 · Levine Residence</h5><div class="desc">Deposit · $2,400 · Net 15 · Overdue 7d</div></div>
+            <div class="permit-stage stage-failed">LATE</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast">Action completed</div>
+
+<script>
+  let toastTimer;
+  function t(msg){
+    const el=document.getElementById('toast');
+    el.lastChild.nodeType===3 ? el.lastChild.nodeValue=' '+msg : el.appendChild(document.createTextNode(' '+msg));
+    el.textContent=msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>el.classList.remove('show'),2800);
+  }
+  // wire up clickable demo actions
+  document.querySelectorAll('.side-item').forEach(a=>{
+    if(!a.classList.contains('active')){
+      a.addEventListener('click',e=>{e.preventDefault();t('Navigating — demo mode')});
+    }
+  });
+  document.querySelectorAll('.panel-action').forEach(a=>{
+    a.addEventListener('click',e=>{e.preventDefault();t('Opening detail view')});
+  });
+  document.querySelectorAll('.job').forEach(j=>{
+    j.style.cursor='pointer';
+    j.addEventListener('click',()=>t('Opening job ticket'));
+  });
+</script>
+
+
+<script id="kpc-protect-js">
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+  document.addEventListener('dragstart', function(e) {
+    var t = e.target && e.target.tagName;
+    if (t === 'IMG' || t === 'svg' || t === 'SVG') e.preventDefault();
+  }, false);
+  document.addEventListener('keydown', function(e) {
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) {
+      e.preventDefault(); return false;
+    }
+  }, false);
+})();
+</script>
+
+<a href="https://kanepc.com" target="_top" id="kpc-demo-badge"
+   style="position:fixed;bottom:14px;right:14px;
+          background:rgba(20,20,20,0.92);color:#fff;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+          text-decoration:none;padding:9px 14px;border-radius:3px;
+          border:1px solid rgba(255,255,255,0.12);
+          box-shadow:0 6px 18px rgba(0,0,0,0.35);
+          z-index:2147483647;line-height:1;
+          -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);">
+  Demo &middot; Built by <span style="color:#E65100">Kane PC</span>
+</a>
+
+</body>
+</html>

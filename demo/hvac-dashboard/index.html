@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comfort Pro HVAC — Operations — Kane PC Sample Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg: #F5F2EB;
+    --bg-grid: rgba(15, 20, 25, 0.04);
+    --surface: #FFFFFF;
+    --surface-2: #FAF8F2;
+    --border: #D9D4C7;
+    --border-strong: #0F1419;
+    --ink: #0F1419;
+    --ink-2: #4A4A45;
+    --ink-3: #8A857A;
+    --accent: #E85D2C;
+    --accent-deep: #C24818;
+    --teal: #1A4D5C;
+    --success: #2D7D3D;
+    --warn: #C68B23;
+    --shadow: 0 1px 0 rgba(15,20,25,0.04), 0 8px 24px -12px rgba(15,20,25,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'Geist', -apple-system, sans-serif;
+    background: var(--bg);
+    background-image:
+      linear-gradient(var(--bg-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: 'tnum' 1; }
+  .display { font-family: 'Bricolage Grotesque', sans-serif; letter-spacing: -0.02em; }
+
+  /* ============ HEADER ============ */
+  header {
+    background: var(--ink);
+    color: var(--bg);
+    border-bottom: 1px solid var(--border-strong);
+  }
+
+  .header-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .brand-mark {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+    color: var(--bg);
+  }
+
+  .brand-mark .accent { color: var(--accent); }
+
+  .brand-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(245,242,235,0.5);
+    border-left: 1px solid rgba(245,242,235,0.2);
+    padding-left: 12px;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .sync-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(245,242,235,0.06);
+    border: 1px solid rgba(245,242,235,0.12);
+    border-radius: 2px;
+    color: rgba(245,242,235,0.85);
+  }
+
+  .sync-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 0 3px rgba(45,125,61,0.2);
+  }
+
+  .powered-by {
+    color: rgba(245,242,235,0.4);
+    font-size: 10px;
+  }
+
+  .powered-by strong { color: var(--accent); font-weight: 500; }
+
+  /* ============ NAV ============ */
+  nav.tabs {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tabs-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .tab {
+    padding: 16px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-3);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    transition: all 0.15s ease;
+    position: relative;
+  }
+
+  .tab:hover:not(:disabled) { color: var(--ink); }
+  .tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+  .tab:disabled {
+    color: var(--ink-3);
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .tab .tab-num {
+    color: var(--ink-3);
+    margin-right: 8px;
+    font-weight: 400;
+  }
+  .tab.active .tab-num { color: var(--accent); }
+
+  /* ============ MAIN ============ */
+  main {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 32px 28px 64px;
+  }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Section header */
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-head h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .section-head .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+  }
+
+  .period-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .period-btn {
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink-2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+  }
+  .period-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .period-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+
+  /* KPI Cards */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px 22px;
+    position: relative;
+    border-radius: 2px;
+  }
+
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 32px; height: 2px;
+    background: var(--accent);
+  }
+  .kpi:nth-child(2)::before { background: var(--teal); }
+  .kpi:nth-child(3)::before { background: var(--success); }
+  .kpi:nth-child(4)::before { background: var(--warn); }
+
+  .kpi-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-3);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .kpi-label .idx { color: var(--ink-3); opacity: 0.5; }
+
+  .kpi-value {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .kpi-value .unit {
+    font-size: 18px;
+    color: var(--ink-3);
+    font-weight: 500;
+    margin-left: 2px;
+  }
+
+  .kpi-delta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--success);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .kpi-delta.down { color: var(--accent-deep); }
+
+  /* Two-column dashboard split */
+  .dash-split {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+
+  .panel-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .panel-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .panel-title .num { color: var(--ink-3); margin-right: 8px; font-weight: 400; }
+
+  .panel-body { padding: 8px 0; }
+
+  /* Tech leaderboard */
+  .lb-row {
+    display: grid;
+    grid-template-columns: 32px 1fr auto auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .lb-row:last-child { border-bottom: none; }
+
+  .lb-rank {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    background: var(--bg);
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+  }
+  .lb-row:first-child .lb-rank {
+    background: var(--ink);
+    color: var(--accent);
+    border-color: var(--ink);
+  }
+
+  .lb-name {
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .lb-name .lb-meta {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  .lb-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-2);
+    text-align: right;
+  }
+
+  .lb-num strong {
+    display: block;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  .lb-num.commission strong { color: var(--accent); }
+
+  .lb-bar-wrap {
+    grid-column: 1 / -1;
+    height: 2px;
+    background: var(--bg);
+    border-radius: 2px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  .lb-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* Chart panel */
+  .chart-wrap {
+    padding: 24px;
+    height: 280px;
+    position: relative;
+  }
+
+  .chart-stats {
+    display: flex;
+    gap: 24px;
+    padding: 16px 24px 0;
+  }
+
+  .chart-stat {
+    flex: 1;
+  }
+  .chart-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+  }
+  .chart-stat-value {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .chart-stat-value .pct { color: var(--success); font-size: 13px; margin-left: 6px; font-weight: 500; }
+
+  /* Jobs table */
+  .jobs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .jobs-table th {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-3);
+    font-weight: 500;
+    padding: 14px 20px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .jobs-table th:last-child { text-align: right; }
+  .jobs-table th.num-col { text-align: right; }
+
+  .jobs-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .jobs-table tr:last-child td { border-bottom: none; }
+  .jobs-table tr:hover { background: var(--surface-2); }
+
+  .job-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  .job-customer { font-weight: 500; color: var(--ink); }
+  .job-desc { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+  .job-tech {
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+
+  .job-num {
+    font-family: 'JetBrains Mono', monospace;
+    text-align: right;
+    color: var(--ink);
+  }
+
+  .margin-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-weight: 500;
+    display: inline-block;
+  }
+  .margin-tag.high { background: rgba(45,125,61,0.1); color: var(--success); }
+  .margin-tag.med  { background: rgba(198,139,35,0.12); color: var(--warn); }
+  .margin-tag.low  { background: rgba(232,93,44,0.1); color: var(--accent-deep); }
+
+  /* ============ QUOTE BUILDER ============ */
+
+  .quote-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .quote-templates {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .template-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .template-btn:hover {
+    border-color: var(--ink);
+    transform: translateY(-1px);
+  }
+  .template-btn::after {
+    content: '→';
+    position: absolute;
+    top: 14px; right: 14px;
+    color: var(--ink-3);
+    font-family: 'JetBrains Mono', monospace;
+    transition: transform 0.15s ease;
+  }
+  .template-btn:hover::after {
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+  .template-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+  }
+  .template-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .template-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  .form-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .form-section-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface-2);
+  }
+
+  .form-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .form-section-title .num {
+    color: var(--accent);
+    margin-right: 8px;
+    font-weight: 400;
+  }
+
+  .form-body { padding: 20px; }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .form-row:last-child { margin-bottom: 0; }
+  .form-row.full { grid-template-columns: 1fr; }
+
+  .field-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .field-input, .field-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    border-radius: 2px;
+    transition: border-color 0.15s ease;
+  }
+
+  .field-input:focus, .field-select:focus {
+    outline: none;
+    border-color: var(--ink);
+    background: var(--surface);
+  }
+
+  .field-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%238A857A'%3e%3cpath d='M8 11L3 6h10z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  /* Equipment list */
+  .line-items {
+    border-top: 1px solid var(--border);
+  }
+
+  .line-item {
+    display: grid;
+    grid-template-columns: 1fr 60px 90px 90px 28px;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .line-item:last-child { border-bottom: none; }
+
+  .li-desc { color: var(--ink); }
+  .li-desc .li-sub {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  .li-qty input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 2px;
+  }
+  .li-qty input:focus { outline: none; border-color: var(--ink); }
+
+  .li-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-align: right;
+    color: var(--ink-2);
+  }
+  .li-num.total {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .li-remove {
+    background: none;
+    border: none;
+    color: var(--ink-3);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+  }
+  .li-remove:hover {
+    color: var(--accent-deep);
+    background: rgba(232,93,44,0.08);
+  }
+
+  .add-equipment {
+    display: flex;
+    gap: 8px;
+    padding: 14px 20px;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+  }
+  .add-equipment select {
+    flex: 1;
+  }
+  .add-btn {
+    padding: 10px 16px;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.15s ease;
+  }
+  .add-btn:hover { background: var(--accent); }
+
+  /* Summary panel */
+  .summary {
+    position: sticky;
+    top: 16px;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 24px;
+    border-radius: 2px;
+    box-shadow: var(--shadow);
+  }
+
+  .summary-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .summary-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 22px;
+    line-height: 1.2;
+  }
+
+  .summary-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(245,242,235,0.08);
+    font-size: 13px;
+  }
+  .summary-line:last-of-type { border-bottom: none; }
+
+  .summary-label {
+    color: rgba(245,242,235,0.6);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .summary-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--bg);
+  }
+
+  .summary-line.total {
+    margin-top: 8px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(245,242,235,0.2);
+  }
+
+  .summary-line.total .summary-label {
+    color: var(--bg);
+    font-size: 12px;
+  }
+
+  .summary-line.total .summary-value {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+
+  .summary-margin {
+    background: rgba(245,242,235,0.06);
+    padding: 14px 16px;
+    margin: 18px -8px 0;
+    border-radius: 2px;
+    border-left: 2px solid var(--accent);
+  }
+
+  .margin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .margin-grid > div .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(245,242,235,0.5);
+    margin-bottom: 4px;
+  }
+  .margin-grid > div .value {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--bg);
+  }
+  .margin-grid > div .value.success { color: #6FBE7E; }
+  .margin-grid > div .value.accent { color: var(--accent); }
+
+  .summary-actions {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-primary, .btn-secondary {
+    padding: 12px 16px;
+    border: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .btn-primary:hover { background: var(--accent-deep); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--bg);
+    border: 1px solid rgba(245,242,235,0.2);
+  }
+  .btn-secondary:hover { border-color: var(--bg); }
+
+  .summary-footer {
+    margin-top: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(245,242,235,0.4);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Demo banner */
+  .demo-banner {
+    background: var(--ink);
+    color: var(--bg);
+    text-align: center;
+    padding: 6px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+  .demo-banner .accent { color: var(--accent); }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .dash-split { grid-template-columns: 1fr; }
+    .quote-grid { grid-template-columns: 1fr; }
+    .summary { position: relative; top: 0; }
+    .quote-templates { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    .header-inner { flex-direction: column; align-items: flex-start; gap: 12px; padding: 14px 16px; }
+    .header-meta { width: 100%; flex-wrap: wrap; }
+    main { padding: 20px 16px 40px; }
+    .kpi-row { grid-template-columns: 1fr; }
+    .quote-templates { grid-template-columns: 1fr; }
+    .section-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .section-head h1 { font-size: 28px; }
+    .form-row { grid-template-columns: 1fr; }
+    .line-item { grid-template-columns: 1fr 50px 80px 28px; }
+    .line-item .li-num.unit { display: none; }
+    .tabs-inner { padding: 0 8px; overflow-x: auto; }
+    .tab { padding: 14px 14px; font-size: 10px; white-space: nowrap; }
+  }
+</style>
+
+<style id="kpc-protect">
+  body {
+    -webkit-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text; -moz-user-select: text;
+    -ms-user-select: text; user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img, svg {
+    -webkit-user-drag: none; user-drag: none;
+    -webkit-touch-callout: none;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="demo-banner">
+  <span class="accent">●</span> DEMO ENVIRONMENT — sample data shown for review purposes
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark">COMFORT PRO<span class="accent">.</span></div>
+      <div class="brand-sub">HVAC Operations · v0.1</div>
+    </div>
+    <div class="header-meta">
+      <div class="sync-pill"><span class="sync-dot"></span> FieldEdge · synced 2m ago</div>
+      <div class="sync-pill"><span class="sync-dot"></span> QuickBooks · synced 4m ago</div>
+      <div class="powered-by">Powered by <strong>Kane PC</strong></div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-inner">
+    <button class="tab active" data-view="profitability"><span class="tab-num">01</span>Profitability</button>
+    <button class="tab" data-view="quote"><span class="tab-num">02</span>Quote Builder</button>
+    <button class="tab" disabled><span class="tab-num">03</span>Schedule</button>
+    <button class="tab" disabled><span class="tab-num">04</span>Customers</button>
+    <button class="tab" disabled><span class="tab-num">05</span>Reports</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ================ PROFITABILITY ================ -->
+  <section id="profitability" class="view active">
+    <div class="section-head">
+      <div>
+        <div class="crumb">/ Operations / Job Profitability</div>
+        <h1>Margin & Commissions.</h1>
+      </div>
+      <div class="period-bar">
+        <button class="period-btn">Today</button>
+        <button class="period-btn">Week</button>
+        <button class="period-btn active">Month</button>
+        <button class="period-btn">Quarter</button>
+        <button class="period-btn">YTD</button>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-label"><span>Revenue MTD</span><span class="idx mono">01</span></div>
+        <div class="kpi-value mono">$284,420</div>
+        <div class="kpi-delta">▲ 12.4% vs last month</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label"><span>Gross Margin</span><span class="idx mono">02</span></div>
+        <div class="kpi-value mono">42.8<span class="unit">%</span></div>
+        <div class="kpi-delta">▲ 1.6 pts vs last month</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label"><span>Net Profit</span><span class="idx mono">03</span></div>
+        <div class="kpi-value mono">$89,640</div>
+        <div class="kpi-delta">▲ 8.1% vs last month</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label"><span>Tech Commissions</span><span class="idx mono">04</span></div>
+        <div class="kpi-value mono">$24,180</div>
+        <div class="kpi-delta down">▲ 14.2% (5 techs paid)</div>
+      </div>
+    </div>
+
+    <div class="dash-split">
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title"><span class="num">01.</span>Tech Leaderboard · April 2026</div>
+        </div>
+        <div class="panel-body" id="leaderboard"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title"><span class="num">02.</span>Margin Trend · 12 Weeks</div>
+        </div>
+        <div class="chart-stats">
+          <div class="chart-stat">
+            <div class="chart-stat-label">Avg Margin</div>
+            <div class="chart-stat-value mono">41.6<span class="pct">%</span></div>
+          </div>
+          <div class="chart-stat">
+            <div class="chart-stat-label">Peak Week</div>
+            <div class="chart-stat-value mono">43.4<span class="pct">%</span></div>
+          </div>
+          <div class="chart-stat">
+            <div class="chart-stat-label">Trend</div>
+            <div class="chart-stat-value mono">+5.2<span class="pct">pts</span></div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="marginChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top: 16px;">
+      <div class="panel-head">
+        <div class="panel-title"><span class="num">03.</span>Recent Jobs · Last 7 Days</div>
+        <div class="panel-title" style="color: var(--ink-3); font-weight: 400;">Showing 6 of 47</div>
+      </div>
+      <div class="panel-body" style="padding: 0;">
+        <table class="jobs-table">
+          <thead>
+            <tr>
+              <th style="width: 90px;">Job ID</th>
+              <th>Customer / Description</th>
+              <th>Tech</th>
+              <th class="num-col">Revenue</th>
+              <th class="num-col">Cost</th>
+              <th class="num-col">Margin</th>
+              <th class="num-col">Commission</th>
+            </tr>
+          </thead>
+          <tbody id="jobs-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================ QUOTE BUILDER ================ -->
+  <section id="quote" class="view">
+    <div class="section-head">
+      <div>
+        <div class="crumb">/ Operations / New Quote</div>
+        <h1>Quote in 60 seconds.</h1>
+      </div>
+      <div class="period-bar">
+        <button class="period-btn" onclick="resetQuote()">↺ Clear</button>
+        <button class="period-btn active">Quote #Q-2412</button>
+      </div>
+    </div>
+
+    <div class="quote-templates">
+      <button class="template-btn" onclick="loadTemplate('ac_replace')">
+        <div class="template-tag">Template · 01</div>
+        <div class="template-name">AC System Replacement</div>
+        <div class="template-meta">~$8,400 · 4–6 hr install</div>
+      </button>
+      <button class="template-btn" onclick="loadTemplate('service_call')">
+        <div class="template-tag">Template · 02</div>
+        <div class="template-name">Service Call + Diagnostic</div>
+        <div class="template-meta">~$320 · 1 hr</div>
+      </button>
+      <button class="template-btn" onclick="loadTemplate('maintenance')">
+        <div class="template-tag">Template · 03</div>
+        <div class="template-name">Annual Maintenance</div>
+        <div class="template-meta">~$240 · 1 hr</div>
+      </button>
+      <button class="template-btn" onclick="loadTemplate('mini_split')">
+        <div class="template-tag">Template · 04</div>
+        <div class="template-name">Mini-Split Install</div>
+        <div class="template-meta">~$4,800 · 1 day</div>
+      </button>
+    </div>
+
+    <div class="quote-grid">
+      <div>
+        <!-- Customer & Job -->
+        <div class="form-section">
+          <div class="form-section-head">
+            <div class="form-section-title"><span class="num">01.</span>Customer & Site</div>
+          </div>
+          <div class="form-body">
+            <div class="form-row">
+              <div>
+                <label class="field-label">Customer</label>
+                <select class="field-select" id="customer">
+                  <option value="">— New customer —</option>
+                  <option selected>Mitchell Residence · 4127 Service Way, Bradenton</option>
+                  <option>Anderson Property Mgmt · Sarasota</option>
+                  <option>Coastal Dental · Lakewood Ranch</option>
+                  <option>Riverside HOA · Bradenton</option>
+                  <option>Greene Residence · Palmetto</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Job Type</label>
+                <select class="field-select" id="jobType">
+                  <option>Residential — Replacement</option>
+                  <option>Residential — Repair</option>
+                  <option>Residential — Maintenance</option>
+                  <option>Commercial — Service</option>
+                  <option>New Install</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="field-label">Assigned Tech</label>
+                <select class="field-select" id="tech" onchange="updateSummary()">
+                  <option value="0.08" selected>Mike Torres · Senior · 8% comm</option>
+                  <option value="0.07">Carlos Ruiz · Senior · 7% comm</option>
+                  <option value="0.07">Jake Henderson · Senior · 7% comm</option>
+                  <option value="0.06">Tony Marciano · Standard · 6% comm</option>
+                  <option value="0.05">Dave Kowalski · Apprentice · 5% comm</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Service Date</label>
+                <input class="field-input" type="text" value="Apr 28, 2026">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Equipment & Materials -->
+        <div class="form-section">
+          <div class="form-section-head">
+            <div class="form-section-title"><span class="num">02.</span>Equipment & Materials</div>
+          </div>
+          <div class="line-items" id="lineItems"></div>
+          <div class="add-equipment">
+            <select class="field-select" id="equipmentSelect">
+              <option value="">+ Add equipment or material...</option>
+              <optgroup label="AC Condensers">
+                <option value="ac_2t|2-Ton AC Condenser (16 SEER)|1840">2-Ton AC Condenser (16 SEER)</option>
+                <option value="ac_3t|3-Ton AC Condenser (16 SEER)|2340">3-Ton AC Condenser (16 SEER)</option>
+                <option value="ac_4t|4-Ton AC Condenser (16 SEER)|2890">4-Ton AC Condenser (16 SEER)</option>
+                <option value="ac_5t|5-Ton AC Condenser (16 SEER)|3420">5-Ton AC Condenser (16 SEER)</option>
+              </optgroup>
+              <optgroup label="Heat Pumps">
+                <option value="hp_3t|3-Ton Heat Pump (16 SEER)|2890">3-Ton Heat Pump (16 SEER)</option>
+                <option value="hp_4t|4-Ton Heat Pump (16 SEER)|3440">4-Ton Heat Pump (16 SEER)</option>
+              </optgroup>
+              <optgroup label="Air Handlers / Furnaces">
+                <option value="ah_3t|Air Handler 3-Ton|1240">Air Handler 3-Ton</option>
+                <option value="ah_4t|Air Handler 4-Ton|1480">Air Handler 4-Ton</option>
+                <option value="furn_80|80k BTU Furnace 80%|1420">80k BTU Furnace 80%</option>
+                <option value="furn_100|100k BTU Furnace 96%|1980">100k BTU Furnace 96%</option>
+              </optgroup>
+              <optgroup label="Mini-Splits">
+                <option value="ms_12|Mini-Split 12k BTU|1180">Mini-Split 12k BTU</option>
+                <option value="ms_24|Mini-Split 24k BTU|1890">Mini-Split 24k BTU</option>
+              </optgroup>
+              <optgroup label="Parts & Accessories">
+                <option value="ls_50|50ft Lineset Kit|180">50ft Lineset Kit</option>
+                <option value="cap|Run Capacitor 45/5 MFD|28">Run Capacitor 45/5 MFD</option>
+                <option value="cont|Contactor 30A|34">Contactor 30A 2-Pole</option>
+                <option value="r410|R-410A Refrigerant (lb)|24">R-410A Refrigerant (per lb)</option>
+                <option value="filt|MERV-11 Filter (16x25x1)|18">MERV-11 Filter</option>
+                <option value="tstat_p|Programmable Thermostat|140">Programmable Thermostat</option>
+                <option value="tstat_s|Smart Thermostat (Ecobee)|240">Smart Thermostat (Ecobee)</option>
+                <option value="pad|Equipment Pad (concrete)|68">Equipment Pad</option>
+              </optgroup>
+            </select>
+            <button class="add-btn" onclick="addEquipment()">Add</button>
+          </div>
+        </div>
+
+        <!-- Labor -->
+        <div class="form-section">
+          <div class="form-section-head">
+            <div class="form-section-title"><span class="num">03.</span>Labor</div>
+          </div>
+          <div class="form-body">
+            <div class="form-row">
+              <div>
+                <label class="field-label">Labor Hours</label>
+                <input class="field-input mono" type="number" id="laborHours" value="6" step="0.5" min="0" oninput="updateSummary()">
+              </div>
+              <div>
+                <label class="field-label">Rate ($/hr)</label>
+                <input class="field-input mono" type="number" id="laborRate" value="145" min="0" oninput="updateSummary()">
+              </div>
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="field-label">Markup %</label>
+                <select class="field-select" id="markup" onchange="updateSummary()">
+                  <option value="45">45% — Commercial</option>
+                  <option value="60" selected>60% — Standard Residential</option>
+                  <option value="80">80% — Premium Residential</option>
+                  <option value="100">100% — Emergency / After-hours</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Tax Rate %</label>
+                <input class="field-input mono" type="number" id="tax" value="7" step="0.5" oninput="updateSummary()">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky summary -->
+      <div class="summary">
+        <div class="summary-tag">// Live Quote</div>
+        <div class="summary-title">Mitchell Residence<br><span style="color: var(--accent); font-size: 16px;">4-Ton AC Replace</span></div>
+
+        <div class="summary-line">
+          <span class="summary-label">Materials</span>
+          <span class="summary-value mono" id="sumMaterials">$0</span>
+        </div>
+        <div class="summary-line">
+          <span class="summary-label">Labor</span>
+          <span class="summary-value mono" id="sumLabor">$0</span>
+        </div>
+        <div class="summary-line">
+          <span class="summary-label">Subtotal (cost)</span>
+          <span class="summary-value mono" id="sumCost">$0</span>
+        </div>
+        <div class="summary-line">
+          <span class="summary-label">Markup</span>
+          <span class="summary-value mono" id="sumMarkup">$0</span>
+        </div>
+        <div class="summary-line">
+          <span class="summary-label">Tax</span>
+          <span class="summary-value mono" id="sumTax">$0</span>
+        </div>
+
+        <div class="summary-line total">
+          <span class="summary-label">Quote Total</span>
+          <span class="summary-value" id="sumTotal">$0</span>
+        </div>
+
+        <div class="summary-margin">
+          <div class="margin-grid">
+            <div>
+              <div class="label">Gross Margin</div>
+              <div class="value success mono" id="sumMargin">0%</div>
+            </div>
+            <div>
+              <div class="label">Tech Commission</div>
+              <div class="value accent mono" id="sumComm">$0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-actions">
+          <button class="btn-primary">Send to Customer</button>
+          <button class="btn-secondary">→ Push to FieldEdge</button>
+        </div>
+
+        <div class="summary-footer">
+          <span>Quote #Q-2412</span>
+          <span id="lineCount">0 lines</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // ============ DATA ============
+  const techs = [
+    { name: 'Mike Torres',     role: 'Senior · Install Lead',    jobs: 23, rev: 84200, margin: 45.2, commission: 8420, bar: 100 },
+    { name: 'Carlos Ruiz',     role: 'Senior · Install',         jobs: 19, rev: 67800, margin: 43.1, commission: 5890, bar: 80 },
+    { name: 'Jake Henderson',  role: 'Senior · Service',         jobs: 21, rev: 58400, margin: 41.8, commission: 4920, bar: 70 },
+    { name: 'Tony Marciano',   role: 'Standard · Service',       jobs: 14, rev: 43200, margin: 39.4, commission: 3180, bar: 51 },
+    { name: 'Dave Kowalski',   role: 'Apprentice · Maintenance', jobs: 11, rev: 30820, margin: 38.9, commission: 1770, bar: 37 }
+  ];
+
+  const recentJobs = [
+    { id: 'J-2401', customer: 'Mitchell Residence',     desc: '4-Ton AC Replacement',     tech: 'M. Torres',    rev: 8420,  cost: 4180, margin: 50.4, comm: 337 },
+    { id: 'J-2400', customer: 'Coastal Dental',         desc: 'RTU Service Call',         tech: 'J. Henderson', rev: 1240,  cost: 580,  margin: 53.2, comm: 46  },
+    { id: 'J-2399', customer: 'Anderson Property Mgmt', desc: 'Maintenance Contract',     tech: 'C. Ruiz',      rev: 3800,  cost: 1820, margin: 52.1, comm: 139 },
+    { id: 'J-2398', customer: 'Greene Residence',       desc: 'Capacitor + Diagnostic',   tech: 'M. Torres',    rev: 480,   cost: 180,  margin: 62.5, comm: 24  },
+    { id: 'J-2397', customer: 'Riverside HOA',          desc: 'Mini-split Install (×3)',  tech: 'T. Marciano',  rev: 14200, cost: 9100, margin: 35.9, comm: 306 },
+    { id: 'J-2396', customer: 'Sarasota Marina',        desc: 'R-410A Recharge',          tech: 'D. Kowalski',  rev: 920,   cost: 340,  margin: 63.0, comm: 29  }
+  ];
+
+  const marginTrend = [38.2, 39.1, 40.5, 39.8, 41.2, 42.0, 41.8, 42.5, 43.1, 42.8, 43.4, 42.8];
+
+  const templates = {
+    ac_replace: {
+      label: '4-Ton AC Replace',
+      lines: [
+        { name: '4-Ton AC Condenser (16 SEER)', sub: 'EQUIPMENT', qty: 1, cost: 2890 },
+        { name: 'Air Handler 4-Ton',            sub: 'EQUIPMENT', qty: 1, cost: 1480 },
+        { name: '50ft Lineset Kit',              sub: 'MATERIAL',  qty: 1, cost: 180  },
+        { name: 'R-410A Refrigerant (lb)',       sub: 'MATERIAL',  qty: 4, cost: 24   },
+        { name: 'Smart Thermostat (Ecobee)',     sub: 'MATERIAL',  qty: 1, cost: 240  },
+        { name: 'Equipment Pad',                 sub: 'MATERIAL',  qty: 1, cost: 68   }
+      ],
+      hours: 6, rate: 145, markup: 60
+    },
+    service_call: {
+      label: 'Service + Diagnostic',
+      lines: [
+        { name: 'Run Capacitor 45/5 MFD', sub: 'MATERIAL', qty: 1, cost: 28 }
+      ],
+      hours: 1, rate: 145, markup: 80
+    },
+    maintenance: {
+      label: 'Annual Maintenance',
+      lines: [
+        { name: 'MERV-11 Filter (16x25x1)', sub: 'MATERIAL', qty: 2, cost: 18 }
+      ],
+      hours: 1, rate: 145, markup: 60
+    },
+    mini_split: {
+      label: 'Mini-Split Install',
+      lines: [
+        { name: 'Mini-Split 24k BTU',  sub: 'EQUIPMENT', qty: 1, cost: 1890 },
+        { name: '50ft Lineset Kit',    sub: 'MATERIAL',  qty: 1, cost: 180  },
+        { name: 'Smart Thermostat (Ecobee)', sub: 'MATERIAL', qty: 1, cost: 240 }
+      ],
+      hours: 8, rate: 145, markup: 60
+    }
+  };
+
+  // ============ RENDER PROFITABILITY ============
+  function renderLeaderboard() {
+    const el = document.getElementById('leaderboard');
+    el.innerHTML = techs.map((t, i) => `
+      <div class="lb-row" style="grid-template-columns: 32px 1fr auto auto;">
+        <div class="lb-rank">${String(i+1).padStart(2,'0')}</div>
+        <div class="lb-name">
+          ${t.name}
+          <span class="lb-meta">${t.role} · ${t.jobs} jobs</span>
+        </div>
+        <div class="lb-num">
+          <strong>$${(t.rev/1000).toFixed(1)}k</strong>
+          ${t.margin}% margin
+        </div>
+        <div class="lb-num commission">
+          <strong>$${t.commission.toLocaleString()}</strong>
+          commission
+        </div>
+        <div class="lb-bar-wrap">
+          <div class="lb-bar" style="width: ${t.bar}%"></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderJobs() {
+    const tbody = document.getElementById('jobs-body');
+    tbody.innerHTML = recentJobs.map(j => {
+      const cls = j.margin >= 50 ? 'high' : j.margin >= 40 ? 'med' : 'low';
+      return `
+        <tr>
+          <td><span class="job-id">${j.id}</span></td>
+          <td>
+            <div class="job-customer">${j.customer}</div>
+            <div class="job-desc">${j.desc}</div>
+          </td>
+          <td><span class="job-tech">${j.tech}</span></td>
+          <td class="job-num">$${j.rev.toLocaleString()}</td>
+          <td class="job-num" style="color: var(--ink-3);">$${j.cost.toLocaleString()}</td>
+          <td class="job-num"><span class="margin-tag ${cls}">${j.margin}%</span></td>
+          <td class="job-num" style="color: var(--accent);">$${j.comm}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function renderChart() {
+    const ctx = document.getElementById('marginChart').getContext('2d');
+    const grad = ctx.createLinearGradient(0, 0, 0, 280);
+    grad.addColorStop(0, 'rgba(232, 93, 44, 0.18)');
+    grad.addColorStop(1, 'rgba(232, 93, 44, 0)');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'],
+        datasets: [{
+          data: marginTrend,
+          borderColor: '#E85D2C',
+          backgroundColor: grad,
+          fill: true,
+          tension: 0.35,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#E85D2C',
+          pointHoverBorderColor: '#fff',
+          pointHoverBorderWidth: 2,
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: {
+          backgroundColor: '#0F1419', titleFont: { family: 'JetBrains Mono', size: 10 },
+          bodyFont: { family: 'JetBrains Mono', size: 12 },
+          padding: 10, displayColors: false,
+          callbacks: { label: c => `${c.parsed.y}% margin` }
+        }},
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { family: 'JetBrains Mono', size: 10 }, color: '#8A857A' }
+          },
+          y: {
+            min: 35, max: 46,
+            grid: { color: 'rgba(15,20,25,0.05)' },
+            border: { display: false },
+            ticks: {
+              font: { family: 'JetBrains Mono', size: 10 },
+              color: '#8A857A',
+              callback: v => v + '%'
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // ============ QUOTE BUILDER ============
+  let lineItems = [];
+
+  function loadTemplate(key) {
+    const t = templates[key];
+    lineItems = t.lines.map(l => ({...l}));
+    document.getElementById('laborHours').value = t.hours;
+    document.getElementById('laborRate').value = t.rate;
+    document.getElementById('markup').value = t.markup;
+    renderLineItems();
+    updateSummary();
+  }
+
+  function addEquipment() {
+    const sel = document.getElementById('equipmentSelect');
+    if (!sel.value) return;
+    const [, name, costStr] = sel.value.split('|');
+    const sub = sel.options[sel.selectedIndex].parentElement.label || 'MATERIAL';
+    lineItems.push({ name, sub: sub.toUpperCase(), qty: 1, cost: parseFloat(costStr) });
+    sel.value = '';
+    renderLineItems();
+    updateSummary();
+  }
+
+  function removeLine(i) {
+    lineItems.splice(i, 1);
+    renderLineItems();
+    updateSummary();
+  }
+
+  function updateQty(i, val) {
+    lineItems[i].qty = Math.max(0, parseFloat(val) || 0);
+    renderLineItems();
+    updateSummary();
+  }
+
+  function renderLineItems() {
+    const el = document.getElementById('lineItems');
+    if (lineItems.length === 0) {
+      el.innerHTML = `<div style="padding: 28px 20px; text-align: center; color: var(--ink-3); font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em;">No items — add equipment below or load a template above</div>`;
+      return;
+    }
+    el.innerHTML = lineItems.map((li, i) => `
+      <div class="line-item">
+        <div class="li-desc">
+          ${li.name}
+          <span class="li-sub">${li.sub}</span>
+        </div>
+        <div class="li-qty">
+          <input type="number" min="0" step="1" value="${li.qty}" oninput="updateQty(${i}, this.value)">
+        </div>
+        <div class="li-num unit">$${li.cost.toLocaleString()}</div>
+        <div class="li-num total">$${(li.qty * li.cost).toLocaleString()}</div>
+        <button class="li-remove" onclick="removeLine(${i})" aria-label="Remove">×</button>
+      </div>
+    `).join('');
+  }
+
+  function fmt(n) {
+    return '$' + Math.round(n).toLocaleString();
+  }
+
+  function updateSummary() {
+    const materials = lineItems.reduce((s, li) => s + li.qty * li.cost, 0);
+    const hours = parseFloat(document.getElementById('laborHours').value) || 0;
+    const rate  = parseFloat(document.getElementById('laborRate').value) || 0;
+    const labor = hours * rate;
+    const cost  = materials + labor;
+    const markupPct = parseFloat(document.getElementById('markup').value) || 0;
+    const markup = cost * (markupPct / 100);
+    const subtotalAfterMarkup = cost + markup;
+    const taxPct = parseFloat(document.getElementById('tax').value) || 0;
+    const tax = subtotalAfterMarkup * (taxPct / 100);
+    const total = subtotalAfterMarkup + tax;
+
+    const grossMargin = subtotalAfterMarkup > 0 ? (markup / subtotalAfterMarkup) * 100 : 0;
+    const commPct = parseFloat(document.getElementById('tech').value) || 0;
+    const commission = markup * commPct;
+
+    document.getElementById('sumMaterials').textContent = fmt(materials);
+    document.getElementById('sumLabor').textContent = fmt(labor);
+    document.getElementById('sumCost').textContent = fmt(cost);
+    document.getElementById('sumMarkup').textContent = fmt(markup);
+    document.getElementById('sumTax').textContent = fmt(tax);
+    document.getElementById('sumTotal').textContent = fmt(total);
+    document.getElementById('sumMargin').textContent = grossMargin.toFixed(1) + '%';
+    document.getElementById('sumComm').textContent = fmt(commission);
+    document.getElementById('lineCount').textContent = lineItems.length + ' lines';
+  }
+
+  function resetQuote() {
+    lineItems = [];
+    document.getElementById('laborHours').value = 0;
+    document.getElementById('laborRate').value = 145;
+    renderLineItems();
+    updateSummary();
+  }
+
+  // ============ TABS ============
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.disabled) return;
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById(t.dataset.view).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // ============ INIT ============
+  renderLeaderboard();
+  renderJobs();
+  renderChart();
+  loadTemplate('ac_replace');
+</script>
+
+
+<script id="kpc-protect-js">
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+  document.addEventListener('dragstart', function(e) {
+    var t = e.target && e.target.tagName;
+    if (t === 'IMG' || t === 'svg' || t === 'SVG') e.preventDefault();
+  }, false);
+  document.addEventListener('keydown', function(e) {
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) {
+      e.preventDefault(); return false;
+    }
+  }, false);
+})();
+</script>
+
+<a href="https://kanepc.com" target="_top" id="kpc-demo-badge"
+   style="position:fixed;bottom:14px;right:14px;
+          background:rgba(20,20,20,0.92);color:#fff;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+          text-decoration:none;padding:9px 14px;border-radius:3px;
+          border:1px solid rgba(255,255,255,0.12);
+          box-shadow:0 6px 18px rgba(0,0,0,0.35);
+          z-index:2147483647;line-height:1;
+          -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);">
+  Demo &middot; Built by <span style="color:#E65100">Kane PC</span>
+</a>
+
+</body>
+</html>

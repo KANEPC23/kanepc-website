@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legal Practice Portal — Kane PC Sample Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --slate:#1C2B3A;--slate-mid:#243648;--slate-light:#2E4460;
+  --burg:#7B1E2D;--burg-light:#9B2638;--burg-pale:#F7EEF0;
+  --cream:#F8F6F1;--white:#FFFFFF;
+  --tp:#1C2B3A;--ts:#5A6A7A;--tm:#8A9AAA;
+  --border:rgba(28,43,58,0.09);--border-s:rgba(28,43,58,0.16);
+  --s-bg:#EAF5EE;--s-tx:#1A6B3A;--w-bg:#FEF5E4;--w-tx:#92600A;
+  --d-bg:#FCEAEA;--d-tx:#9B2222;--i-bg:#E7F0FB;--i-tx:#1A4A8A;
+}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--tp);font-size:14px;}
+#app{display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:var(--slate);color:#fff;padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.tl{display:flex;align-items:center;gap:14px;}
+.firm-mark{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;color:#fff;white-space:nowrap;}
+.firm-mark em{font-style:italic;color:rgba(255,255,255,0.55);font-size:16px;}
+.tdiv{width:1px;height:20px;background:rgba(255,255,255,0.12);}
+.portal-lbl{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.08em;text-transform:uppercase;}
+.tr-side{display:flex;align-items:center;gap:10px;}
+.user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.1);border-radius:20px;padding:4px 12px 4px 4px;}
+.av{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;}
+.av-atty{background:var(--burg);color:#fff;}
+.uname{font-size:12px;color:rgba(255,255,255,0.7);}
+.rbadge{font-size:10px;padding:2px 8px;border-radius:8px;letter-spacing:0.04em;}
+.rbadge-atty{background:rgba(123,30,45,0.3);color:#D4758A;border:0.5px solid rgba(123,30,45,0.4);}
+.view-toggle{display:flex;gap:6px;}
+.vtbtn{font-size:11px;padding:4px 10px;border-radius:8px;cursor:pointer;border:0.5px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.45);background:transparent;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.vtbtn:hover,.vtbtn.active{background:var(--burg);color:#fff;border-color:var(--burg);}
+.sub-bar{background:var(--slate-mid);padding:7px 28px;display:flex;align-items:center;justify-content:space-between;}
+.pa-pills{display:flex;gap:5px;align-items:center;flex-wrap:wrap;}
+.pa-lbl{font-size:10px;color:rgba(255,255,255,0.22);letter-spacing:0.06em;text-transform:uppercase;margin-right:4px;}
+.pa-pill{font-size:11px;padding:3px 11px;border-radius:12px;cursor:pointer;border:0.5px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);transition:all .15s;background:transparent;font-family:'DM Sans',sans-serif;}
+.pa-pill:hover{color:rgba(255,255,255,0.7);}
+.pa-pill.active{background:var(--burg);color:#fff;border-color:var(--burg);}
+.int-pills{display:flex;gap:6px;align-items:center;}
+.int-lbl{font-size:10px;color:rgba(255,255,255,0.18);margin-right:2px;}
+.int-pill{font-size:10px;padding:2px 9px;border-radius:10px;}
+.int-gd{border:0.5px solid rgba(66,133,244,0.5);color:#7BADEE;}
+.int-ts{border:0.5px solid rgba(123,30,45,0.6);color:#D4758A;}
+.int-qb{border:0.5px solid rgba(39,174,96,0.4);color:#6DC98A;}
+.tabs-bar{background:var(--white);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 20px;}
+.tab{padding:0 16px;height:46px;display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;color:var(--ts);transition:all .15s;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif;}
+.tab:hover{color:var(--tp);}
+.tab.active{color:var(--slate);border-bottom-color:var(--burg);font-weight:500;}
+.tab.court-tab.active{color:#B22222;border-bottom-color:#B22222;}
+.tab.time-tab.active{color:var(--burg);border-bottom-color:var(--burg);}
+.tdot{width:6px;height:6px;border-radius:50%;background:#B22222;flex-shrink:0;animation:pulse 1.8s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.notif{min-width:17px;height:17px;border-radius:9px;background:var(--burg);color:#fff;font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center;padding:0 4px;}
+.main{flex:1;padding:26px 28px;max-width:1100px;margin:0 auto;width:100%;}
+.panel{display:none;}.panel.active{display:block;}
+.section-lbl{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--tm);margin-bottom:12px;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--tp);margin-bottom:14px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+.stat-lbl{font-size:11px;color:var(--tm);margin-bottom:5px;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;color:var(--tp);line-height:1;}
+.stat-sub{font-size:11px;color:var(--tm);margin-top:4px;}
+.stat-up{color:#1A6B3A;}.stat-warn{color:#92600A;}
+.badge{font-size:11px;padding:3px 10px;border-radius:10px;display:inline-block;white-space:nowrap;}
+.b-active{background:var(--s-bg);color:var(--s-tx);}
+.b-pending{background:var(--w-bg);color:var(--w-tx);}
+.b-review{background:var(--i-bg);color:var(--i-tx);}
+.b-urgent{background:var(--d-bg);color:var(--d-tx);font-weight:500;}
+.b-closed{background:#F0EEE8;color:#7A7060;}
+.b-trial{background:#F3E8FB;color:#6A1E8A;font-weight:500;}
+.mrow{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.mrow:last-child{border-bottom:none;}
+.mname{font-size:13px;font-weight:500;color:var(--tp);}
+.msub{font-size:11px;color:var(--tm);margin-top:2px;}
+.case-tbl{width:100%;border-collapse:collapse;}
+.case-tbl th{text-align:left;font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--tm);padding:0 12px 10px;border-bottom:1px solid var(--border);}
+.case-tbl td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+.case-tbl tr:last-child td{border-bottom:none;}
+.case-tbl tr:hover td{background:#FAFAF8;}
+.cnum{font-size:10px;color:var(--tm);font-family:monospace;}
+.folder-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.folder-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:border-color .15s;}
+.folder-card:hover{border-color:var(--burg);}
+.fi{font-size:22px;margin-bottom:6px;}.fn{font-size:13px;font-weight:500;color:var(--tp);}.fc{font-size:11px;color:var(--tm);margin-top:3px;}
+.doc-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer;}
+.doc-row:last-child{border-bottom:none;}
+.di{font-size:17px;flex-shrink:0;}.dn{flex:1;color:var(--tp);}.dm{font-size:11px;color:var(--tm);white-space:nowrap;}
+.dtag{font-size:10px;padding:2px 8px;border-radius:8px;border:0.5px solid var(--border-s);color:var(--ts);white-space:nowrap;}
+.dtag.shared{border-color:rgba(26,107,58,.3);color:var(--s-tx);background:var(--s-bg);}
+.dtag.sig{border-color:rgba(146,96,10,.3);color:var(--w-tx);background:var(--w-bg);}
+.dtag.gdrive{border-color:rgba(66,133,244,.3);color:#1A4A8A;background:#E7F0FB;}
+.dl-tbl{width:100%;border-collapse:collapse;}
+.dl-tbl th{text-align:left;font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--tm);padding:0 12px 10px;border-bottom:1px solid var(--border);}
+.dl-tbl td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+.dl-tbl tr:last-child td{border-bottom:none;}
+.dchip{font-size:11px;padding:4px 10px;border-radius:8px;font-weight:500;text-align:center;white-space:nowrap;background:#F0EEE8;color:var(--ts);}
+.dchip.hot{background:var(--d-bg);color:var(--d-tx);}
+.dchip.warn{background:var(--w-bg);color:var(--w-tx);}
+.days{font-size:11px;padding:3px 9px;border-radius:10px;}
+.days-hot{background:var(--d-bg);color:var(--d-tx);}
+.days-warn{background:var(--w-bg);color:var(--w-tx);}
+.days-ok{background:#F0EEE8;color:var(--tm);}
+.msg-layout{display:grid;grid-template-columns:210px 1fr;gap:16px;}
+.msg-sb{border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.msg-sb-hd{padding:11px 14px;background:#FAFAF8;border-bottom:1px solid var(--border);font-size:10px;font-weight:500;color:var(--tm);text-transform:uppercase;letter-spacing:0.07em;}
+.msg-ti{padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;}
+.msg-ti:last-child{border-bottom:none;}
+.msg-ti:hover,.msg-ti.active{background:var(--burg-pale);}
+.mtn{font-size:13px;font-weight:500;color:var(--tp);}
+.mts{font-size:11px;color:var(--tm);margin-top:2px;}
+.mtp{font-size:11px;color:var(--tm);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.unread-dot{width:7px;height:7px;border-radius:50%;background:var(--burg);flex-shrink:0;}
+.msg-pane{border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;}
+.msg-ph{padding:14px 18px;border-bottom:1px solid var(--border);background:#FAFAF8;border-radius:12px 12px 0 0;}
+.msg-pn{font-size:14px;font-weight:500;color:var(--tp);}
+.msg-pm{font-size:11px;color:var(--tm);margin-top:2px;}
+.msg-body{flex:1;padding:18px;display:flex;flex-direction:column;gap:14px;min-height:220px;}
+.msg{display:flex;gap:10px;}.msg.fc{flex-direction:row-reverse;}
+.mav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;}
+.mav-a{background:var(--slate);color:#fff;}.mav-c{background:var(--i-bg);color:var(--i-tx);}
+.mbubble{max-width:62%;border-radius:12px;padding:9px 13px;font-size:13px;line-height:1.55;}
+.mb-a{background:#F0EEE8;color:var(--tp);}.mb-c{background:var(--i-bg);color:var(--tp);}
+.mtime{font-size:10px;color:var(--tm);margin-top:4px;}
+.msg-foot{padding:11px 16px;border-top:1px solid var(--border);display:flex;gap:10px;}
+.msg-input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--tp);background:var(--white);outline:none;}
+.msg-input:focus{border-color:var(--burg);}
+.send-btn{padding:8px 16px;background:var(--slate);color:#fff;border:none;border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.court-alert{background:#B22222;color:#fff;border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.ca-dot{width:8px;height:8px;border-radius:50%;background:#fff;flex-shrink:0;}
+.ca-txt{font-size:13px;font-weight:500;}.ca-sub{font-size:11px;opacity:.75;margin-top:2px;}
+.court-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px;}
+.cct{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.ccn{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--tp);}
+.ccr{font-size:11px;color:var(--tm);margin-top:3px;}
+.ctime{font-size:14px;font-weight:500;color:#B22222;text-align:right;}
+.ctype{font-size:11px;color:var(--tm);text-align:right;margin-top:3px;}
+.cc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.cchip{font-size:11px;padding:4px 11px;border-radius:10px;border:1px solid var(--border);color:var(--ts);cursor:pointer;}
+.cchip.doc{border-color:rgba(26,74,138,.25);color:var(--i-tx);background:var(--i-bg);}
+.cchip.note{border-color:rgba(26,107,58,.25);color:var(--s-tx);background:var(--s-bg);}
+.court-quick{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:6px;}
+.cq-title{font-size:12px;font-weight:500;color:var(--tp);margin-bottom:10px;}
+.cq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.cq-lbl{font-size:10px;color:var(--tm);}.cq-val{font-size:12px;color:var(--ts);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.contact-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:13px;display:flex;align-items:center;gap:12px;}
+.cav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.av-j{background:#F0EEE8;color:#5A4A30;}.av-o{background:var(--i-bg);color:var(--i-tx);}
+.av-c{background:var(--s-bg);color:var(--s-tx);}.av-s{background:var(--burg-pale);color:var(--burg);}
+.cname{font-size:13px;font-weight:500;color:var(--tp);}
+.crole{font-size:11px;color:var(--tm);margin-top:2px;}
+.cphone{font-size:11px;color:var(--i-tx);margin-top:3px;}
+.time-layout{display:grid;grid-template-columns:1fr 340px;gap:20px;}
+.time-form{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:22px;}
+.time-form-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--tp);margin-bottom:6px;}
+.time-form-sub{font-size:12px;color:var(--tm);margin-bottom:20px;}
+.form-row{margin-bottom:16px;}
+.form-label{font-size:11px;font-weight:500;color:var(--ts);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:6px;display:block;}
+.form-select,.form-input,.form-textarea{width:100%;padding:9px 12px;border:1px solid var(--border-s);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--tp);background:var(--white);outline:none;transition:border-color .15s;}
+.form-select:focus,.form-input:focus,.form-textarea:focus{border-color:var(--burg);}
+.form-textarea{resize:vertical;min-height:80px;line-height:1.5;}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.hours-input{width:100%;padding:9px 12px;border:1px solid var(--border-s);border-radius:8px;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;color:var(--tp);outline:none;}
+.hours-input:focus{border-color:var(--burg);}
+.hours-hint{font-size:10px;color:var(--tm);margin-top:4px;}
+.submit-row{display:flex;gap:10px;margin-top:6px;}
+.btn-primary{padding:10px 20px;background:var(--burg);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.btn-secondary{padding:10px 18px;background:var(--white);color:var(--tp);border:1px solid var(--border-s);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.time-sidebar{display:flex;flex-direction:column;gap:14px;}
+.slip-preview{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.slip-title{font-size:11px;font-weight:500;color:var(--tm);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;}
+.slip-header{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+.slip-firm{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:500;color:var(--tp);}
+.slip-addr{font-size:10px;color:var(--tm);margin-top:3px;line-height:1.5;}
+.slip-date{font-size:11px;color:var(--ts);text-align:right;}
+.slip-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;}
+.slip-key{color:var(--tm);}.slip-val{color:var(--tp);font-weight:500;text-align:right;max-width:60%;}
+.slip-desc{margin-top:10px;padding:10px;background:var(--cream);border-radius:8px;font-size:12px;color:var(--ts);line-height:1.5;min-height:48px;}
+.slip-total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+.slip-total-lbl{font-size:11px;color:var(--tm);}
+.slip-total-val{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--burg);}
+.slip-actions{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.slip-btn{width:100%;padding:9px 16px;border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;text-align:center;display:block;}
+.slip-btn-email{background:var(--burg);color:#fff;border:none;}
+.slip-btn-copy{background:var(--white);color:var(--tp);border:1px solid var(--border-s);}
+.recent-slips{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;}
+.rslip-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);}
+.rslip-item:last-child{border-bottom:none;}
+.rslip-who{font-size:12px;font-weight:500;color:var(--tp);}
+.rslip-matter{font-size:11px;color:var(--tm);}
+.rslip-right{text-align:right;}
+.rslip-hrs{font-size:12px;font-weight:500;color:var(--burg);}
+.rslip-code{font-size:10px;color:var(--tm);}
+.client-welcome{background:var(--slate);border-radius:12px;padding:22px 24px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;}
+.client-welcome::after{content:'';position:absolute;right:-20px;top:-20px;width:110px;height:110px;border-radius:50%;background:rgba(123,30,45,0.2);}
+.cw-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:#fff;margin-bottom:4px;}
+.cw-matter{font-size:13px;color:rgba(255,255,255,0.5);}
+.cw-atty{font-size:12px;color:#D4758A;margin-top:8px;}
+.search-input{width:100%;padding:9px 13px;border:1px solid var(--border-s);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--white);color:var(--tp);outline:none;margin-bottom:14px;}
+.search-input:focus{border-color:var(--burg);}
+.footer{border-top:1px solid var(--border);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;background:var(--white);}
+.fbrand{font-size:11px;color:var(--tm);}
+.fbrand span{color:var(--burg);}
+.flinks{display:flex;gap:16px;}
+.flink{font-size:11px;color:var(--tm);cursor:pointer;}
+.demo-banner{background:var(--burg-pale);border-bottom:1px solid rgba(123,30,45,0.15);padding:7px 28px;display:flex;align-items:center;justify-content:space-between;}
+.demo-banner-txt{font-size:11px;color:var(--burg);font-weight:500;}
+.demo-banner-sub{font-size:11px;color:var(--ts);}
+@media(max-width:720px){
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .two-col,.folder-grid,.contact-grid,.msg-layout,.time-layout{grid-template-columns:1fr;}
+  .main{padding:16px;}
+  .sub-bar{flex-direction:column;gap:6px;align-items:flex-start;}
+}
+</style>
+
+<style id="kpc-protect">
+  body {
+    -webkit-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text; -moz-user-select: text;
+    -ms-user-select: text; user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img, svg {
+    -webkit-user-drag: none; user-drag: none;
+    -webkit-touch-callout: none;
+  }
+</style>
+
+</head>
+<body>
+
+<div id="app">
+
+  <!-- DEMO BANNER -->
+  <div class="demo-banner">
+    <div class="demo-banner-txt">⚡ Interactive Demo — Kane PC Legal Practice Portal</div>
+    <div class="demo-banner-sub">Toggle Attorney / Client view · No data transmitted · <strong>kanepc.com</strong> · (555) 010-0100</div>
+  </div>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tl">
+      <div class="firm-mark" id="firm-mark">Marsden &amp; Rowan <em>Law Group</em></div>
+      <div class="tdiv"></div>
+      <div class="portal-lbl" id="portal-lbl">Attorney Portal</div>
+    </div>
+    <div class="tr-side">
+      <div class="view-toggle">
+        <button class="vtbtn active" onclick="switchView('attorney',this)">⚖️ Attorney View</button>
+        <button class="vtbtn" onclick="switchView('client',this)">👤 Client View</button>
+      </div>
+      <div class="user-chip">
+        <div class="av av-atty" id="user-av">CR</div>
+        <div class="uname" id="user-name">Catherine A. Rowan, Esq.</div>
+      </div>
+      <span class="rbadge rbadge-atty" id="role-badge">Partner</span>
+    </div>
+  </div>
+
+  <!-- ATTORNEY SUB-BAR -->
+  <div class="sub-bar" id="sub-bar-atty">
+    <div class="pa-pills">
+      <span class="pa-lbl">Practice area:</span>
+      <button class="pa-pill active" onclick="setPa(this)">All Matters</button>
+      <button class="pa-pill" onclick="setPa(this)">General Liability</button>
+      <button class="pa-pill" onclick="setPa(this)">Premises</button>
+      <button class="pa-pill" onclick="setPa(this)">Labor Law</button>
+      <button class="pa-pill" onclick="setPa(this)">Products</button>
+      <button class="pa-pill" onclick="setPa(this)">SIU / Fraud</button>
+      <button class="pa-pill" onclick="setPa(this)">Municipal</button>
+      <button class="pa-pill" onclick="setPa(this)">Commercial</button>
+    </div>
+    <div class="int-pills">
+      <span class="int-lbl">Connected:</span>
+      <span class="int-pill int-gd">Google Drive</span>
+      <span class="int-pill int-ts">Timeslips</span>
+      <span class="int-pill int-qb">QuickBooks</span>
+    </div>
+  </div>
+
+  <!-- ATTORNEY TABS -->
+  <div class="tabs-bar" id="tabs-atty">
+    <button class="tab active" onclick="showTab('dashboard',this)">◈ &nbsp;Dashboard</button>
+    <button class="tab" onclick="showTab('matters',this)">⊟ &nbsp;Matters</button>
+    <button class="tab" onclick="showTab('docs',this)">⊡ &nbsp;Documents</button>
+    <button class="tab" onclick="showTab('deadlines',this)">◷ &nbsp;Deadlines</button>
+    <button class="tab time-tab" onclick="showTab('timeentry',this)">⏱ &nbsp;Time Entry</button>
+    <button class="tab" onclick="showTab('messages',this)">⊠ &nbsp;Messages <span class="notif">4</span></button>
+    <button class="tab court-tab" onclick="showTab('court',this)"><span class="tdot"></span>&nbsp; Court Mode</button>
+    <button class="tab" onclick="showTab('contacts',this)">⊕ &nbsp;Contacts</button>
+  </div>
+
+  <!-- CLIENT TABS -->
+  <div class="tabs-bar" id="tabs-client" style="display:none;">
+    <button class="tab active" onclick="showClientTab('c-overview',this)">◈ &nbsp;My Matter</button>
+    <button class="tab" onclick="showClientTab('c-docs',this)">⊡ &nbsp;My Documents</button>
+    <button class="tab" onclick="showClientTab('c-messages',this)">⊠ &nbsp;Messages <span class="notif">1</span></button>
+    <button class="tab" onclick="showClientTab('c-dates',this)">◷ &nbsp;Key Dates</button>
+  </div>
+
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-lbl">Active Matters</div><div class="stat-val">47</div><div class="stat-sub stat-up">↑ 5 this month</div></div>
+        <div class="stat-card"><div class="stat-lbl">Upcoming Deadlines</div><div class="stat-val">12</div><div class="stat-sub stat-warn">⚠ 3 within 72 hrs</div></div>
+        <div class="stat-card"><div class="stat-lbl">Time Slips Pending</div><div class="stat-val">8</div><div class="stat-sub">Awaiting billing review</div></div>
+        <div class="stat-card"><div class="stat-lbl">Office Location</div><div class="stat-val">WP</div><div class="stat-sub">White Plains, NY</div></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Recent Matters</div>
+          <div class="mrow"><div><div class="mname">Anderson v. Triboro Transit Authority</div><div class="msub">Labor Law § 240/241 · White Plains</div></div><span class="badge b-trial">Trial Prep</span></div>
+          <div class="mrow"><div><div class="mname">Delgado v. City of Stamford</div><div class="msub">Municipal Defense · Civil Rights § 1983</div></div><span class="badge b-urgent">Dep. Tomorrow</span></div>
+          <div class="mrow"><div><div class="mname">SIU — Rivera Claim #2025-SIU-041</div><div class="msub">Insurance Fraud · Staged Accident</div></div><span class="badge b-active">Investigation</span></div>
+          <div class="mrow"><div><div class="mname">Porter v. Greenfield Retail Group</div><div class="msub">Premises Liability · Slip &amp; Fall</div></div><span class="badge b-review">Discovery</span></div>
+          <div class="mrow"><div><div class="mname">Lakeside Ave. Construction Defects</div><div class="msub">Construction Defects · White Plains</div></div><span class="badge b-pending">Expert Disclosure</span></div>
+          <div class="mrow"><div><div class="mname">Harbor View Realty v. Summit Dev.</div><div class="msub">Commercial Litigation · Breach of Contract</div></div><span class="badge b-review">Motion Practice</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Upcoming Deadlines</div>
+          <div class="mrow"><div style="display:flex;gap:10px;align-items:center"><div class="dchip hot" style="min-width:50px">Jun 3</div><div><div class="mname">Anderson — Plaintiff Expert Disclosure</div><div class="msub">Labor Law · SDNY</div></div></div></div>
+          <div class="mrow"><div style="display:flex;gap:10px;align-items:center"><div class="dchip hot" style="min-width:50px">Jun 4</div><div><div class="mname">Delgado — Deposition of Commander Harris</div><div class="msub">Municipal Defense · White Plains</div></div></div></div>
+          <div class="mrow"><div style="display:flex;gap:10px;align-items:center"><div class="dchip warn" style="min-width:50px">Jun 10</div><div><div class="mname">Porter — Response to Summary Judgment</div><div class="msub">Premises · Westchester Sup. Ct.</div></div></div></div>
+          <div class="mrow"><div style="display:flex;gap:10px;align-items:center"><div class="dchip" style="min-width:50px">Jun 18</div><div><div class="mname">Lakeside — Expert Disclosure Deadline</div><div class="msub">Construction · Westchester Sup. Ct.</div></div></div></div>
+          <div class="mrow"><div style="display:flex;gap:10px;align-items:center"><div class="dchip" style="min-width:50px">Jun 25</div><div><div class="mname">Harbor View Realty — Note of Issue</div><div class="msub">Commercial · NY Sup. Ct.</div></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATTERS -->
+    <div class="panel" id="panel-matters">
+      <input class="search-input" placeholder="Search matters, clients, index number…">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+        <button class="pa-pill active" style="font-size:12px;" onclick="setPa(this)">All</button>
+        <button class="pa-pill" style="font-size:12px;" onclick="setPa(this)">Labor Law</button>
+        <button class="pa-pill" style="font-size:12px;" onclick="setPa(this)">Premises</button>
+        <button class="pa-pill" style="font-size:12px;" onclick="setPa(this)">Municipal</button>
+        <button class="pa-pill" style="font-size:12px;" onclick="setPa(this)">SIU / Fraud</button>
+        <button class="pa-pill" style="font-size:12px;" onclick="setPa(this)">Products</button>
+        <button class="pa-pill" style="font-size:12px;" onclick="setPa(this)">Commercial</button>
+        <button class="pa-pill" style="font-size:12px;" onclick="setPa(this)">Construction</button>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <table class="case-tbl">
+          <thead><tr><th>Matter</th><th>Client / Insured</th><th>Practice Area</th><th>Attorney</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><div class="mname">Anderson v. Triboro Transit Authority</div><div class="cnum">Index #2023-88412</div></td><td>Triboro Transit / MTA</td><td>Labor Law § 240</td><td>Reed</td><td><span class="badge b-trial">Trial Prep</span></td></tr>
+            <tr><td><div class="mname">Delgado v. City of Stamford</div><div class="cnum">Index #2024-33218</div></td><td>City of Stamford</td><td>Municipal Defense</td><td>Morrison</td><td><span class="badge b-urgent">Dep. Tomorrow</span></td></tr>
+            <tr><td><div class="mname">SIU — Rivera #2025-SIU-041</div><div class="cnum">Claim #RV-2025-0041</div></td><td>Meridian Insurance</td><td>SIU / Insurance Fraud</td><td>Morrison</td><td><span class="badge b-active">Investigation</span></td></tr>
+            <tr><td><div class="mname">Porter v. Greenfield Retail Group</div><div class="cnum">Index #2024-55901</div></td><td>Greenfield Retail Group</td><td>Premises Liability</td><td>Holt</td><td><span class="badge b-review">Discovery</span></td></tr>
+            <tr><td><div class="mname">Lakeside Ave. Construction Defects</div><div class="cnum">Index #2024-77034</div></td><td>Lakeside Development LLC</td><td>Construction Defects</td><td>Flanagan</td><td><span class="badge b-pending">Expert Disclosure</span></td></tr>
+            <tr><td><div class="mname">Harbor View Realty v. Summit Dev.</div><div class="cnum">Index #2024-61290</div></td><td>Harbor View Realty LLC</td><td>Commercial Litigation</td><td>Reed</td><td><span class="badge b-review">Motion Practice</span></td></tr>
+            <tr><td><div class="mname">Reyes v. Eastside Market Group</div><div class="cnum">Index #2025-10845</div></td><td>Eastside Market Group</td><td>Premises Liability</td><td>Greco</td><td><span class="badge b-active">Active</span></td></tr>
+            <tr><td><div class="mname">Halcyon Products Recall</div><div class="cnum">Index #2024-SDNY-7712</div></td><td>Halcyon Industries</td><td>Products Liability</td><td>Holt</td><td><span class="badge b-review">Discovery</span></td></tr>
+            <tr><td><div class="mname">Fairfield County v. Marsh</div><div class="cnum">Index #2024-44107</div></td><td>Fairfield County</td><td>Municipal Defense</td><td>Morrison</td><td><span class="badge b-active">Active</span></td></tr>
+            <tr><td><div class="mname">Tanaka v. Summit Properties</div><div class="cnum">Index #2025-22690</div></td><td>Summit Properties</td><td>Labor Law § 241</td><td>Walsh</td><td><span class="badge b-active">Active</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div class="panel" id="panel-docs">
+      <div class="section-lbl">Document Vault — Synced with Google Drive</div>
+      <div class="folder-grid">
+        <div class="folder-card"><div class="fi">📁</div><div class="fn">Pleadings &amp; Motions</div><div class="fc">58 documents · Google Drive</div></div>
+        <div class="folder-card"><div class="fi">📁</div><div class="fn">Discovery &amp; Depositions</div><div class="fc">44 documents · Google Drive</div></div>
+        <div class="folder-card"><div class="fi">📁</div><div class="fn">Expert Reports &amp; Disclosure</div><div class="fc">19 documents</div></div>
+        <div class="folder-card"><div class="fi">📁</div><div class="fn">Court Orders &amp; Decisions</div><div class="fc">23 documents</div></div>
+        <div class="folder-card"><div class="fi">📁</div><div class="fn">SIU Investigation Files</div><div class="fc">12 documents · Restricted</div></div>
+        <div class="folder-card"><div class="fi">🔗</div><div class="fn">Shared with Client</div><div class="fc">18 documents · Secure link</div></div>
+      </div>
+      <div class="section-lbl">Recent Documents</div>
+      <div class="card" style="padding:4px 16px;">
+        <div class="doc-row"><span class="di">📄</span><div class="dn">Anderson_Expert_Disclosure_Opposition.pdf</div><span class="dm">Jun 1 · 248 KB</span><span class="dtag gdrive">Google Drive</span></div>
+        <div class="doc-row"><span class="di">📋</span><div class="dn">Delgado_Commander_Deposition_Notice.docx</div><span class="dm">May 31 · 76 KB</span><span class="dtag sig">Pending Service</span></div>
+        <div class="doc-row"><span class="di">📄</span><div class="dn">Rivera_SIU_Investigation_Report_v2.pdf</div><span class="dm">May 30 · 512 KB</span><span class="dtag">Internal · Restricted</span></div>
+        <div class="doc-row"><span class="di">📊</span><div class="dn">Porter_Incident_Report_Analysis.xlsx</div><span class="dm">May 28 · 66 KB</span><span class="dtag gdrive">Google Drive</span></div>
+        <div class="doc-row"><span class="di">📄</span><div class="dn">HarborView_MSJ_Opposition_Brief.pdf</div><span class="dm">May 27 · 184 KB</span><span class="dtag shared">Shared ✓</span></div>
+        <div class="doc-row"><span class="di">📋</span><div class="dn">Lakeside_Expert_Witness_CV_Amended.docx</div><span class="dm">May 26 · 102 KB</span><span class="dtag gdrive">Google Drive</span></div>
+      </div>
+    </div>
+
+    <!-- DEADLINES -->
+    <div class="panel" id="panel-deadlines">
+      <div class="section-lbl">All Upcoming Deadlines</div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <table class="dl-tbl">
+          <thead><tr><th>Date</th><th>Matter / Event</th><th>Court / Venue</th><th>Attorney</th><th>Due In</th></tr></thead>
+          <tbody>
+            <tr><td><span class="dchip hot">Jun 3</span></td><td><div class="mname">Anderson — Plaintiff Expert Disclosure response</div><div class="cnum">Labor Law · Index #2023-88412</div></td><td style="font-size:12px;color:var(--ts)">SDNY</td><td style="font-size:12px;color:var(--ts)">Reed</td><td><span class="days days-hot">2 days</span></td></tr>
+            <tr><td><span class="dchip hot">Jun 4</span></td><td><div class="mname">Delgado — Deposition of Commander Harris</div><div class="cnum">Municipal · Index #2024-33218</div></td><td style="font-size:12px;color:var(--ts)">White Plains</td><td style="font-size:12px;color:var(--ts)">Morrison</td><td><span class="days days-hot">3 days</span></td></tr>
+            <tr><td><span class="dchip hot">Jun 7</span></td><td><div class="mname">Rivera SIU — Examination Under Oath</div><div class="cnum">SIU / Fraud · Claim #RV-2025-0041</div></td><td style="font-size:12px;color:var(--ts)">Meridian Ins. Office</td><td style="font-size:12px;color:var(--ts)">Morrison</td><td><span class="days days-hot">6 days</span></td></tr>
+            <tr><td><span class="dchip warn">Jun 10</span></td><td><div class="mname">Porter — Response to Summary Judgment motion</div><div class="cnum">Premises · Index #2024-55901</div></td><td style="font-size:12px;color:var(--ts)">Westchester Sup. Ct.</td><td style="font-size:12px;color:var(--ts)">Holt</td><td><span class="days days-warn">9 days</span></td></tr>
+            <tr><td><span class="dchip">Jun 18</span></td><td><div class="mname">Lakeside — Defense expert disclosure deadline</div><div class="cnum">Construction · Index #2024-77034</div></td><td style="font-size:12px;color:var(--ts)">Westchester Sup. Ct.</td><td style="font-size:12px;color:var(--ts)">Flanagan</td><td><span class="days days-ok">17 days</span></td></tr>
+            <tr><td><span class="dchip">Jun 25</span></td><td><div class="mname">Harbor View Realty — Note of Issue filing</div><div class="cnum">Commercial · Index #2024-61290</div></td><td style="font-size:12px;color:var(--ts)">NY Supreme Court</td><td style="font-size:12px;color:var(--ts)">Reed</td><td><span class="days days-ok">24 days</span></td></tr>
+            <tr><td><span class="dchip">Jul 8</span></td><td><div class="mname">Tanaka — Deposition of site supervisor</div><div class="cnum">Labor Law § 241 · Index #2025-22690</div></td><td style="font-size:12px;color:var(--ts)">Westchester Sup. Ct.</td><td style="font-size:12px;color:var(--ts)">Walsh</td><td><span class="days days-ok">37 days</span></td></tr>
+            <tr><td><span class="dchip">Jul 20</span></td><td><div class="mname">Halcyon — Close of fact discovery</div><div class="cnum">Products Liability · SDNY</div></td><td style="font-size:12px;color:var(--ts)">SDNY</td><td style="font-size:12px;color:var(--ts)">Holt</td><td><span class="days days-ok">49 days</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TIME ENTRY -->
+    <div class="panel" id="panel-timeentry">
+      <div class="time-layout">
+        <div>
+          <div class="time-form">
+            <div class="time-form-title">Submit Time Entry</div>
+            <div class="time-form-sub">Complete the slip below. Click "Email to Billing" to send directly to the billing coordinator for Timeslips entry — or copy the formatted slip to paste manually.</div>
+            <div class="form-row-2">
+              <div class="form-row" style="margin-bottom:0">
+                <label class="form-label">Timekeeper</label>
+                <select class="form-select" id="te-atty" onchange="updatePreview()">
+                  <option value="">— Select attorney —</option>
+                  <option value="James T. Morrison" data-rate="425">James T. Marsden, Esq. — $425/hr</option>
+                  <option value="Catherine A. Reed" data-rate="425">Catherine A. Rowan, Esq. — $425/hr</option>
+                  <option value="David M. Holt" data-rate="325">David M. Hayes, Esq. — $325/hr</option>
+                  <option value="Sarah K. Flanagan" data-rate="325">Sarah K. Flanagan, Esq. — $325/hr</option>
+                  <option value="Michael P. Greco" data-rate="325">Michael P. Greco, Esq. — $325/hr</option>
+                  <option value="Lauren B. Walsh" data-rate="325">Lauren B. Walsh, Esq. — $325/hr</option>
+                  <option value="Kevin R. Chu" data-rate="300">Kevin R. Chu, Esq. — $300/hr</option>
+                  <option value="Rebecca T. Sloane" data-rate="300">Rebecca T. Sloane, Esq. — $300/hr</option>
+                  <option value="Patricia M. Alvarez" data-rate="145">Patricia M. Alvarez, Paralegal — $145/hr</option>
+                  <option value="Nancy L. Keane" data-rate="145">Nancy L. Keane, Paralegal — $145/hr</option>
+                  <option value="Dorothy M. Finn" data-rate="145">Dorothy M. Foster, Paralegal — $145/hr</option>
+                </select>
+              </div>
+              <div class="form-row" style="margin-bottom:0">
+                <label class="form-label">Date of Service</label>
+                <input class="form-input" type="date" id="te-date" onchange="updatePreview()">
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:16px;">
+              <label class="form-label">Matter</label>
+              <select class="form-select" id="te-matter" onchange="updatePreview()">
+                <option value="">— Select matter —</option>
+                <option value="Anderson v. Triboro Transit Authority | Index #2023-88412">Anderson v. Triboro Transit · #2023-88412</option>
+                <option value="Delgado v. City of Stamford | Index #2024-33218">Delgado v. City of Stamford · #2024-33218</option>
+                <option value="SIU — Rivera #2025-SIU-041 | Claim #RV-2025-0041">SIU — Rivera · Claim #RV-2025-0041</option>
+                <option value="Porter v. Greenfield Retail Group | Index #2024-55901">Porter v. Greenfield Retail · #2024-55901</option>
+                <option value="Lakeside Ave. Construction Defects | Index #2024-77034">Lakeside Construction Defects · #2024-77034</option>
+                <option value="Harbor View Realty v. Summit Dev. | Index #2024-61290">Harbor View Realty v. Summit Dev. · #2024-61290</option>
+                <option value="Reyes v. Eastside Market Group | Index #2025-10845">Reyes v. Eastside Market · #2025-10845</option>
+                <option value="Halcyon Products Recall | Index #2024-SDNY-7712">Halcyon Products Recall · #SDNY-7712</option>
+                <option value="Tanaka v. Summit Properties | Index #2025-22690">Tanaka v. Summit Properties · #2025-22690</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Billing Code</label>
+              <select class="form-select" id="te-code" onchange="updatePreview()">
+                <option value="">— Select billing code —</option>
+                <optgroup label="Case Management">
+                  <option value="L100 — Case Review &amp; Assessment">L100 — Case Review &amp; Assessment</option>
+                  <option value="L110 — Fact Investigation &amp; Development">L110 — Fact Investigation &amp; Development</option>
+                  <option value="L120 — Analysis &amp; Strategy">L120 — Analysis &amp; Strategy</option>
+                  <option value="L130 — Expert / Consultant Coordination">L130 — Expert / Consultant Coordination</option>
+                  <option value="L140 — Document &amp; File Management">L140 — Document &amp; File Management</option>
+                </optgroup>
+                <optgroup label="Pleadings &amp; Motions">
+                  <option value="L210 — Pleadings">L210 — Pleadings</option>
+                  <option value="L230 — Court-Mandated Conference / CMC">L230 — Court-Mandated Conference / CMC</option>
+                  <option value="L240 — Dispositive Motions (MSJ / MTD)">L240 — Dispositive Motions (MSJ / MTD)</option>
+                  <option value="L250 — Written Motions &amp; Submissions">L250 — Written Motions &amp; Submissions</option>
+                </optgroup>
+                <optgroup label="Discovery">
+                  <option value="L310 — Written Discovery">L310 — Written Discovery</option>
+                  <option value="L320 — Document Production &amp; Review">L320 — Document Production &amp; Review</option>
+                  <option value="L330 — Deposition (Prep / Attend / Defend)">L330 — Deposition (Prep / Attend / Defend)</option>
+                  <option value="L340 — Expert Discovery">L340 — Expert Discovery</option>
+                  <option value="L350 — Discovery Motions">L350 — Discovery Motions</option>
+                </optgroup>
+                <optgroup label="Trial">
+                  <option value="L410 — Fact Witness Preparation">L410 — Fact Witness Preparation</option>
+                  <option value="L420 — Expert Witness Preparation">L420 — Expert Witness Preparation</option>
+                  <option value="L440 — Trial Motions &amp; Motions in Limine">L440 — Trial Motions &amp; Motions in Limine</option>
+                  <option value="L450 — Trial Attendance &amp; Preparation">L450 — Trial Attendance &amp; Preparation</option>
+                  <option value="L460 — Post-Trial Motions">L460 — Post-Trial Motions</option>
+                </optgroup>
+                <optgroup label="Appeals">
+                  <option value="L510 — Appellate Motions">L510 — Appellate Motions</option>
+                  <option value="L520 — Appellate Briefs &amp; Record">L520 — Appellate Briefs &amp; Record</option>
+                  <option value="L530 — Oral Argument">L530 — Oral Argument</option>
+                </optgroup>
+                <optgroup label="Communications">
+                  <option value="C100 — Client Communication">C100 — Client Communication</option>
+                  <option value="C110 — Opposing Counsel Communication">C110 — Opposing Counsel Communication</option>
+                  <option value="C120 — Court Communication / Correspondence">C120 — Court Communication / Correspondence</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="form-row-2">
+              <div>
+                <label class="form-label">Hours</label>
+                <input class="hours-input" type="number" id="te-hours" min="0.1" max="24" step="0.1" placeholder="0.0" onchange="updatePreview()" oninput="updatePreview()">
+                <div class="hours-hint">Enter in tenths (e.g. 1.5 = 1 hr 30 min)</div>
+              </div>
+              <div>
+                <label class="form-label">Rate (auto-filled)</label>
+                <input class="hours-input" type="text" id="te-rate" placeholder="$0/hr" readonly style="background:#FAFAF8;color:var(--ts);">
+                <div class="hours-hint">Rate pulled from timekeeper selection</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Description of Work Performed</label>
+              <textarea class="form-textarea" id="te-desc" placeholder="Briefly describe the work performed. This will appear on the time slip and in Timeslips billing records…" onchange="updatePreview()" oninput="updatePreview()"></textarea>
+            </div>
+            <div class="submit-row">
+              <button class="btn-primary" onclick="emailSlip()">📧 Email to Billing</button>
+              <button class="btn-secondary" onclick="copySlip()">📋 Copy Slip</button>
+              <button class="btn-secondary" onclick="clearForm()">Clear</button>
+            </div>
+          </div>
+        </div>
+        <div class="time-sidebar">
+          <div class="slip-preview">
+            <div class="slip-title">Time Slip Preview</div>
+            <div class="slip-header">
+              <div>
+                <div class="slip-firm">Marsden &amp; Rowan Legal Group</div>
+                <div class="slip-addr">200 Main Street<br>White Plains, NY 10000<br>(555) 010-0100</div>
+              </div>
+              <div class="slip-date" id="prev-date">—</div>
+            </div>
+            <div class="slip-row"><span class="slip-key">Timekeeper</span><span class="slip-val" id="prev-atty">—</span></div>
+            <div class="slip-row"><span class="slip-key">Matter</span><span class="slip-val" id="prev-matter" style="font-size:11px">—</span></div>
+            <div class="slip-row"><span class="slip-key">Billing Code</span><span class="slip-val" id="prev-code" style="font-size:11px">—</span></div>
+            <div class="slip-row"><span class="slip-key">Hours</span><span class="slip-val" id="prev-hours">—</span></div>
+            <div class="slip-desc" id="prev-desc" style="color:var(--tm);font-style:italic;">Description will appear here…</div>
+            <div class="slip-total">
+              <span class="slip-total-lbl">Billable Amount</span>
+              <span class="slip-total-val" id="prev-total">$0.00</span>
+            </div>
+            <div class="slip-actions">
+              <button class="slip-btn slip-btn-email" onclick="emailSlip()">📧 Email to Billing Coordinator</button>
+              <button class="slip-btn slip-btn-copy" onclick="copySlip()">📋 Copy Formatted Slip</button>
+            </div>
+            <div style="margin-top:10px;font-size:10px;color:var(--tm);text-align:center;line-height:1.5;">Slip emails to <strong>billing@marsdenrowanlaw.com</strong><br>for Timeslips entry by billing coordinator</div>
+          </div>
+          <div class="recent-slips">
+            <div class="slip-title" style="margin-bottom:12px;">Recent Slips — This Week</div>
+            <div class="rslip-item"><div><div class="rslip-who">C. Reed</div><div class="rslip-matter">Anderson v. Triboro Transit</div></div><div class="rslip-right"><div class="rslip-hrs">2.5 hrs</div><div class="rslip-code">L330 — Deposition</div></div></div>
+            <div class="rslip-item"><div><div class="rslip-who">J. Morrison</div><div class="rslip-matter">Rivera SIU #041</div></div><div class="rslip-right"><div class="rslip-hrs">1.8 hrs</div><div class="rslip-code">L110 — Investigation</div></div></div>
+            <div class="rslip-item"><div><div class="rslip-who">D. Holt</div><div class="rslip-matter">Porter v. Greenfield</div></div><div class="rslip-right"><div class="rslip-hrs">3.2 hrs</div><div class="rslip-code">L320 — Doc Review</div></div></div>
+            <div class="rslip-item"><div><div class="rslip-who">P. Alvarez</div><div class="rslip-matter">Harbor View Realty</div></div><div class="rslip-right"><div class="rslip-hrs">4.0 hrs</div><div class="rslip-code">L310 — Discovery</div></div></div>
+            <div class="rslip-item"><div><div class="rslip-who">S. Flanagan</div><div class="rslip-matter">Lakeside Construction</div></div><div class="rslip-right"><div class="rslip-hrs">1.5 hrs</div><div class="rslip-code">L130 — Expert Coord.</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="panel" id="panel-messages">
+      <div class="msg-layout">
+        <div class="msg-sb">
+          <div class="msg-sb-hd">Secure Messages</div>
+          <div class="msg-ti active"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div class="mtn">Triboro Transit Legal Dept.</div><div class="unread-dot"></div></div><div class="mts">Anderson Matter · Jun 1</div><div class="mtp">Expert disclosure — our position…</div></div>
+          <div class="msg-ti"><div class="mtn">Meridian Insurance — Claims</div><div class="mts">Rivera SIU · May 31</div><div class="mtp">EUO scheduling confirmed</div></div>
+          <div class="msg-ti"><div class="mtn">Corp. Counsel, Stamford</div><div class="mts">Delgado Matter · May 30</div><div class="mtp">Cmdr. Harris availability Jun 4</div></div>
+          <div class="msg-ti"><div class="mtn">Greenfield Legal — Thomas Walsh</div><div class="mts">Porter Matter · May 29</div><div class="mtp">MSJ brief attached for review</div></div>
+        </div>
+        <div class="msg-pane">
+          <div class="msg-ph">
+            <div class="msg-pn">Triboro Transit Authority — Legal Department</div>
+            <div class="msg-pm">Anderson v. Triboro Transit · Index #2023-88412 · Labor Law § 240</div>
+          </div>
+          <div class="msg-body">
+            <div class="msg"><div class="mav mav-a">CR</div><div><div class="mbubble mb-a">Triboro Transit — plaintiff's expert report came in yesterday. The biomechanical expert is opining on the scaffold collapse. We need to calendar our rebuttal deadline and discuss whether to retain a competing structural engineer. Can you confirm your client's position on settlement before I proceed?</div><div class="mtime">May 29 · 4:18 PM</div></div></div>
+            <div class="msg fc"><div class="mav mav-c">TT</div><div><div class="mbubble mb-c">Received. We've reviewed the report internally — the biomechanical conclusions are aggressive. Our position remains defense through trial unless you're seeing something different. What's your read on the expert?</div><div class="mtime">May 30 · 9:22 AM</div></div></div>
+            <div class="msg"><div class="mav mav-a">CR</div><div><div class="mbubble mb-a">Our structural engineer has reviewed preliminarily — we believe we can effectively rebut on the scaffold configuration argument. I'd recommend we proceed toward trial. I'll have a full response memo to you by end of week.</div><div class="mtime">May 30 · 2:45 PM</div></div></div>
+            <div class="msg fc"><div class="mav mav-c">TT</div><div><div class="mbubble mb-c">Agreed. Please proceed. Memo by Friday works. Also please confirm billing codes on the expert coordination time — our claims team needs it for the reserve file.</div><div class="mtime">Jun 1 · 8:50 AM</div></div></div>
+          </div>
+          <div class="msg-foot">
+            <input class="msg-input" placeholder="Reply securely to Triboro Transit Legal…">
+            <button class="send-btn">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURT MODE -->
+    <div class="panel" id="panel-court">
+      <div class="court-alert">
+        <div class="ca-dot"></div>
+        <div><div class="ca-txt">Court Mode — Offline Ready</div><div class="ca-sub">All matters below cached locally. Available without wifi. Last synced today at 7:55 AM.</div></div>
+      </div>
+      <div class="section-lbl">Today's Appearances</div>
+      <div class="court-card">
+        <div class="cct">
+          <div><div class="ccn">Delgado v. City of Stamford</div><div class="ccr">Westchester Supreme Court · Part 8 · Hon. Patricia Donahue</div></div>
+          <div><div class="ctime">10:00 AM</div><div class="ctype">Preliminary Conference · Municipal Defense</div></div>
+        </div>
+        <div style="font-size:12px;color:var(--tm);">Municipal Defense / § 1983 · Index #2024-33218 · Lead: James T. Marsden, Esq.</div>
+        <div class="cc-chips">
+          <span class="cchip doc">📄 Complaint &amp; Answer</span>
+          <span class="cchip doc">📄 Preliminary Conference Order</span>
+          <span class="cchip doc">📄 Delgado Discovery Demands</span>
+          <span class="cchip note">📝 Conference Strategy Notes</span>
+          <span class="cchip">👤 Corp. Counsel: (555) 010-0210</span>
+          <span class="cchip">⚖ Plaintiff atty: Cohen &amp; Stein (555) 010-0282</span>
+        </div>
+      </div>
+      <div class="court-card">
+        <div class="cct">
+          <div><div class="ccn">Porter v. Greenfield Retail Group</div><div class="ccr">Westchester Supreme Court · Part 22 · Hon. Lawrence Ecker</div></div>
+          <div><div class="ctime">2:15 PM</div><div class="ctype">Discovery Conference · Premises Liability</div></div>
+        </div>
+        <div style="font-size:12px;color:var(--tm);">Premises Liability · Index #2024-55901 · Lead: David M. Hayes, Esq.</div>
+        <div class="cc-chips">
+          <span class="cchip doc">📄 Incident Report (Internal)</span>
+          <span class="cchip doc">📄 Plaintiff's Discovery Demands</span>
+          <span class="cchip doc">📄 Our Discovery Responses</span>
+          <span class="cchip note">📝 Surveillance Footage Status</span>
+          <span class="cchip">👤 Greenfield Legal: Thomas Walsh (555) 010-0388</span>
+          <span class="cchip">⚖ Plaintiff: Murphy &amp; Foy (555) 010-0441</span>
+        </div>
+      </div>
+      <div class="court-quick">
+        <div class="cq-title">Quick Reference — Westchester Supreme Court</div>
+        <div class="cq-grid">
+          <div><div class="cq-lbl">Clerk's Office</div><div class="cq-val">(914) 824-5300</div></div>
+          <div><div class="cq-lbl">Hon. Patricia Donahue (Pt. 8)</div><div class="cq-val">(914) 824-5308</div></div>
+          <div><div class="cq-lbl">Hon. Lawrence Ecker (Pt. 22)</div><div class="cq-val">(914) 824-5322</div></div>
+          <div><div class="cq-lbl">Corp. Counsel, Stamford</div><div class="cq-val">(555) 010-0210</div></div>
+          <div><div class="cq-lbl">NYS E-Filing (NYSCEF)</div><div class="cq-val">iapps.courts.state.ny.us</div></div>
+          <div><div class="cq-lbl">Kane PC IT Support</div><div class="cq-val">(555) 010-0100</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACTS -->
+    <div class="panel" id="panel-contacts">
+      <div class="section-lbl" style="margin-bottom:12px;">Partners</div>
+      <div class="contact-grid" style="margin-bottom:18px;">
+        <div class="contact-card"><div class="cav av-s">JM</div><div><div class="cname">James T. Marsden, Esq.</div><div class="crole">Partner · SIU, Municipal, Premises</div><div class="cphone">Ext. 700 · jonas.marsden@marsdenrowanlaw.com</div></div></div>
+        <div class="contact-card"><div class="cav av-s">CR</div><div><div class="cname">Catherine A. Rowan, Esq.</div><div class="crole">Partner · Labor Law, Commercial, Appellate</div><div class="cphone">Ext. 701 · catherine.rowan@marsdenrowanlaw.com</div></div></div>
+      </div>
+      <div class="section-lbl" style="margin-bottom:12px;">Attorneys</div>
+      <div class="contact-grid" style="margin-bottom:18px;">
+        <div class="contact-card"><div class="cav av-s">DH</div><div><div class="cname">David M. Hayes, Esq.</div><div class="crole">Attorney · Premises &amp; Products</div><div class="cphone">Ext. 713 · david.hayes@marsdenrowanlaw.com</div></div></div>
+        <div class="contact-card"><div class="cav av-s">SF</div><div><div class="cname">Sarah K. Flanagan, Esq.</div><div class="crole">Attorney · Construction &amp; Labor Law</div><div class="cphone">Ext. 716 · sarah.flanagan@marsdenrowanlaw.com</div></div></div>
+        <div class="contact-card"><div class="cav av-s">MG</div><div><div class="cname">Michael P. Greco, Esq.</div><div class="crole">Attorney · General Liability</div><div class="cphone">Ext. 718 · michael.greco@marsdenrowanlaw.com</div></div></div>
+        <div class="contact-card"><div class="cav av-s">LW</div><div><div class="cname">Lauren B. Walsh, Esq.</div><div class="crole">Attorney · Labor Law &amp; Municipal</div><div class="cphone">Ext. 720 · lauren.walsh@marsdenrowanlaw.com</div></div></div>
+      </div>
+      <div class="section-lbl" style="margin-bottom:12px;">Paralegals &amp; Staff</div>
+      <div class="contact-grid" style="margin-bottom:18px;">
+        <div class="contact-card"><div class="cav av-c">MT</div><div><div class="cname">Margaret Torres</div><div class="crole">Office Manager</div><div class="cphone">Ext. 722 · margaret.torres@marsdenrowanlaw.com</div></div></div>
+        <div class="contact-card"><div class="cav av-c">PA</div><div><div class="cname">Patricia M. Alvarez</div><div class="crole">Litigation Paralegal · Billing Coordinator</div><div class="cphone">Ext. 719 · patricia.alvarez@marsdenrowanlaw.com</div></div></div>
+        <div class="contact-card"><div class="cav av-c">NK</div><div><div class="cname">Nancy L. Keane</div><div class="crole">Litigation Paralegal</div><div class="cphone">Ext. 734 · nancy.keane@marsdenrowanlaw.com</div></div></div>
+        <div class="contact-card"><div class="cav av-c">DF</div><div><div class="cname">Dorothy M. Finn</div><div class="crole">Litigation Paralegal</div><div class="cphone">Ext. 738 · dorothy.foster@marsdenrowanlaw.com</div></div></div>
+      </div>
+      <div class="section-lbl" style="margin-bottom:12px;">Judiciary — Active Courts</div>
+      <div class="contact-grid">
+        <div class="contact-card"><div class="cav av-j">PD</div><div><div class="cname">Hon. Patricia Donahue</div><div class="crole">Westchester Supreme · Part 8</div><div class="cphone">(914) 824-5308</div></div></div>
+        <div class="contact-card"><div class="cav av-j">LE</div><div><div class="cname">Hon. Lawrence Ecker</div><div class="crole">Westchester Supreme · Part 22</div><div class="cphone">(914) 824-5322</div></div></div>
+        <div class="contact-card"><div class="cav av-j">WC</div><div><div class="cname">Westchester Co. Clerk</div><div class="crole">Supreme Court · NYSCEF</div><div class="cphone">(914) 824-5300</div></div></div>
+        <div class="contact-card"><div class="cav av-c">KP</div><div><div class="cname">Kane PC IT Support</div><div class="crole">Technology Partner · 24/7</div><div class="cphone">(555) 010-0100</div></div></div>
+      </div>
+    </div>
+
+    <!-- CLIENT PANELS -->
+    <div class="panel" id="panel-c-overview">
+      <div class="client-welcome">
+        <div class="cw-name">Welcome, Triboro Transit Legal</div>
+        <div class="cw-matter">Anderson v. Triboro Transit Authority · Index #2023-88412 · Labor Law § 240</div>
+        <div class="cw-atty">Lead Attorney: Catherine A. Rowan, Esq. · (555) 010-0100 Ext. 701</div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Matter Status</div>
+          <div class="mrow"><div class="mname">Case Type</div><div style="font-size:13px;color:var(--ts)">Labor Law § 240 — Scaffold Injury</div></div>
+          <div class="mrow"><div class="mname">Status</div><span class="badge b-trial">Trial Preparation</span></div>
+          <div class="mrow"><div class="mname">Opened</div><div style="font-size:13px;color:var(--ts)">August 2023</div></div>
+          <div class="mrow"><div class="mname">Next Event</div><div style="font-size:13px;color:var(--ts)">Expert Rebuttal — Jun 3</div></div>
+          <div class="mrow"><div class="mname">Court</div><div style="font-size:13px;color:var(--ts)">SDNY · White Plains Division</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Action Items</div>
+          <div class="mrow"><div><div class="mname">Review Expert Rebuttal Memo</div><div class="msub">Due from attorney by Friday Jun 6</div></div><span class="badge b-pending">Pending</span></div>
+          <div class="mrow"><div><div class="mname">Confirm Trial Reserve Position</div><div class="msub">Claims team approval needed</div></div><span class="badge b-urgent">Needed</span></div>
+          <div class="mrow" style="border-bottom:none;"><div><div class="mname">Billing Code Approval</div><div class="msub">Expert coordination — L130</div></div><span class="badge b-review">Review</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-c-docs">
+      <div class="section-lbl">Documents Shared with Your Organization</div>
+      <div class="card" style="padding:4px 16px;">
+        <div class="doc-row"><span class="di">📄</span><div class="dn">Complaint_and_Verified_Answer.pdf</div><span class="dm">Sep 2023 · 214 KB</span><span class="dtag shared">View</span></div>
+        <div class="doc-row"><span class="di">📄</span><div class="dn">Plaintiff_Expert_Report_Biomechanical.pdf</div><span class="dm">May 30 · 1.2 MB</span><span class="dtag shared">View</span></div>
+        <div class="doc-row"><span class="di">📋</span><div class="dn">Defense_Expert_Rebuttal_Summary.docx</div><span class="dm">In preparation</span><span class="dtag sig">Pending</span></div>
+        <div class="doc-row"><span class="di">📄</span><div class="dn">Discovery_Responses_Set_II.pdf</div><span class="dm">Feb 2024 · 388 KB</span><span class="dtag shared">View</span></div>
+        <div class="doc-row"><span class="di">📋</span><div class="dn">Billing_Summary_Q1_2025.pdf</div><span class="dm">Jun 1 · 44 KB</span><span class="dtag shared">View</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-c-messages">
+      <div class="msg-pane" style="border-radius:12px;">
+        <div class="msg-ph">
+          <div class="msg-pn">Catherine A. Rowan, Esq.</div>
+          <div class="msg-pm">Anderson v. Triboro Transit · Secure Client Messaging</div>
+        </div>
+        <div class="msg-body">
+          <div class="msg"><div class="mav mav-a">CR</div><div><div class="mbubble mb-a">Triboro Transit — plaintiff's expert report came in yesterday. The biomechanical expert is opining on the scaffold collapse. We need to calendar our rebuttal deadline and discuss whether to retain a competing structural engineer.</div><div class="mtime">May 29 · 4:18 PM</div></div></div>
+          <div class="msg fc"><div class="mav mav-c">TT</div><div><div class="mbubble mb-c">Received. Our position remains defense through trial unless you're seeing something different. What's your read on the expert's conclusions?</div><div class="mtime">May 30 · 9:22 AM</div></div></div>
+          <div class="msg"><div class="mav mav-a">CR</div><div><div class="mbubble mb-a">We believe we can effectively rebut on the scaffold configuration argument. I'd recommend we proceed toward trial. Full memo to you by Friday.</div><div class="mtime">May 30 · 2:45 PM</div></div></div>
+        </div>
+        <div class="msg-foot">
+          <input class="msg-input" placeholder="Message your attorney securely…">
+          <button class="send-btn">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-c-dates">
+      <div class="section-lbl">Key Dates — Anderson v. Triboro Transit</div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <table class="dl-tbl">
+          <thead><tr><th>Date</th><th>Event</th><th>Action Required</th></tr></thead>
+          <tbody>
+            <tr><td><span class="dchip hot">Jun 3</span></td><td><div class="mname">Expert disclosure rebuttal deadline</div></td><td style="font-size:12px;color:var(--w-tx);">Memo from attorney by Friday</td></tr>
+            <tr><td><span class="dchip">TBD</span></td><td><div class="mname">Trial date — SDNY White Plains</div></td><td style="font-size:12px;color:var(--ts);">Reserve position to be confirmed</td></tr>
+            <tr><td><span class="dchip">Monthly</span></td><td><div class="mname">Billing statement — Timeslips export</div></td><td style="font-size:12px;color:var(--ts);">Reviewed &amp; approved by claims</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <div class="footer">
+    <div class="fbrand">Legal Practice Portal Demo · Powered by <span>Kane PC</span> · 200 Commerce Ave. LL4, White Plains, NY 10000 · (555) 010-0100</div>
+    <div style="display:flex;gap:16px;">
+      <span style="font-size:11px;color:var(--tm);">kanepc.com</span>
+      <span style="font-size:11px;color:var(--burg);cursor:pointer;">Request a Demo</span>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+document.getElementById('te-date').value = new Date().toISOString().split('T')[0];
+updatePreview();
+
+function switchView(role, btn) {
+  document.querySelectorAll('.vtbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (role === 'attorney') {
+    document.getElementById('portal-lbl').textContent = 'Attorney Portal';
+    document.getElementById('user-av').textContent = 'CR';
+    document.getElementById('user-name').textContent = 'Catherine A. Rowan, Esq.';
+    document.getElementById('role-badge').textContent = 'Partner';
+    document.getElementById('sub-bar-atty').style.display = 'flex';
+    document.getElementById('tabs-atty').style.display = 'flex';
+    document.getElementById('tabs-client').style.display = 'none';
+    showTab('dashboard', document.querySelector('#tabs-atty .tab'));
+  } else {
+    document.getElementById('portal-lbl').textContent = 'Client Portal';
+    document.getElementById('user-av').textContent = 'TT';
+    document.getElementById('user-name').textContent = 'Triboro Transit Legal Dept.';
+    document.getElementById('role-badge').textContent = 'Client';
+    document.getElementById('sub-bar-atty').style.display = 'none';
+    document.getElementById('tabs-atty').style.display = 'none';
+    document.getElementById('tabs-client').style.display = 'flex';
+    showClientTab('c-overview', document.querySelector('#tabs-client .tab'));
+  }
+}
+
+function showTab(id, el) {
+  document.querySelectorAll('#tabs-atty .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function showClientTab(id, el) {
+  document.querySelectorAll('#tabs-client .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function setPa(el) {
+  el.closest('div').querySelectorAll('.pa-pill').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+function updatePreview() {
+  var attyEl = document.getElementById('te-atty');
+  var attyOpt = attyEl.options[attyEl.selectedIndex];
+  var atty = attyOpt ? attyOpt.value : '';
+  var rate = attyOpt && attyOpt.dataset.rate ? parseInt(attyOpt.dataset.rate) : 0;
+  var matter = document.getElementById('te-matter').value;
+  var code = document.getElementById('te-code').value;
+  var hours = parseFloat(document.getElementById('te-hours').value) || 0;
+  var desc = document.getElementById('te-desc').value;
+  var dateVal = document.getElementById('te-date').value;
+  document.getElementById('te-rate').value = rate ? '$' + rate + '/hr' : '';
+  var dateDisplay = dateVal ? new Date(dateVal + 'T12:00:00').toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '—';
+  document.getElementById('prev-date').textContent = dateDisplay;
+  document.getElementById('prev-atty').textContent = atty || '—';
+  document.getElementById('prev-matter').textContent = matter ? matter.split('|')[0].trim() : '—';
+  document.getElementById('prev-code').textContent = code || '—';
+  document.getElementById('prev-hours').textContent = hours ? hours.toFixed(1) + ' hrs' : '—';
+  document.getElementById('prev-desc').textContent = desc || 'Description will appear here…';
+  document.getElementById('prev-desc').style.fontStyle = desc ? 'normal' : 'italic';
+  document.getElementById('prev-desc').style.color = desc ? 'var(--ts)' : 'var(--tm)';
+  var total = hours * rate;
+  document.getElementById('prev-total').textContent = '$' + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+function buildSlipText() {
+  var attyEl = document.getElementById('te-atty');
+  var attyOpt = attyEl.options[attyEl.selectedIndex];
+  var atty = attyOpt ? attyOpt.value : '[Not Selected]';
+  var rate = attyOpt && attyOpt.dataset.rate ? parseInt(attyOpt.dataset.rate) : 0;
+  var matter = document.getElementById('te-matter').value || '[Not Selected]';
+  var code = document.getElementById('te-code').value || '[Not Selected]';
+  var hours = parseFloat(document.getElementById('te-hours').value) || 0;
+  var desc = document.getElementById('te-desc').value || '[No description provided]';
+  var dateVal = document.getElementById('te-date').value;
+  var dateDisplay = dateVal ? new Date(dateVal + 'T12:00:00').toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'}) : '[Date not set]';
+  var total = (hours * rate).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return 'MARSDEN & ROWAN LAW GROUP — TIME SLIP\n'
+    + '200 Main Street, White Plains, NY 10000 | (555) 010-0100\n'
+    + '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'
+    + 'Date of Service : ' + dateDisplay + '\n'
+    + 'Timekeeper      : ' + atty + '\n'
+    + 'Billing Rate    : $' + rate + '/hr\n'
+    + 'Matter          : ' + matter.split('|')[0].trim() + '\n'
+    + 'Billing Code    : ' + code + '\n'
+    + 'Hours           : ' + hours.toFixed(1) + '\n'
+    + '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'
+    + 'Description:\n' + desc + '\n'
+    + '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'
+    + 'BILLABLE AMOUNT : $' + total + '\n'
+    + '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'
+    + 'Submitted via Kane PC Legal Practice Portal\n'
+    + 'Please enter into Timeslips — Kane PC IT Support: (555) 010-0100';
+}
+function emailSlip() {
+  var slip = buildSlipText();
+  var attyEl = document.getElementById('te-atty');
+  var attyOpt = attyEl.options[attyEl.selectedIndex];
+  var atty = attyOpt ? attyOpt.value.split(',')[0] : 'Attorney';
+  var subject = encodeURIComponent('Time Slip — ' + atty + ' — ' + new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}));
+  window.location.href = 'mailto:billing@marsdenrowanlaw.com?subject=' + subject + '&body=' + encodeURIComponent(slip);
+}
+function copySlip() {
+  var slip = buildSlipText();
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(slip).then(function() {
+      var btn = document.querySelector('.slip-btn-copy');
+      var orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      setTimeout(function() { btn.textContent = orig; }, 2000);
+    });
+  }
+}
+function clearForm() {
+  document.getElementById('te-atty').selectedIndex = 0;
+  document.getElementById('te-matter').selectedIndex = 0;
+  document.getElementById('te-code').selectedIndex = 0;
+  document.getElementById('te-hours').value = '';
+  document.getElementById('te-desc').value = '';
+  document.getElementById('te-date').value = new Date().toISOString().split('T')[0];
+  updatePreview();
+}
+</script>
+
+<script id="kpc-protect-js">
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+  document.addEventListener('dragstart', function(e) {
+    var t = e.target && e.target.tagName;
+    if (t === 'IMG' || t === 'svg' || t === 'SVG') e.preventDefault();
+  }, false);
+  document.addEventListener('keydown', function(e) {
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) {
+      e.preventDefault(); return false;
+    }
+  }, false);
+})();
+</script>
+
+<a href="https://kanepc.com" target="_top" id="kpc-demo-badge"
+   style="position:fixed;bottom:14px;right:14px;
+          background:rgba(20,20,20,0.92);color:#fff;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+          text-decoration:none;padding:9px 14px;border-radius:3px;
+          border:1px solid rgba(255,255,255,0.12);
+          box-shadow:0 6px 18px rgba(0,0,0,0.35);
+          z-index:2147483647;line-height:1;
+          -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);">
+  Demo &middot; Built by <span style="color:#E65100">Kane PC</span>
+</a>
+
+</body>
+</html>

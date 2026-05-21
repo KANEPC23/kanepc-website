@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinnacle Realty — Kane PC Sample Build</title>
+<style>
+:root {
+  --bg: #0b0d14;
+  --surface: #12151f;
+  --card: #181c2a;
+  --card2: #1e2334;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --gold: #c8a84b;
+  --gold-lt: #e0c97a;
+  --gold-dim: rgba(200,168,75,0.13);
+  --text: #e6eaf6;
+  --muted: #7a86a4;
+  --dim: #3a4260;
+  --ok: #34d399; --ok-d: rgba(52,211,153,0.13);
+  --warn: #f5a623; --warn-d: rgba(245,166,35,0.13);
+  --danger: #f87171; --danger-d: rgba(248,113,113,0.13);
+  --info: #60a5fa; --info-d: rgba(96,165,250,0.13);
+  --coral: #f0856a; --coral-d: rgba(240,133,106,0.13);
+  --sidebar: 224px;
+  --hdr: 54px;
+  --r: 10px;
+  --rs: 6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;color:inherit;font:inherit}
+input,textarea,select{font:inherit;color:var(--text);background:var(--card2);border:1px solid var(--border2);border-radius:var(--rs);padding:8px 12px;width:100%;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--gold)}
+select option{background:#1e2334}
+
+/* ── Header ─────────────────── */
+#hdr{height:var(--hdr);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;position:fixed;top:0;left:0;right:0;z-index:100}
+.brand{display:flex;align-items:center;gap:9px;font-family:'Palatino Linotype',Palatino,Georgia,serif;font-size:18px;letter-spacing:0.02em;color:var(--gold-lt);width:var(--sidebar);flex-shrink:0}
+.brand-diamond{width:22px;height:22px;background:var(--gold);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);flex-shrink:0}
+.role-switcher{display:flex;background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:3px;gap:2px}
+.role-btn{padding:5px 14px;border-radius:7px;font-size:13px;font-weight:500;color:var(--muted);transition:all .18s}
+.role-btn.active{background:var(--gold-dim);color:var(--gold-lt);border:1px solid rgba(200,168,75,0.3)}
+.hdr-spacer{flex:1}
+.prop-select-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+#propSelect{width:auto;font-size:13px;padding:5px 10px;display:none}
+
+/* ── Sidebar ─────────────────── */
+#sidebar{width:var(--sidebar);background:var(--surface);border-right:1px solid var(--border);position:fixed;top:var(--hdr);bottom:0;left:0;overflow-y:auto;padding:16px 10px;display:flex;flex-direction:column;gap:4px}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:0.1em;color:var(--dim);text-transform:uppercase;padding:12px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r);color:var(--muted);cursor:pointer;transition:all .15s;font-size:13px}
+.nav-item:hover{background:var(--card);color:var(--text)}
+.nav-item.active{background:var(--gold-dim);color:var(--gold-lt);border:1px solid rgba(200,168,75,0.2)}
+.nav-icon{width:18px;text-align:center;font-size:15px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--danger);color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:600}
+
+/* ── Main ─────────────────────── */
+#main{margin-left:var(--sidebar);margin-top:var(--hdr);padding:28px 28px;min-height:calc(100vh - var(--hdr))}
+.page-title{font-family:'Palatino Linotype',Palatino,Georgia,serif;font-size:24px;font-weight:400;color:var(--gold-lt);margin-bottom:6px}
+.page-sub{color:var(--muted);font-size:13px;margin-bottom:24px}
+
+/* ── Stat Cards ───────────────── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px}
+.stat-label{font-size:11px;font-weight:600;letter-spacing:0.07em;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.stat-value{font-size:28px;font-weight:600;line-height:1;color:var(--text)}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:6px}
+.stat-accent{color:var(--gold)}
+
+/* ── Cards ───────────────────── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.card-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.card-title small{font-size:12px;font-weight:400;color:var(--muted)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+
+/* ── Property Cards ───────────── */
+.prop-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:border-color .18s}
+.prop-card:hover{border-color:var(--border2)}
+.prop-thumb{height:90px;background:linear-gradient(135deg,#1a2040 0%,#0d1030 100%);display:flex;align-items:center;justify-content:center;font-size:32px;position:relative}
+.prop-status-badge{position:absolute;top:10px;right:10px}
+.prop-body{padding:14px 16px}
+.prop-name{font-family:'Palatino Linotype',Palatino,Georgia,serif;font-size:15px;color:var(--gold-lt);margin-bottom:3px}
+.prop-addr{font-size:12px;color:var(--muted);margin-bottom:10px}
+.prop-owner{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.prop-stats{display:flex;gap:12px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.prop-stat{text-align:center;flex:1}
+.prop-stat-n{font-size:16px;font-weight:600;color:var(--text)}
+.prop-stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* ── Badges ───────────────────── */
+.badge{display:inline-flex;align-items:center;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;letter-spacing:.03em}
+.badge-ok{background:var(--ok-d);color:var(--ok)}
+.badge-warn{background:var(--warn-d);color:var(--warn)}
+.badge-danger{background:var(--danger-d);color:var(--danger)}
+.badge-info{background:var(--info-d);color:var(--info)}
+.badge-dim{background:var(--card2);color:var(--muted)}
+.badge-gold{background:var(--gold-dim);color:var(--gold-lt)}
+
+/* ── Task rows ─────────────────── */
+.task-list{display:flex;flex-direction:column;gap:8px}
+.task-row{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:12px 16px;display:grid;grid-template-columns:22px 1fr auto auto auto;align-items:center;gap:12px;transition:background .15s}
+.task-row:hover{background:var(--card2)}
+.task-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;cursor:pointer}
+.task-check.done{background:var(--ok-d);border-color:var(--ok);color:var(--ok)}
+.task-title-col{min-width:0}
+.task-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.task-name.done{color:var(--muted);text-decoration:line-through}
+.task-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.task-cat{font-size:11px;background:var(--card2);color:var(--muted);border-radius:4px;padding:2px 8px;white-space:nowrap}
+.task-date{font-size:11px;color:var(--muted);white-space:nowrap}
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;color:var(--muted);background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all .15s}
+.filter-btn.active{background:var(--gold-dim);color:var(--gold-lt);border-color:rgba(200,168,75,0.3)}
+
+/* ── Staff ─────────────────────── */
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+.staff-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 16px;text-align:center}
+.avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;margin:0 auto 12px}
+.av-blue{background:rgba(96,165,250,0.2);color:var(--info)}
+.av-teal{background:rgba(52,211,153,0.2);color:var(--ok)}
+.av-green{background:rgba(74,222,128,0.2);color:#4ade80}
+.av-amber{background:rgba(251,191,36,0.2);color:var(--warn)}
+.av-coral{background:rgba(240,133,106,0.2);color:var(--coral)}
+.staff-name{font-size:14px;font-weight:600;margin-bottom:4px}
+.staff-role{font-size:12px;color:var(--muted);margin-bottom:10px}
+.staff-stats{display:flex;justify-content:center;gap:16px}
+.staff-stat{text-align:center}
+.staff-stat-n{font-size:18px;font-weight:600}
+.staff-stat-l{font-size:10px;color:var(--muted)}
+
+/* ── Inventory ─────────────────── */
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.inv-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.inv-cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.inv-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.inv-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.inv-name{font-size:13px;font-weight:600;line-height:1.3;margin-bottom:3px}
+.inv-room{font-size:11px;color:var(--muted)}
+.inv-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.inv-value{font-size:14px;font-weight:600;color:var(--gold)}
+.inv-notes{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+
+/* ── Activity feed ─────────────── */
+.feed{display:flex;flex-direction:column;gap:0}
+.feed-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.feed-item:last-child{border-bottom:none}
+.feed-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.feed-text{font-size:13px;line-height:1.45}
+.feed-time{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── Request form ──────────────── */
+.req-form{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:20px}
+.form-row{margin-bottom:14px}
+.form-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.submit-btn{background:var(--gold);color:#0b0d14;border-radius:var(--rs);padding:9px 22px;font-size:13px;font-weight:700;letter-spacing:.03em;border:none;cursor:pointer;transition:opacity .15s}
+.submit-btn:hover{opacity:.88}
+
+/* ── Scrollbar ─────────────────── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:3px}
+</style>
+
+<style id="kpc-protect">
+  body {
+    -webkit-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text; -moz-user-select: text;
+    -ms-user-select: text; user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img, svg {
+    -webkit-user-drag: none; user-drag: none;
+    -webkit-touch-callout: none;
+  }
+</style>
+
+</head>
+<body>
+
+<!-- Header -->
+<div id="hdr">
+  <div class="brand">
+    <div class="brand-diamond"></div>
+    Pinnacle Realty
+  </div>
+  <div class="role-switcher">
+    <button class="role-btn active" id="mgr-btn" onclick="setRole('manager')">Manager View</button>
+    <button class="role-btn" id="hw-btn" onclick="setRole('homeowner')">Homeowner View</button>
+  </div>
+  <div class="hdr-spacer"></div>
+  <div class="prop-select-wrap" id="prop-select-wrap" style="display:none">
+    <span>Viewing:</span>
+    <select id="propSelect" onchange="selectedProp=+this.value;renderAll()">
+      <option value="1">The Whitmore Estate</option>
+      <option value="2">Casa Serena</option>
+      <option value="3">The Hargrove Residence</option>
+    </select>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar"></div>
+
+<!-- Main -->
+<div id="main"></div>
+
+<script>
+// ── Data ───────────────────────────────────────────────────────────────────────
+const STAFF=[
+  {id:1,name:"Marco Rivera",role:"Plumbing & HVAC",initials:"MR",av:"av-blue"},
+  {id:2,name:"Sandra Lee",role:"Interior & Cleaning",initials:"SL",av:"av-teal"},
+  {id:3,name:"Derek Thomas",role:"Landscaping & Exterior",initials:"DT",av:"av-green"},
+  {id:4,name:"Pat O'Brien",role:"Electrical & Security",initials:"PO",av:"av-amber"},
+  {id:5,name:"Kira Voss",role:"General Maintenance",initials:"KV",av:"av-coral"},
+];
+const PROPS=[
+  {id:1,name:"The Whitmore Estate",addr:"412 Pelican Bay Dr, Sarasota FL",owner:"Gerald & Anne Whitmore",status:"active",icon:"🏛"},
+  {id:2,name:"Casa Serena",addr:"88 Osprey Cove, Longboat Key FL",owner:"Donovan Pierce",status:"active",icon:"🌴"},
+  {id:3,name:"The Hargrove Residence",addr:"1204 Bayou Club Blvd, Lakewood Ranch FL",owner:"The Hargrove Family",status:"maintenance",icon:"🏡"},
+];
+let TASKS=[
+  {id:1,propId:1,title:"Pool pump replacement",cat:"Plumbing",status:"complete",who:1,priority:"high",date:"Mar 28",note:"Pentair pump replaced, pressure OK"},
+  {id:2,propId:1,title:"Quarterly HVAC service",cat:"HVAC",status:"in-progress",who:1,priority:"medium",date:"Apr 2",note:""},
+  {id:3,propId:1,title:"Trim royal palms (front drive)",cat:"Landscaping",status:"pending",who:3,priority:"low",date:"Apr 10",note:""},
+  {id:4,propId:2,title:"Deep clean before owner arrival",cat:"Cleaning",status:"complete",who:2,priority:"high",date:"Mar 30",note:"All surfaces, linens replaced"},
+  {id:5,propId:2,title:"Security camera offline – Zone 3",cat:"Electrical",status:"in-progress",who:4,priority:"high",date:"Apr 1",note:"DVR firmware update pending"},
+  {id:6,propId:2,title:"Touch-up paint – guest bath",cat:"Maintenance",status:"pending",who:5,priority:"low",date:"Apr 15",note:""},
+  {id:7,propId:3,title:"Garage door spring replacement",cat:"Maintenance",status:"complete",who:5,priority:"high",date:"Mar 25",note:"Both springs replaced"},
+  {id:8,propId:3,title:"Exterior pressure wash",cat:"Exterior",status:"pending",who:3,priority:"medium",date:"Apr 8",note:""},
+  {id:9,propId:3,title:"Generator monthly fuel check",cat:"Maintenance",status:"pending",who:5,priority:"medium",date:"Apr 5",note:""},
+];
+const INVENTORY=[
+  {id:1,propId:1,name:"Wedgwood China Set (12 place)",room:"Kitchen",cat:"Dishware",qty:1,val:2400,notes:"Upper cabinet, dining side",icon:"🍽"},
+  {id:2,propId:1,name:"Waterford Crystal Stemware",room:"Dining Room",cat:"Dishware",qty:12,val:1800,notes:"Hanging rack, china cabinet",icon:"🥂"},
+  {id:3,propId:1,name:"Rolex Submariner",room:"Master Bedroom",cat:"Valuables",qty:1,val:14000,notes:"Locked jewelry box, top dresser",icon:"⌚"},
+  {id:4,propId:1,name:"Pearl Necklace Set",room:"Master Bedroom",cat:"Valuables",qty:1,val:3200,notes:"Locked jewelry box",icon:"💎"},
+  {id:5,propId:1,name:'Sony 85" OLED Television',room:"Living Room",cat:"Electronics",qty:1,val:4500,notes:"Wall mounted over media console",icon:"📺"},
+  {id:6,propId:1,name:"Original Oil Painting – Coastal",room:"Living Room",cat:"Artwork",qty:1,val:6000,notes:"Signed 'Alvarez', above fireplace",icon:"🖼"},
+  {id:7,propId:1,name:"Cast Iron Skillet Set (3)",room:"Kitchen",cat:"Dishware",qty:3,val:180,notes:"Lower cabinet, stove side",icon:"🍳"},
+  {id:8,propId:2,name:"Le Creuset Cookware Set",room:"Kitchen",cat:"Dishware",qty:1,val:800,notes:"Hanging pot rack",icon:"🍳"},
+  {id:9,propId:2,name:"Traeger Pro 780 Grill",room:"Outdoor Kitchen",cat:"Appliances",qty:1,val:1200,notes:"Covered patio, under awning",icon:"🔥"},
+  {id:10,propId:2,name:"Vintage Watch Collection",room:"Master Closet",cat:"Valuables",qty:4,val:22000,notes:"Watch winder safe, closet",icon:"⌚"},
+  {id:11,propId:3,name:"Craftsman Tool Cabinet",room:"Garage",cat:"Tools",qty:1,val:600,notes:"Left wall, full set included",icon:"🔧"},
+  {id:12,propId:3,name:"Dining Set (table + 8 chairs)",room:"Dining Room",cat:"Furniture",qty:1,val:3800,notes:"Restoration Hardware, dining room",icon:"🪑"},
+];
+const ACTIVITY=[
+  {text:"Pool pump replacement at Whitmore Estate marked complete",time:"Today, 10:24 AM",dot:"var(--ok)"},
+  {text:"Security camera issue reported at Casa Serena – Pat O'Brien assigned",time:"Today, 9:15 AM",dot:"var(--warn)"},
+  {text:"Deep clean complete – Casa Serena ready for owner arrival",time:"Yesterday, 4:40 PM",dot:"var(--ok)"},
+  {text:"New inventory item added: Vintage Watch Collection at Casa Serena",time:"Yesterday, 2:12 PM",dot:"var(--info)"},
+  {text:"Hargrove Residence – garage door springs replaced by Kira Voss",time:"Mar 25, 11:00 AM",dot:"var(--ok)"},
+];
+
+// ── State ──────────────────────────────────────────────────────────────────────
+let role="manager";
+let view="dashboard";
+let selectedProp=1;
+let taskFilter="all";
+let invRoom="all";
+let nextTaskId=10;
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
+function getStaff(id){return STAFF.find(s=>s.id===id)||{name:"Unassigned",initials:"?",av:"av-blue"}}
+function getProp(id){return PROPS.find(p=>p.id===id)}
+function propTasks(propId){return TASKS.filter(t=>t.propId===propId)}
+function openCount(propId){return TASKS.filter(t=>t.propId===propId&&t.status!=="complete").length}
+function statusBadge(s){
+  if(s==="complete")return`<span class="badge badge-ok">Complete</span>`;
+  if(s==="in-progress")return`<span class="badge badge-info">In Progress</span>`;
+  if(s==="pending")return`<span class="badge badge-warn">Pending</span>`;
+  return`<span class="badge badge-dim">${s}</span>`;
+}
+function priorityBadge(p){
+  if(p==="high")return`<span class="badge badge-danger">High</span>`;
+  if(p==="medium")return`<span class="badge badge-warn">Med</span>`;
+  return`<span class="badge badge-dim">Low</span>`;
+}
+function catColor(c){
+  const m={Dishware:"var(--info)",Valuables:"var(--gold)",Electronics:"var(--ok)",Artwork:"var(--coral)",Appliances:"var(--warn)",Tools:"var(--muted)",Furniture:"#a78bfa"};
+  return m[c]||"var(--muted)";
+}
+function fmt(n){return"$"+n.toLocaleString()}
+function setRole(r){
+  role=r;
+  view="dashboard";
+  taskFilter="all";
+  invRoom="all";
+  document.getElementById("mgr-btn").classList.toggle("active",r==="manager");
+  document.getElementById("hw-btn").classList.toggle("active",r==="homeowner");
+  const w=document.getElementById("prop-select-wrap");
+  if(w)w.style.display=r==="homeowner"?"flex":"none";
+  renderAll();
+}
+function setView(v){view=v;renderAll()}
+function setTaskFilter(f){taskFilter=f;renderAll()}
+function setInvRoom(r){invRoom=r;renderAll()}
+
+// ── Sidebar ────────────────────────────────────────────────────────────────────
+function renderSidebar(){
+  const mgrNav=[
+    {v:"dashboard",icon:"◈",label:"Dashboard"},
+    {v:"properties",icon:"⬡",label:"Properties"},
+    {v:"tasks",icon:"☰",label:"Work Orders",badge:TASKS.filter(t=>t.status==="pending"||t.status==="in-progress").length},
+    {v:"staff",icon:"◉",label:"Staff & Vendors"},
+  ];
+  const hwNav=[
+    {v:"dashboard",icon:"◈",label:"My Home"},
+    {v:"requests",icon:"+",label:"Add Request"},
+    {v:"handlers",icon:"◉",label:"Who's Handling It"},
+    {v:"inventory",icon:"▦",label:"Inventory"},
+  ];
+  const nav=role==="manager"?mgrNav:hwNav;
+  return nav.map(n=>`
+    <div class="nav-item ${view===n.v?"active":""}" onclick="setView('${n.v}')">
+      <span class="nav-icon">${n.icon}</span>
+      <span>${n.label}</span>
+      ${n.badge?`<span class="nav-badge">${n.badge}</span>`:""}
+    </div>
+  `).join("")+`
+    <div style="flex:1"></div>
+    <div style="padding:12px 10px;border-top:1px solid var(--border);margin-top:8px">
+      <div style="font-size:11px;color:var(--muted)">Demo v1.0</div>
+      <div style="font-size:11px;color:var(--dim);margin-top:2px">Kane PC App Dev</div>
+    </div>`;
+}
+
+// ── Views ──────────────────────────────────────────────────────────────────────
+function renderManagerDashboard(){
+  const totalOpen=TASKS.filter(t=>t.status!=="complete").length;
+  const totalDone=TASKS.filter(t=>t.status==="complete").length;
+  const invTotal=INVENTORY.reduce((a,i)=>a+i.val,0);
+  return`
+    <div class="page-title">Good afternoon, William</div>
+    <div class="page-sub">Portfolio overview · Wednesday, April 1, 2026</div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Properties</div><div class="stat-value">3</div><div class="stat-sub">All active</div></div>
+      <div class="stat-card"><div class="stat-label">Open Tasks</div><div class="stat-value stat-accent">${totalOpen}</div><div class="stat-sub">${TASKS.filter(t=>t.priority==="high"&&t.status!=="complete").length} high priority</div></div>
+      <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value">${totalDone}</div><div class="stat-sub">This month</div></div>
+      <div class="stat-card"><div class="stat-label">Inventory Value</div><div class="stat-value" style="font-size:22px">${fmt(invTotal)}</div><div class="stat-sub">Across all properties</div></div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Recent Activity</div>
+        <div class="feed">${ACTIVITY.map(a=>`
+          <div class="feed-item">
+            <div class="feed-dot" style="background:${a.dot}"></div>
+            <div><div class="feed-text">${a.text}</div><div class="feed-time">${a.time}</div></div>
+          </div>`).join("")}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Open Items by Property</div>
+        ${PROPS.map(p=>{
+          const open=openCount(p.id);
+          const total=propTasks(p.id).length;
+          const pct=total?Math.round((total-open)/total*100):0;
+          return`<div style="margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:13px;font-weight:500">${p.name}</span>
+              <span style="font-size:12px;color:var(--muted)">${open} open / ${total} total</span>
+            </div>
+            <div style="background:var(--card2);border-radius:4px;height:6px;overflow:hidden">
+              <div style="background:var(--gold);width:${pct}%;height:100%;border-radius:4px;transition:width .4s"></div>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">${pct}% complete</div>
+          </div>`}).join("")}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">High Priority Tasks <small>requiring attention</small></div>
+      <div class="task-list">
+        ${TASKS.filter(t=>t.priority==="high"&&t.status!=="complete").map(t=>{
+          const s=getStaff(t.who);
+          return`<div class="task-row">
+            <div class="task-check" style="border-color:var(--danger)">&nbsp;</div>
+            <div class="task-title-col">
+              <div class="task-name">${t.title}</div>
+              <div class="task-meta">${getProp(t.propId).name} · ${s.name}</div>
+            </div>
+            <span class="task-cat">${t.cat}</span>
+            ${statusBadge(t.status)}
+            <span class="task-date">${t.date}</span>
+          </div>`;}).join("")}
+      </div>
+    </div>`;
+}
+
+function renderProperties(){
+  return`
+    <div class="page-title">Properties</div>
+    <div class="page-sub">Managing ${PROPS.length} properties</div>
+    <div class="three-col">
+      ${PROPS.map(p=>`
+        <div class="prop-card">
+          <div class="prop-thumb" style="font-size:48px">
+            ${p.icon}
+            <div class="prop-status-badge">${p.status==="active"?'<span class="badge badge-ok">Active</span>':'<span class="badge badge-warn">Maintenance</span>'}</div>
+          </div>
+          <div class="prop-body">
+            <div class="prop-name">${p.name}</div>
+            <div class="prop-addr">${p.addr}</div>
+            <div class="prop-owner">Owner: ${p.owner}</div>
+            <div class="prop-stats">
+              <div class="prop-stat"><div class="prop-stat-n">${propTasks(p.id).length}</div><div class="prop-stat-l">Tasks</div></div>
+              <div class="prop-stat"><div class="prop-stat-n" style="color:var(--warn)">${openCount(p.id)}</div><div class="prop-stat-l">Open</div></div>
+              <div class="prop-stat"><div class="prop-stat-n" style="color:var(--info)">${INVENTORY.filter(i=>i.propId===p.id).length}</div><div class="prop-stat-l">Items</div></div>
+            </div>
+          </div>
+        </div>`).join("")}
+    </div>`;
+}
+
+function renderTasks(tasks,showProp){
+  const filtered=taskFilter==="all"?tasks:tasks.filter(t=>t.status===taskFilter);
+  return`
+    <div class="page-title">Work Orders</div>
+    <div class="page-sub">${tasks.length} total tasks across portfolio</div>
+    <div class="filter-bar">
+      ${["all","pending","in-progress","complete"].map(f=>`
+        <button class="filter-btn ${taskFilter===f?"active":""}" onclick="setTaskFilter('${f}')">${f==="all"?"All Tasks":f==="in-progress"?"In Progress":f.charAt(0).toUpperCase()+f.slice(1)}</button>
+      `).join("")}
+    </div>
+    <div class="task-list">
+      ${filtered.map(t=>{
+        const s=getStaff(t.who);
+        const done=t.status==="complete";
+        return`<div class="task-row">
+          <div class="task-check ${done?"done":""}" onclick="toggleTask(${t.id})">${done?"✓":""}</div>
+          <div class="task-title-col">
+            <div class="task-name ${done?"done":""}">${t.title}</div>
+            <div class="task-meta">${showProp?getProp(t.propId).name+" · ":""}${s.name}${t.note?` · ${t.note}`:""}</div>
+          </div>
+          <span class="task-cat">${t.cat}</span>
+          ${statusBadge(t.status)}
+          <span class="task-date">${t.date}</span>
+        </div>`;}).join("")||'<div style="text-align:center;padding:32px;color:var(--muted)">No tasks match this filter</div>'}
+    </div>`;
+}
+
+function renderStaff(){
+  return`
+    <div class="page-title">Staff & Vendors</div>
+    <div class="page-sub">Your managed team</div>
+    <div class="staff-grid">
+      ${STAFF.map(s=>{
+        const assigned=TASKS.filter(t=>t.who===s.id);
+        const open=assigned.filter(t=>t.status!=="complete").length;
+        return`<div class="staff-card">
+          <div class="avatar ${s.av}">${s.initials}</div>
+          <div class="staff-name">${s.name}</div>
+          <div class="staff-role">${s.role}</div>
+          <div class="staff-stats">
+            <div class="staff-stat"><div class="staff-stat-n">${assigned.length}</div><div class="staff-stat-l">Assigned</div></div>
+            <div class="staff-stat"><div class="staff-stat-n" style="color:var(--warn)">${open}</div><div class="staff-stat-l">Open</div></div>
+          </div>
+        </div>`}).join("")}
+    </div>
+    <div class="card">
+      <div class="card-title">All Active Assignments</div>
+      <div class="task-list">
+        ${TASKS.filter(t=>t.status!=="complete").map(t=>{
+          const s=getStaff(t.who);
+          return`<div class="task-row">
+            <div class="avatar ${s.av}" style="width:28px;height:28px;font-size:11px">${s.initials}</div>
+            <div class="task-title-col">
+              <div class="task-name">${t.title}</div>
+              <div class="task-meta">${getProp(t.propId).name} · ${s.name}</div>
+            </div>
+            <span class="task-cat">${t.cat}</span>
+            ${statusBadge(t.status)}
+            ${priorityBadge(t.priority)}
+          </div>`}).join("")}
+      </div>
+    </div>`;
+}
+
+function renderHomeownerDashboard(){
+  const p=getProp(selectedProp);
+  const tasks=propTasks(selectedProp);
+  const open=tasks.filter(t=>t.status!=="complete");
+  const done=tasks.filter(t=>t.status==="complete");
+  const inv=INVENTORY.filter(i=>i.propId===selectedProp);
+  const invVal=inv.reduce((a,i)=>a+i.val,0);
+  return`
+    <div class="page-title">${p.name}</div>
+    <div class="page-sub">${p.addr}</div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Open Tasks</div><div class="stat-value stat-accent">${open.length}</div><div class="stat-sub">Requires attention</div></div>
+      <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value">${done.length}</div><div class="stat-sub">This month</div></div>
+      <div class="stat-card"><div class="stat-label">Inventory Items</div><div class="stat-value">${inv.length}</div><div class="stat-sub">Tracked</div></div>
+      <div class="stat-card"><div class="stat-label">Tracked Value</div><div class="stat-value" style="font-size:20px">${fmt(invVal)}</div><div class="stat-sub">Across categories</div></div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Current & Upcoming</div>
+        <div class="task-list">
+          ${open.length?open.map(t=>{
+            const s=getStaff(t.who);
+            return`<div class="task-row">
+              <div class="task-check">&nbsp;</div>
+              <div class="task-title-col">
+                <div class="task-name">${t.title}</div>
+                <div class="task-meta">${s.name} · ${t.date}</div>
+              </div>
+              ${statusBadge(t.status)}
+            </div>`;}).join(""):'<div style="text-align:center;padding:24px;color:var(--muted)">All caught up ✓</div>'}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Recently Completed</div>
+        <div class="task-list">
+          ${done.map(t=>{
+            const s=getStaff(t.who);
+            return`<div class="task-row">
+              <div class="task-check done">✓</div>
+              <div class="task-title-col">
+                <div class="task-name done">${t.title}</div>
+                <div class="task-meta">${s.name} · ${t.note||t.date}</div>
+              </div>
+            </div>`;}).join("")}
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderRequests(){
+  const tasks=propTasks(selectedProp);
+  return`
+    <div class="page-title">Add a Request</div>
+    <div class="page-sub">Submit a task or concern for your property manager</div>
+    <div class="req-form">
+      <div class="form-row">
+        <div class="form-label">What needs attention?</div>
+        <input type="text" id="req-title" placeholder="e.g. Pool light is flickering, Need gutters cleaned...">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-row">
+          <div class="form-label">Category</div>
+          <select id="req-cat">
+            <option>Plumbing</option><option>Electrical</option><option>HVAC</option>
+            <option>Landscaping</option><option>Cleaning</option><option>Maintenance</option>
+            <option>Security</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-label">Priority</div>
+          <select id="req-priority">
+            <option value="low">Low – No rush</option>
+            <option value="medium" selected>Medium – When possible</option>
+            <option value="high">High – Urgent</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label">Additional notes</div>
+        <textarea id="req-note" rows="3" placeholder="Any helpful details, photos description, location in the home..."></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitRequest()">Submit Request</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Your Requests <small>${tasks.length} total</small></div>
+      <div class="task-list">
+        ${tasks.map(t=>{
+          const s=getStaff(t.who);
+          return`<div class="task-row">
+            <div class="task-check ${t.status==="complete"?"done":""}">${t.status==="complete"?"✓":""}</div>
+            <div class="task-title-col">
+              <div class="task-name ${t.status==="complete"?"done":""}">${t.title}</div>
+              <div class="task-meta">Assigned to ${s.name} · ${t.date}</div>
+            </div>
+            ${statusBadge(t.status)}
+            ${priorityBadge(t.priority)}
+          </div>`;}).join("")}
+      </div>
+    </div>`;
+}
+
+function renderHandlers(){
+  const tasks=propTasks(selectedProp);
+  const staffOnProp=[...new Set(tasks.map(t=>t.who))].map(id=>getStaff(id));
+  return`
+    <div class="page-title">Who's Handling It</div>
+    <div class="page-sub">Your assigned service team</div>
+    <div class="staff-grid" style="margin-bottom:24px">
+      ${staffOnProp.map(s=>{
+        const myTasks=tasks.filter(t=>t.who===s.id);
+        const open=myTasks.filter(t=>t.status!=="complete").length;
+        return`<div class="staff-card">
+          <div class="avatar ${s.av}">${s.initials}</div>
+          <div class="staff-name">${s.name}</div>
+          <div class="staff-role">${s.role}</div>
+          <div class="staff-stats">
+            <div class="staff-stat"><div class="staff-stat-n">${myTasks.length}</div><div class="staff-stat-l">Tasks</div></div>
+            <div class="staff-stat"><div class="staff-stat-n" style="color:${open?"var(--warn)":"var(--ok)"}">${open}</div><div class="staff-stat-l">Open</div></div>
+          </div>
+        </div>`}).join("")}
+    </div>
+    <div class="card">
+      <div class="card-title">Task Assignments</div>
+      <div class="task-list">
+        ${tasks.map(t=>{
+          const s=getStaff(t.who);
+          return`<div class="task-row">
+            <div class="avatar ${s.av}" style="width:28px;height:28px;font-size:11px;flex-shrink:0">${s.initials}</div>
+            <div class="task-title-col">
+              <div class="task-name">${t.title}</div>
+              <div class="task-meta">${s.name} · ${s.role}</div>
+            </div>
+            ${statusBadge(t.status)}
+            <span class="task-date">${t.date}</span>
+          </div>`;}).join("")}
+      </div>
+    </div>`;
+}
+
+function renderInventory(propId){
+  const inv=INVENTORY.filter(i=>i.propId===propId);
+  const rooms=[...new Set(inv.map(i=>i.room))];
+  const filtered=invRoom==="all"?inv:inv.filter(i=>i.room===invRoom);
+  const totalVal=filtered.reduce((a,i)=>a+i.val,0);
+  return`
+    <div class="page-title">Inventory</div>
+    <div class="page-sub">${inv.length} items tracked · Total value ${fmt(inv.reduce((a,i)=>a+i.val,0))}</div>
+    <div class="filter-bar">
+      <button class="filter-btn ${invRoom==="all"?"active":""}" onclick="setInvRoom('all')">All Rooms</button>
+      ${rooms.map(r=>`<button class="filter-btn ${invRoom===r?"active":""}" onclick="setInvRoom('${r}')">${r}</button>`).join("")}
+    </div>
+    <div style="margin-bottom:16px;display:flex;align-items:center;gap:12px">
+      <span style="font-size:13px;color:var(--muted)">${filtered.length} items · </span>
+      <span class="badge badge-gold">${fmt(totalVal)} in view</span>
+    </div>
+    <div class="inv-grid">
+      ${filtered.map(item=>`
+        <div class="inv-card">
+          <div class="inv-header">
+            <div class="inv-icon" style="background:${catColor(item.cat)}22">${item.icon}</div>
+            <div style="min-width:0">
+              <div class="inv-name">${item.name}</div>
+              <div class="inv-room">📍 ${item.room}</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge" style="background:${catColor(item.cat)}22;color:${catColor(item.cat)}">${item.cat}</span>
+            ${item.qty>1?`<span class="badge badge-dim">Qty: ${item.qty}</span>`:""}
+          </div>
+          ${item.notes?`<div class="inv-notes">${item.notes}</div>`:""}
+          <div class="inv-footer">
+            <div class="inv-value">${fmt(item.val)}</div>
+            <span class="badge badge-dim">Est. value</span>
+          </div>
+        </div>`).join("")}
+      ${!filtered.length?'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">No items in this room</div>':""}
+    </div>`;
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────────
+function toggleTask(id){
+  const t=TASKS.find(t=>t.id===id);
+  if(!t)return;
+  const cycle=["pending","in-progress","complete"];
+  t.status=cycle[(cycle.indexOf(t.status)+1)%cycle.length];
+  renderAll();
+}
+
+function submitRequest(){
+  const title=document.getElementById("req-title").value.trim();
+  if(!title){alert("Please enter a task description.");return;}
+  const cat=document.getElementById("req-cat").value;
+  const priority=document.getElementById("req-priority").value;
+  const note=document.getElementById("req-note").value.trim();
+  TASKS.push({id:nextTaskId++,propId:selectedProp,title,cat,status:"pending",who:5,priority,date:"Apr "+Math.floor(Math.random()*20+2),note});
+  view="requests";
+  renderAll();
+}
+
+// ── Render All ─────────────────────────────────────────────────────────────────
+function renderAll(){
+  document.getElementById("sidebar").innerHTML=renderSidebar();
+  let content="";
+  if(role==="manager"){
+    if(view==="dashboard")content=renderManagerDashboard();
+    else if(view==="properties")content=renderProperties();
+    else if(view==="tasks")content=renderTasks(TASKS,true);
+    else if(view==="staff")content=renderStaff();
+  } else {
+    if(view==="dashboard")content=renderHomeownerDashboard();
+    else if(view==="requests")content=renderRequests();
+    else if(view==="handlers")content=renderHandlers();
+    else if(view==="inventory")content=renderInventory(selectedProp);
+  }
+  document.getElementById("main").innerHTML=content;
+}
+
+renderAll();
+</script>
+
+<script id="kpc-protect-js">
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+  document.addEventListener('dragstart', function(e) {
+    var t = e.target && e.target.tagName;
+    if (t === 'IMG' || t === 'svg' || t === 'SVG') e.preventDefault();
+  }, false);
+  document.addEventListener('keydown', function(e) {
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) {
+      e.preventDefault(); return false;
+    }
+  }, false);
+})();
+</script>
+
+<a href="https://kanepc.com" target="_top" id="kpc-demo-badge"
+   style="position:fixed;bottom:14px;right:14px;
+          background:rgba(20,20,20,0.92);color:#fff;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+          text-decoration:none;padding:9px 14px;border-radius:3px;
+          border:1px solid rgba(255,255,255,0.12);
+          box-shadow:0 6px 18px rgba(0,0,0,0.35);
+          z-index:2147483647;line-height:1;
+          -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);">
+  Demo &middot; Built by <span style="color:#E65100">Kane PC</span>
+</a>
+
+</body>
+</html>

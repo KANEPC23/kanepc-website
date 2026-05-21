@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PastureChart — Vet & Farm Management — Kane PC Sample Build</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sidebar: #1b2b1b;
+      --sidebar-hover: #273d27;
+      --sidebar-active: #3a5a3a;
+      --accent: #8fb87a;
+      --accent-warm: #c4622d;
+      --accent-gold: #c9a040;
+      --bg: #f6f3ed;
+      --card: #ffffff;
+      --text: #1a2a1a;
+      --text2: #627462;
+      --text3: #9aaa9a;
+      --border: #e6e1d8;
+      --green: #3a5a3a;
+      --shadow: 0 2px 12px rgba(0,0,0,0.07);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;}
+
+    /* ── SIDEBAR ── */
+    .sidebar{width:258px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;}
+    .logo-wrap{padding:22px 18px 14px;border-bottom:1px solid rgba(255,255,255,0.07);}
+    .logo{font-family:'Lora',serif;font-size:21px;color:#fff;font-weight:600;letter-spacing:-0.3px;display:flex;align-items:center;gap:8px;}
+    .logo-sub{font-size:10.5px;color:rgba(255,255,255,0.35);letter-spacing:1.8px;text-transform:uppercase;margin-top:3px;padding-left:2px;}
+    .mode-toggle{margin:14px 14px 6px;background:rgba(255,255,255,0.07);border-radius:10px;padding:4px;display:flex;gap:3px;}
+    .mode-btn{flex:1;padding:8px 4px;border:none;background:transparent;color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;border-radius:7px;cursor:pointer;transition:all 0.18s;white-space:nowrap;}
+    .mode-btn.active{background:var(--accent);color:#1b2b1b;font-weight:700;}
+    .sec-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.28);padding:14px 18px 6px;}
+    .a-item{display:flex;align-items:center;gap:11px;padding:9px 14px;cursor:pointer;border-radius:8px;margin:1px 8px;transition:all 0.14s;}
+    .a-item:hover{background:var(--sidebar-hover);}
+    .a-item.active{background:var(--sidebar-active);}
+    .a-avatar{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;overflow:hidden;}
+    .a-avatar img{width:100%;height:100%;object-fit:cover;}
+    .a-info{flex:1;min-width:0;}
+    .a-name{font-size:13.5px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .a-breed{font-size:11.5px;color:rgba(255,255,255,0.38);}
+    .sb-foot{margin-top:auto;padding:14px;border-top:1px solid rgba(255,255,255,0.07);}
+    .add-btn{width:100%;padding:10px;background:rgba(143,184,122,0.14);border:1.5px dashed rgba(143,184,122,0.38);border-radius:9px;color:var(--accent);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.18s;}
+    .add-btn:hover{background:rgba(143,184,122,0.24);}
+
+    /* ── MAIN ── */
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+    .welcome{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
+    .welcome-icon{font-size:60px;opacity:0.3;}
+    .welcome-h{font-family:'Lora',serif;font-size:20px;color:var(--text2);}
+    .welcome-p{font-size:13.5px;color:var(--text3);}
+
+    /* ── DETAIL ── */
+    .detail{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+    .det-head{background:var(--card);border-bottom:1px solid var(--border);padding:18px 26px 0;}
+    .det-top{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+    .photo-circle{width:66px;height:66px;border-radius:15px;background:#ece8e0;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden;position:relative;cursor:pointer;border:2px solid var(--border);flex-shrink:0;transition:transform 0.15s;}
+    .photo-circle:hover{transform:scale(1.04);}
+    .photo-circle img{width:100%;height:100%;object-fit:cover;}
+    .photo-ov{position:absolute;inset:0;background:rgba(0,0,0,0.48);display:flex;align-items:center;justify-content:center;opacity:0;transition:0.18s;font-size:20px;color:#fff;border-radius:13px;}
+    .photo-circle:hover .photo-ov{opacity:1;}
+    .det-meta{flex:1;}
+    .det-name{font-family:'Lora',serif;font-size:24px;font-weight:600;line-height:1.1;}
+    .det-sub{font-size:13px;color:var(--text2);margin-top:3px;}
+    .badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;}
+    .badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:0.4px;}
+    .b-farm{background:#e6f2e6;color:#2d5a2d;}
+    .b-exotic{background:#fdf0e6;color:#9a4a1a;}
+    .b-pet{background:#e6eeff;color:#2a3e8a;}
+    .b-sex{background:#f2f2f2;color:#606060;}
+    .b-age{background:#fff6e0;color:#7a5e00;}
+    .tabs{display:flex;margin-top:2px;}
+    .tab{padding:10px 18px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.14s;}
+    .tab:hover{color:var(--text2);}
+    .tab.on{color:var(--green);border-bottom-color:var(--green);font-weight:700;}
+    .tcontent{flex:1;overflow-y:auto;padding:22px 26px;}
+
+    /* ── PROFILE ── */
+    .pg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+    .ic{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;}
+    .ic-lbl{font-size:10.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--text3);margin-bottom:5px;}
+    .ic-val{font-size:15.5px;font-weight:600;color:var(--text);}
+    .ic-sub{font-size:11.5px;color:var(--text2);margin-top:2px;}
+    .sec-h{font-family:'Lora',serif;font-size:15.5px;color:var(--text);margin:18px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+    .notes-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;font-size:13.5px;color:var(--text2);line-height:1.65;}
+    .owner-bar{background:#f0f3ff;border:1px solid #d4dcf8;border-radius:11px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+    .ow-icon{font-size:26px;}
+    .ow-lbl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#4e62a4;}
+    .ow-name{font-size:14px;font-weight:700;color:#252e5a;}
+    .ow-contact{font-size:11.5px;color:#6070a8;}
+
+    /* ── MEDICAL ── */
+    .rec{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;margin-bottom:10px;animation:fi 0.15s ease;}
+    .rec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+    .rtype{font-size:10.5px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;padding:3px 8px;border-radius:5px;}
+    .rt-vaccination{background:#e8f5e9;color:#256029;}
+    .rt-exam{background:#e3f0fd;color:#124fa0;}
+    .rt-medication{background:#fff3e0;color:#c05000;}
+    .rt-surgery{background:#fce4ec;color:#800838;}
+    .rt-note{background:#f3e5f5;color:#621090;}
+    .rdate{font-size:11.5px;color:var(--text3);}
+    .rtitle{font-size:14.5px;font-weight:700;color:var(--text);margin-bottom:4px;}
+    .rnotes{font-size:13px;color:var(--text2);line-height:1.55;}
+    .add-rec-btn{width:100%;padding:12px;background:transparent;border:1.5px dashed var(--border);border-radius:12px;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:13.5px;cursor:pointer;transition:all 0.18s;margin-top:4px;}
+    .add-rec-btn:hover{border-color:var(--green);color:var(--green);background:rgba(58,90,58,0.04);}
+
+    /* ── FEEDING ── */
+    .fsched{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+    .fcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;}
+    .ftime{font-size:10.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent-warm);margin-bottom:4px;}
+    .fmeal{font-size:14.5px;font-weight:700;color:var(--text);margin-bottom:4px;}
+    .fdetail{font-size:12.5px;color:var(--text2);}
+
+    /* ── AI ── */
+    .ai-wrap{display:flex;flex-direction:column;gap:0;height:100%;}
+    .key-bar{background:#fffbf0;border:1px solid #ecddb0;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+    .key-lbl{font-size:11.5px;font-weight:700;color:var(--accent-warm);white-space:nowrap;}
+    .key-inp{flex:1;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;}
+    .chat-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:14px;min-height:180px;max-height:320px;}
+    .bubble{max-width:88%;padding:11px 15px;border-radius:16px;font-size:13.5px;line-height:1.55;}
+    .bubble.user{background:var(--green);color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
+    .bubble.ai{background:var(--card);border:1px solid var(--border);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px;}
+    .bubble.thinking{background:var(--card);border:1px solid var(--border);color:var(--text3);align-self:flex-start;font-style:italic;border-bottom-left-radius:4px;}
+    .chat-empty{text-align:center;padding:24px 16px;color:var(--text3);font-size:13.5px;}
+    .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+    .chip{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 13px;font-size:12px;color:var(--text2);cursor:pointer;transition:all 0.13s;}
+    .chip:hover{border-color:var(--green);color:var(--green);background:rgba(58,90,58,0.04);}
+    .chat-row{display:flex;gap:9px;align-items:flex-end;}
+    .chat-ta{flex:1;border:1.5px solid var(--border);border-radius:11px;padding:11px 15px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text);background:var(--card);resize:none;outline:none;transition:border-color 0.14s;min-height:46px;max-height:110px;}
+    .chat-ta:focus{border-color:var(--green);}
+    .send{width:46px;height:46px;background:var(--green);border:none;border-radius:11px;color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.14s;}
+    .send:hover{background:#2a4a2a;}
+    .send:disabled{opacity:0.45;cursor:not-allowed;}
+
+    /* ── MODAL ── */
+    .moverlay{position:fixed;inset:0;background:rgba(0,0,0,0.42);display:flex;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(2px);}
+    .modal{background:var(--card);border-radius:16px;padding:26px;width:440px;max-width:95vw;box-shadow:var(--shadow-lg);animation:fi 0.18s ease;}
+    .m-title{font-family:'Lora',serif;font-size:19px;margin-bottom:18px;color:var(--text);}
+    .fg{margin-bottom:13px;}
+    .flbl{display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:5px;}
+    .fi,.fsel,.fta{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:9px 13px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.14s;}
+    .fi:focus,.fsel:focus,.fta:focus{border-color:var(--green);}
+    .fta{resize:vertical;min-height:76px;}
+    .frow{display:flex;gap:11px;}
+    .frow .fg{flex:1;}
+    .m-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:18px;}
+    .btn-c{padding:9px 20px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13.5px;cursor:pointer;color:var(--text2);}
+    .btn-s{padding:9px 20px;background:var(--green);border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:#fff;cursor:pointer;transition:background 0.14s;}
+    .btn-s:hover{background:#254025;}
+
+    @keyframes fi{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
+    ::-webkit-scrollbar{width:5px;}
+    ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.13);border-radius:3px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    #photo-input{display:none;}
+
+    @media(max-width:700px){
+      .sidebar{width:200px;}
+      .pg{grid-template-columns:1fr;}
+      .fsched{grid-template-columns:1fr;}
+      .det-head{padding:14px 14px 0;}
+      .tcontent{padding:14px;}
+    }
+  </style>
+
+<style id="kpc-protect">
+  body {
+    -webkit-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text; -moz-user-select: text;
+    -ms-user-select: text; user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img, svg {
+    -webkit-user-drag: none; user-drag: none;
+    -webkit-touch-callout: none;
+  }
+</style>
+
+</head>
+<body>
+
+<input type="file" id="photo-input" accept="image/*" capture="environment">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo-wrap">
+    <div class="logo">🐾 PastureChart</div>
+    <div class="logo-sub">Vet &amp; Farm Management</div>
+  </div>
+
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="btn-farm" onclick="setMode('farm')">🌿 My Farm</button>
+    <button class="mode-btn" id="btn-practice" onclick="setMode('practice')">🩺 Practice</button>
+  </div>
+
+  <div class="sec-label" id="sb-label">My Animals</div>
+  <div id="alist"></div>
+
+  <div class="sb-foot">
+    <button class="add-btn" onclick="openAddAnimal()">+ Add Animal</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="main">
+  <div class="welcome" id="welcome">
+    <div class="welcome-icon">🐄</div>
+    <div class="welcome-h">Select an animal to begin</div>
+    <div class="welcome-p">Choose from the sidebar or add a new animal</div>
+  </div>
+  <div class="detail" id="detail" style="display:none;"></div>
+</main>
+
+<!-- MODAL -->
+<div class="moverlay" id="moverlay" style="display:none;" onclick="overlayClick(event)">
+  <div class="modal" id="mcontent"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  SEED DATA
+// ══════════════════════════════════════════════════════════════
+
+const ANIMALS = [
+  {
+    id:'bessie', mode:'farm', emoji:'🐄', name:'Bessie', species:'Cattle', breed:'Holstein',
+    sex:'Female', dob:'2020-03-12', weight:'1,340 lbs', tag:'FRM-001', color:'Black & White', photo:null,
+    notes:'Primary milk cow, averaging ~6 gallons/day. Excellent temperament and easy to handle. Last pregnancy Jan 2023 — healthy calf sold at weaning. BCS consistently 3.0–3.25 through the year.',
+    owner:null,
+    feeding:[
+      {time:'Morning', meal:'Hay & Grain Mix', detail:'20 lbs mixed hay, 8 lbs dairy grain blend, free-choice water'},
+      {time:'Midday', meal:'Pasture Grazing', detail:'Open pasture access 8am–4pm, loose mineral block available'},
+      {time:'Evening', meal:'Hay & Supplement', detail:'20 lbs hay, 2 lbs protein tub, fresh water refreshed'},
+    ],
+    records:[
+      {id:'r1', type:'vaccination', date:'2024-03-01', title:'Annual Bovine Respiratory Panel', notes:'IBR, BVD type I & II, PI3, BRSV — 5mL SQ, left neck. No adverse reaction. Booster due March 2025.'},
+      {id:'r2', type:'exam', date:'2024-01-15', title:'Routine Physical & Milk Quality Check', notes:'SCC within normal range (< 200,000). Hoof condition good — no trimming needed. BCS 3.25/5. Body weight stable. Continue current feeding program.'},
+      {id:'r3', type:'medication', date:'2023-11-08', title:'Mastitis Treatment — Left Rear Quarter', notes:'Subclinical mastitis detected via CMT. Treated with intramammary Amoxicillin x3 days. Milk withheld 72hr per label. Repeat CMT negative on day 5. Full resolution.'},
+    ]
+  },
+  {
+    id:'clover', mode:'farm', emoji:'🐐', name:'Clover', species:'Goat', breed:'Nigerian Dwarf',
+    sex:'Female', dob:'2022-05-20', weight:'52 lbs', tag:'FRM-002', color:'Brown & White', photo:null,
+    notes:'Friendly doe — excellent with children and visitors. Good producer for her size, averaging ~1 quart/day during lactation. Bred to Oreo (farm buck) Oct 2024. Kids expected March 2025.',
+    owner:null,
+    feeding:[
+      {time:'Morning', meal:'Hay & Browse', detail:'2 lbs orchard grass hay, fresh browse when seasonally available'},
+      {time:'Midday', meal:'Mineral & Water', detail:'Free-choice loose goat mineral, always-fresh water'},
+      {time:'Evening', meal:'Grain Supplement', detail:'0.5 lb 16% goat grain — increase to 1 lb at peak lactation'},
+    ],
+    records:[
+      {id:'r4', type:'vaccination', date:'2024-02-14', title:'CDT Booster (C&D + Tetanus)', notes:'Annual CDT administered SQ, left neck. No reaction. Per breeding protocol: plan booster 4 weeks pre-kidding (approx. Feb 2025) to boost passive transfer to kids.'},
+      {id:'r5', type:'exam', date:'2023-09-30', title:'Pre-Breeding Exam & FAMACHA Score', notes:'FAMACHA score 2 (pink/pale pink) — no deworming indicated. BCS 3.0/5. Fecal egg count: low (<200 EPG). Confirmed healthy for breeding. Hoof trim completed.'},
+    ]
+  },
+  {
+    id:'henrietta', mode:'farm', emoji:'🐔', name:'Henrietta', species:'Poultry', breed:'Rhode Island Red',
+    sex:'Female', dob:'2023-04-01', weight:'6.8 lbs', tag:'FRM-003', color:'Deep Mahogany Red', photo:null,
+    notes:'Lead hen of the backyard flock (12 birds). Dominant but not aggressive — keeps order well. Averaging 5–6 eggs/week. Recovered fully from minor flock respiratory event in fall 2023. Currently in peak production.',
+    owner:null,
+    feeding:[
+      {time:'Morning', meal:'Layer Pellets', detail:'Scatter ~4 oz layer pellets across the run — encourages natural foraging behavior'},
+      {time:'Daytime', meal:'Free Range', detail:'Free-range yard access 8am–dusk. Excellent foragers — insects, grass, seeds'},
+      {time:'Evening', meal:'Pellets & Oyster Shell', detail:'4 oz pellets to coop, free-choice crushed oyster shell for eggshell strength'},
+    ],
+    records:[
+      {id:'r6', type:'medication', date:'2023-10-15', title:'Respiratory Illness — Flock Treatment', notes:'Mild URI signs in 3 birds (Henrietta + 2 others): rattle, decreased appetite. Treated with Tylan Soluble in drinking water x 5 days. Egg withdrawal followed per label. All birds fully recovered by day 10.'},
+      {id:'r7', type:'note', date:'2024-04-01', title:'Annual Wellness Observation', notes:'One-year mark — excellent overall health. Comb and wattles bright red. Feather condition very good (outside of normal pre-molt wear). No lice, mites, or external parasites found. High production maintained.'},
+    ]
+  },
+  {
+    id:'max', mode:'practice', emoji:'🐕', name:'Max', species:'Dog', breed:'Golden Retriever',
+    sex:'Male (Neutered)', dob:'2018-07-04', weight:'74 lbs', tag:'PAT-001', color:'Golden', photo:null,
+    notes:'Well-socialized, owner-compliant senior dog. Mild noise aversion (thunderstorm protocol in place). Currently managed for bilateral elbow arthritis and seasonal environmental allergies. Dental cleaning overdue. Owner (the Millers) very attentive and medically engaged.',
+    owner:{name:'John & Sarah Miller', phone:'(555) 010-0182', email:'smiller@email.com'},
+    feeding:[
+      {time:'Morning', meal:'Dry Kibble', detail:'1.5 cups Royal Canin Golden Retriever Adult — no free feeding'},
+      {time:'Evening', meal:'Kibble + Topper', detail:'1.5 cups kibble + 2 tbsp wet food topper. No table scraps. Weight monitored monthly.'},
+    ],
+    records:[
+      {id:'r8', type:'vaccination', date:'2024-06-15', title:'Annual Vaccines — Rabies, DHPP, Bordetella', notes:'Rabies 3-year administered. DHPP booster. Bordetella intranasal. All vaccines current through 2025–2027. Heartworm antigen test: NEGATIVE. Continued on Heartgard Plus monthly.'},
+      {id:'r9', type:'medication', date:'2024-03-10', title:'Apoquel — Seasonal Allergy Flare', notes:'Presenting with bilateral paw licking, erythematous ear canals, mild facial pruritus. Prescribed Apoquel 16mg once daily x30 days. Owner instructed on paw wiping protocol and avoiding known allergens. Recheck scheduled 4 weeks.'},
+      {id:'r10', type:'exam', date:'2023-12-01', title:'Senior Wellness Panel (Age 5+)', notes:'CBC & full chemistry within normal limits. Mild radiographic bilateral elbow OA — started Galliprant 20mg daily. Discussed joint supplementation (Dasuquin). Dental score 3/4 — tartar, mild gingivitis. Cleaning highly recommended this year.'},
+    ]
+  },
+  {
+    id:'luna', mode:'practice', emoji:'🐱', name:'Luna', species:'Cat', breed:'Domestic Shorthair',
+    sex:'Female (Spayed)', dob:'2021-02-14', weight:'9.2 lbs', tag:'PAT-002', color:'Gray Tabby', photo:null,
+    notes:'Indoor-only cat. Very shy at clinic but manageable with patience and low-stress handling. History of stress-induced FLUTD — owner has made excellent environmental enrichment improvements. Currently stable on urinary prescription diet. Weight appropriate for frame.',
+    owner:{name:'Maria Chen', phone:'(555) 010-0271', email:'mchen@email.com'},
+    feeding:[
+      {time:'Morning', meal:'Wet Food', detail:'3 oz Royal Canin Urinary SO wet — critical for increasing water intake'},
+      {time:'Evening', meal:'Dry + Wet Mix', detail:'¼ cup Royal Canin Urinary SO dry + 1.5 oz wet food. Water fountain running 24/7.'},
+    ],
+    records:[
+      {id:'r11', type:'vaccination', date:'2024-05-20', title:'FVRCP 3-Year Booster + Rabies 1-Year', notes:'Indoor cat — FVRCP 3-year administered per AAFP low-risk schedule. Rabies 1-year (owner requested for lease compliance). No adverse reactions post-vaccine. All vaccines current.'},
+      {id:'r12', type:'exam', date:'2024-02-14', title:'Urinary Recheck & Urinalysis', notes:'Urinalysis: no struvite or calcium oxalate crystals. USG 1.038 — well concentrated, good hydration. No gross hematuria. Owner reports no episodes since Nov 2023. Feliway MultiCat recommended for multi-pet household. Excellent management by owner.'},
+    ]
+  },
+  {
+    id:'zeus', mode:'practice', emoji:'🐍', name:'Zeus', species:'Ball Python', breed:'Pastel Morph',
+    sex:'Male', dob:'2019-08-15', weight:'1,840g', tag:'PAT-003', color:'Pastel Yellow & Brown', photo:null,
+    notes:'Healthy, well-maintained adult ball python with experienced owner. Noted mild dysecdysis episode (2023) — husbandry corrected with humid hide addition. Currently eating pre-killed adult mice weekly without issue. Docile temperament, good for exam handling.',
+    owner:{name:'Tyler Brooks', phone:'(555) 010-0344', email:'tbrooks@email.com'},
+    feeding:[
+      {time:'Weekly', meal:'Pre-killed Adult Mouse', detail:'One adult mouse (~28–32g) offered at night in hide. Fast during active shed cycle.'},
+      {time:'Monthly', meal:'Calcium Supplement', detail:'Light calcium carbonate dusting on prey item once per month'},
+    ],
+    records:[
+      {id:'r13', type:'exam', date:'2024-07-10', title:'Annual Wellness Exam', notes:'Weight 1,840g — stable from prior visit. Muscle tone excellent. Eyes clear, no retained spectacles. Minor dried shed on distal tail tip removed manually — no wound underneath. Cloacal and vent exam normal. Owner counseled: target 60–80% humidity during ecdysis.'},
+      {id:'r14', type:'note', date:'2023-09-05', title:'Dysecdysis — First Episode & Husbandry Review', notes:'Owner reported large retained shed across dorsum and proximal tail. Soaked in lukewarm water x20 min; shed removed atraumatically. No underlying lesions. Full husbandry review conducted: added humid hide, increased misting frequency. No recurrence in 10 months.'},
+    ]
+  }
+];
+
+// ══════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════
+
+const S = {mode:'farm', id:null, tab:'profile', apiKey:'', chats:{}};
+
+// ══════════════════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════════════════
+
+function getAge(dob){
+  const d=new Date(dob), n=new Date();
+  let y=n.getFullYear()-d.getFullYear(), m=n.getMonth()-d.getMonth();
+  if(m<0){y--;m+=12;}
+  if(y===0) return m+'mo';
+  return m===0?y+'yr':y+'yr '+m+'mo';
+}
+
+function fmtDate(s){
+  const d=new Date(s+'T12:00:00');
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+
+function getAnimal(id){ return ANIMALS.find(a=>a.id===id); }
+
+function catBadge(mode, species){
+  if(mode==='farm') return '<span class="badge b-farm">Farm</span>';
+  const exotics=['python','snake','parrot','reptile','lizard','turtle','bird','exotic'];
+  if(exotics.some(x=>species.toLowerCase().includes(x))) return '<span class="badge b-exotic">Exotic</span>';
+  return '<span class="badge b-pet">Pet</span>';
+}
+
+function speciesEmoji(sp){
+  const m={dog:'🐕',cat:'🐱',cattle:'🐄',cow:'🐄',goat:'🐐',sheep:'🐑',horse:'🐴',chicken:'🐔',pig:'🐷',rabbit:'🐇',snake:'🐍',python:'🐍',parrot:'🦜',turtle:'🐢',bird:'🐦'};
+  return m[sp.toLowerCase()]||'🐾';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SIDEBAR
+// ══════════════════════════════════════════════════════════════
+
+function renderSidebar(){
+  document.getElementById('btn-farm').className='mode-btn'+(S.mode==='farm'?' active':'');
+  document.getElementById('btn-practice').className='mode-btn'+(S.mode==='practice'?' active':'');
+  document.getElementById('sb-label').textContent=S.mode==='farm'?'My Animals':'Patients';
+  document.getElementById('alist').innerHTML=ANIMALS.filter(a=>a.mode===S.mode).map(a=>`
+    <div class="a-item${a.id===S.id?' active':''}" onclick="selectAnimal('${a.id}')">
+      <div class="a-avatar">${a.photo?`<img src="${a.photo}" alt="${a.name}">`:`<span>${a.emoji}</span>`}</div>
+      <div class="a-info">
+        <div class="a-name">${a.name}</div>
+        <div class="a-breed">${a.breed}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  MODE SWITCH
+// ══════════════════════════════════════════════════════════════
+
+function setMode(m){
+  S.mode=m; S.id=null; S.tab='profile';
+  document.getElementById('welcome').style.display='flex';
+  document.getElementById('detail').style.display='none';
+  renderSidebar();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SELECT / RENDER DETAIL
+// ══════════════════════════════════════════════════════════════
+
+function selectAnimal(id){
+  S.id=id; S.tab='profile';
+  renderSidebar(); renderDetail();
+}
+
+function renderDetail(){
+  const a=getAnimal(S.id); if(!a) return;
+  document.getElementById('welcome').style.display='none';
+  const det=document.getElementById('detail');
+  det.style.display='flex';
+
+  const photoInner=a.photo
+    ?`<img src="${a.photo}" alt="${a.name}"><div class="photo-ov">📷</div>`
+    :`<span>${a.emoji}</span><div class="photo-ov">📷</div>`;
+
+  det.innerHTML=`
+    <div class="det-head">
+      <div class="det-top">
+        <div class="photo-circle" onclick="triggerPhoto()">${photoInner}</div>
+        <div class="det-meta">
+          <div class="det-name">${a.name}</div>
+          <div class="det-sub">${a.species} · ${a.breed}</div>
+          <div class="badges">
+            ${catBadge(a.mode,a.species)}
+            <span class="badge b-sex">${a.sex}</span>
+            <span class="badge b-age">${getAge(a.dob)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab${S.tab==='profile'?' on':''}" onclick="switchTab('profile',this)">Profile</button>
+        <button class="tab${S.tab==='medical'?' on':''}" onclick="switchTab('medical',this)">Medical</button>
+        <button class="tab${S.tab==='feeding'?' on':''}" onclick="switchTab('feeding',this)">Feeding</button>
+        <button class="tab${S.tab==='ai'?' on':''}" onclick="switchTab('ai',this)">🤖 AI Assistant</button>
+      </div>
+    </div>
+    <div class="tcontent" id="tcontent">${renderTab(a)}</div>`;
+}
+
+function switchTab(tab, btn){
+  S.tab=tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('tcontent').innerHTML=renderTab(getAnimal(S.id));
+  if(tab==='ai') setTimeout(()=>{const m=document.getElementById('chat-msgs');if(m)m.scrollTop=m.scrollHeight;},60);
+}
+
+function renderTab(a){
+  if(S.tab==='profile') return tplProfile(a);
+  if(S.tab==='medical') return tplMedical(a);
+  if(S.tab==='feeding') return tplFeeding(a);
+  if(S.tab==='ai')      return tplAI(a);
+  return '';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  PROFILE TAB
+// ══════════════════════════════════════════════════════════════
+
+function tplProfile(a){
+  const ownerBar=a.owner?`
+    <div class="owner-bar">
+      <div class="ow-icon">👤</div>
+      <div>
+        <div class="ow-lbl">Pet Owner</div>
+        <div class="ow-name">${a.owner.name}</div>
+        <div class="ow-contact">${a.owner.phone} &nbsp;·&nbsp; ${a.owner.email}</div>
+      </div>
+    </div>`:'';
+  return `${ownerBar}
+    <div class="pg">
+      <div class="ic"><div class="ic-lbl">Date of Birth</div><div class="ic-val">${fmtDate(a.dob)}</div><div class="ic-sub">Age: ${getAge(a.dob)}</div></div>
+      <div class="ic"><div class="ic-lbl">Weight</div><div class="ic-val">${a.weight}</div><div class="ic-sub">Last recorded</div></div>
+      <div class="ic"><div class="ic-lbl">ID / Tag</div><div class="ic-val">${a.tag}</div><div class="ic-sub">${a.mode==='farm'?'Farm tag':'Patient ID'}</div></div>
+      <div class="ic"><div class="ic-lbl">Coloring</div><div class="ic-val">${a.color}</div><div class="ic-sub">${a.breed}</div></div>
+    </div>
+    <div class="sec-h">Notes</div>
+    <div class="notes-box">${a.notes}</div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  MEDICAL TAB
+// ══════════════════════════════════════════════════════════════
+
+function tplMedical(a){
+  const recs=a.records.map(r=>`
+    <div class="rec">
+      <div class="rec-head">
+        <span class="rtype rt-${r.type}">${r.type.charAt(0).toUpperCase()+r.type.slice(1)}</span>
+        <span class="rdate">${fmtDate(r.date)}</span>
+      </div>
+      <div class="rtitle">${r.title}</div>
+      <div class="rnotes">${r.notes}</div>
+    </div>`).join('');
+  return recs+`<button class="add-rec-btn" onclick="openAddRecord('${a.id}')">+ Add Medical Record</button>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  FEEDING TAB
+// ══════════════════════════════════════════════════════════════
+
+function tplFeeding(a){
+  const cards=a.feeding.map(f=>`
+    <div class="fcard">
+      <div class="ftime">${f.time}</div>
+      <div class="fmeal">${f.meal}</div>
+      <div class="fdetail">${f.detail}</div>
+    </div>`).join('');
+  return `<div class="fsched">${cards}</div>
+    <div class="sec-h">Dietary Notes</div>
+    <div class="notes-box">Feeding plan based on current weight, age, and clinical status. Use the AI Assistant tab to get real-time guidance on ration adjustments, supplement needs, or species-specific best practices.</div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  AI ASSISTANT TAB
+// ══════════════════════════════════════════════════════════════
+
+const SUGGESTIONS={
+  bessie:['Ideal daily grain for a milking Holstein?','Signs of mastitis to watch for?','Recommended vaccination schedule?'],
+  clover:['Pre-kidding nutrition tips?','FAMACHA scoring — how does it work?','Normal kid birth weight range?'],
+  henrietta:['Why might egg production drop?','Respiratory illness prevention in flocks?','Molt vs illness — how to tell?'],
+  max:['Long-term safety of Apoquel?','Arthritis management for senior dogs?','When is dental cleaning urgent?'],
+  luna:['How to prevent stress cystitis in cats?','Best ways to increase water intake?','FLUTD dietary management tips?'],
+  zeus:['Optimal humidity during ball python shed?','Feeding frequency for adult ball pythons?','Respiratory infection signs in snakes?'],
+};
+
+function tplAI(a){
+  if(!S.chats[a.id]) S.chats[a.id]=[];
+  const msgs=S.chats[a.id];
+  const msgsHTML=msgs.length===0
+    ?`<div class="chat-empty">Ask me anything about <strong>${a.name}</strong> — feeding, health, medications, care protocols, or general best practices. I have this animal's full profile loaded.</div>`
+    :msgs.map(m=>`<div class="bubble ${m.role}">${m.content.replace(/\n/g,'<br>')}</div>`).join('');
+  const chips=(SUGGESTIONS[a.id]||['General care tips?','Common health issues?','Feeding best practices?'])
+    .map(s=>`<span class="chip" onclick="sendChip('${s.replace(/'/g,"\\'")}','${a.id}')">${s}</span>`).join('');
+  return `
+    <div class="ai-wrap">
+      <div class="key-bar">
+        <span class="key-lbl">🔑 API Key</span>
+        <input type="password" class="key-inp" id="key-inp" placeholder="sk-ant-..." value="${S.apiKey}" oninput="S.apiKey=this.value">
+      </div>
+      <div class="chat-msgs" id="chat-msgs">${msgsHTML}</div>
+      <div class="chips" id="chips">${msgs.length===0?chips:''}</div>
+      <div class="chat-row">
+        <textarea class="chat-ta" id="chat-ta" placeholder="Ask about ${a.name}…" rows="1"
+          onkeydown="taKey(event,'${a.id}')"></textarea>
+        <button class="send" id="send-btn" onclick="sendChat('${a.id}')">➤</button>
+      </div>
+    </div>`;
+}
+
+async function sendChip(text, id){
+  const ta=document.getElementById('chat-ta');
+  if(ta) ta.value=text;
+  await sendChat(id);
+}
+
+function taKey(e, id){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault(); sendChat(id);}
+}
+
+async function sendChat(animalId){
+  const ta=document.getElementById('chat-ta');
+  const msg=(ta?.value||'').trim();
+  if(!msg) return;
+
+  const key=document.getElementById('key-inp')?.value||S.apiKey;
+  if(!key){alert('Please enter your Anthropic API key above to use the AI assistant.');return;}
+  S.apiKey=key;
+
+  const a=getAnimal(animalId);
+  if(!S.chats[animalId]) S.chats[animalId]=[];
+  S.chats[animalId].push({role:'user',content:msg});
+  if(ta) ta.value='';
+
+  const sendBtn=document.getElementById('send-btn');
+  if(sendBtn) sendBtn.disabled=true;
+  refreshChat(animalId, true);
+
+  const sys=`You are an expert veterinary AI assistant embedded in PastureChart — a professional veterinary and farm management platform. The veterinarian has the following animal's full profile open.
+
+ANIMAL PROFILE:
+  Name: ${a.name}
+  Species: ${a.species} | Breed: ${a.breed}
+  Age: ${getAge(a.dob)} | DOB: ${fmtDate(a.dob)}
+  Sex: ${a.sex} | Weight: ${a.weight}
+  Category: ${a.mode==='farm'?'Farm Animal':['python','snake','parrot','reptile'].some(x=>a.species.toLowerCase().includes(x))?'Exotic Pet':'House Pet'}
+  ${a.owner?`Owner: ${a.owner.name} — ${a.owner.phone}`:'(Own farm animal)'}
+
+CLINICAL NOTES:
+${a.notes}
+
+MEDICAL HISTORY:
+${a.records.map(r=>`  • ${fmtDate(r.date)} [${r.type}] ${r.title}`).join('\n')}
+
+CURRENT FEEDING PLAN:
+${a.feeding.map(f=>`  • ${f.time}: ${f.meal} — ${f.detail}`).join('\n')}
+
+Respond as a knowledgeable, professional veterinary expert. Reference ${a.name}'s specific profile where relevant. Be concise, practical, and actionable. If something requires a physical exam or diagnostics, say so clearly. Do not recommend anything outside safe veterinary practice.`;
+
+  const messages=S.chats[animalId].map(m=>({role:m.role==='ai'?'assistant':'user',content:m.content}));
+
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages})
+    });
+    const data=await res.json();
+    if(data.error) throw new Error(data.error.message);
+    S.chats[animalId].push({role:'ai',content:data.content[0].text});
+  } catch(err){
+    S.chats[animalId].push({role:'ai',content:'⚠️ '+(err.message||'Could not reach AI. Check your API key.')});
+  }
+
+  if(sendBtn) sendBtn.disabled=false;
+  refreshChat(animalId, false);
+}
+
+function refreshChat(id, thinking){
+  const msgs=document.getElementById('chat-msgs');
+  const chips=document.getElementById('chips');
+  if(!msgs) return;
+  const chat=S.chats[id]||[];
+  let h=chat.map(m=>`<div class="bubble ${m.role}">${m.content.replace(/\n/g,'<br>')}</div>`).join('');
+  if(thinking) h+=`<div class="bubble thinking">Reading ${getAnimal(id)?.name}'s profile…</div>`;
+  msgs.innerHTML=h;
+  msgs.scrollTop=msgs.scrollHeight;
+  if(chips) chips.innerHTML='';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  PHOTO UPLOAD
+// ══════════════════════════════════════════════════════════════
+
+function triggerPhoto(){ document.getElementById('photo-input').click(); }
+
+document.getElementById('photo-input').addEventListener('change',function(e){
+  const file=e.target.files[0];
+  if(!file||!S.id) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    const a=getAnimal(S.id);
+    if(a){ a.photo=ev.target.result; renderSidebar(); renderDetail(); }
+  };
+  r.readAsDataURL(file);
+  this.value='';
+});
+
+// ══════════════════════════════════════════════════════════════
+//  ADD ANIMAL MODAL
+// ══════════════════════════════════════════════════════════════
+
+function openAddAnimal(){
+  document.getElementById('mcontent').innerHTML=`
+    <div class="m-title">Add New Animal</div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Name</label><input class="fi" id="mn" placeholder="e.g. Bella"></div>
+      <div class="fg"><label class="flbl">Species</label><input class="fi" id="msp" placeholder="e.g. Dog"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Breed</label><input class="fi" id="mbr" placeholder="e.g. Labrador Mix"></div>
+      <div class="fg"><label class="flbl">Sex</label>
+        <select class="fsel" id="msx">
+          <option>Female</option><option>Male</option>
+          <option>Female (Spayed)</option><option>Male (Neutered)</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Date of Birth</label><input class="fi" id="mdb" type="date"></div>
+      <div class="fg"><label class="flbl">Weight</label><input class="fi" id="mwt" placeholder="e.g. 45 lbs"></div>
+    </div>
+    ${S.mode==='practice'?`
+    <div class="frow">
+      <div class="fg"><label class="flbl">Owner Name</label><input class="fi" id="mon" placeholder="Full name"></div>
+      <div class="fg"><label class="flbl">Owner Phone</label><input class="fi" id="mop" placeholder="(xxx) xxx-xxxx"></div>
+    </div>`:''}
+    <div class="fg"><label class="flbl">Notes</label><textarea class="fta" id="mno" placeholder="Any relevant background, history, or observations…"></textarea></div>
+    <div class="m-actions">
+      <button class="btn-c" onclick="closeModal()">Cancel</button>
+      <button class="btn-s" onclick="saveAnimal()">Add Animal</button>
+    </div>`;
+  document.getElementById('moverlay').style.display='flex';
+}
+
+function saveAnimal(){
+  const name=document.getElementById('mn').value.trim();
+  const species=document.getElementById('msp').value.trim();
+  if(!name||!species){alert('Name and species are required.');return;}
+  const breed=document.getElementById('mbr').value.trim()||species;
+  const sex=document.getElementById('msx').value;
+  const dob=document.getElementById('mdb').value||'2020-01-01';
+  const weight=document.getElementById('mwt').value.trim()||'Not recorded';
+  const notes=document.getElementById('mno').value.trim()||'No notes yet.';
+  const farmCount=ANIMALS.filter(a=>a.mode==='farm').length;
+  const pracCount=ANIMALS.filter(a=>a.mode==='practice').length;
+  const owner=S.mode==='practice'?{
+    name:document.getElementById('mon')?.value.trim()||'Unknown Owner',
+    phone:document.getElementById('mop')?.value.trim()||'',
+    email:''
+  }:null;
+  ANIMALS.push({
+    id:'a_'+Date.now(), mode:S.mode, emoji:speciesEmoji(species),
+    name, species, breed, sex, dob, weight, photo:null,
+    tag:S.mode==='farm'?'FRM-'+String(farmCount+1).padStart(3,'0'):'PAT-'+String(pracCount+1).padStart(3,'0'),
+    color:'Not specified', notes, owner, feeding:[], records:[]
+  });
+  closeModal();
+  selectAnimal('a_'+Date.now() || ANIMALS[ANIMALS.length-1].id);
+  // re-select last
+  const last=ANIMALS[ANIMALS.length-1];
+  selectAnimal(last.id);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  ADD RECORD MODAL
+// ══════════════════════════════════════════════════════════════
+
+function openAddRecord(aid){
+  document.getElementById('mcontent').innerHTML=`
+    <div class="m-title">Add Medical Record</div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Type</label>
+        <select class="fsel" id="rtype">
+          <option value="exam">Exam</option>
+          <option value="vaccination">Vaccination</option>
+          <option value="medication">Medication</option>
+          <option value="surgery">Surgery</option>
+          <option value="note">Note</option>
+        </select>
+      </div>
+      <div class="fg"><label class="flbl">Date</label><input class="fi" id="rdate" type="date" value="${new Date().toISOString().split('T')[0]}"></div>
+    </div>
+    <div class="fg"><label class="flbl">Title</label><input class="fi" id="rtitle" placeholder="e.g. Annual Wellness Exam"></div>
+    <div class="fg"><label class="flbl">Clinical Notes</label><textarea class="fta" id="rnotes" placeholder="Findings, treatment, follow-up instructions…"></textarea></div>
+    <div class="m-actions">
+      <button class="btn-c" onclick="closeModal()">Cancel</button>
+      <button class="btn-s" onclick="saveRecord('${aid}')">Save Record</button>
+    </div>`;
+  document.getElementById('moverlay').style.display='flex';
+}
+
+function saveRecord(aid){
+  const title=document.getElementById('rtitle').value.trim();
+  if(!title){alert('Title is required.');return;}
+  const a=getAnimal(aid);
+  a.records.unshift({id:'rec_'+Date.now(),type:document.getElementById('rtype').value,date:document.getElementById('rdate').value,title,notes:document.getElementById('rnotes').value.trim()});
+  closeModal(); S.tab='medical'; renderDetail();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  MODAL HELPERS
+// ══════════════════════════════════════════════════════════════
+
+function closeModal(){ document.getElementById('moverlay').style.display='none'; }
+function overlayClick(e){ if(e.target===document.getElementById('moverlay')) closeModal(); }
+
+// ══════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════
+
+renderSidebar();
+</script>
+
+<script id="kpc-protect-js">
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+  document.addEventListener('dragstart', function(e) {
+    var t = e.target && e.target.tagName;
+    if (t === 'IMG' || t === 'svg' || t === 'SVG') e.preventDefault();
+  }, false);
+  document.addEventListener('keydown', function(e) {
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) {
+      e.preventDefault(); return false;
+    }
+  }, false);
+})();
+</script>
+
+<a href="https://kanepc.com" target="_top" id="kpc-demo-badge"
+   style="position:fixed;bottom:14px;right:14px;
+          background:rgba(20,20,20,0.92);color:#fff;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+          text-decoration:none;padding:9px 14px;border-radius:3px;
+          border:1px solid rgba(255,255,255,0.12);
+          box-shadow:0 6px 18px rgba(0,0,0,0.35);
+          z-index:2147483647;line-height:1;
+          -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);">
+  Demo &middot; Built by <span style="color:#E65100">Kane PC</span>
+</a>
+
+</body>
+</html>

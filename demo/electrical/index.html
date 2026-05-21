@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apex Electrical Co. — Master Electricians Serving the Tri-State Region — Kane PC Sample Build</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --navy:#0A1628;
+    --navy-2:#0F1F36;
+    --navy-3:#152841;
+    --amber:#FFB627;
+    --amber-2:#F59E0B;
+    --copper:#D97706;
+    --cream:#FAF7F2;
+    --text:#1A2332;
+    --muted:#5B6B82;
+    --line:#E5E0D8;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;color:var(--text);background:var(--cream);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+  /* TOP STRIP */
+  .top-strip{background:var(--navy);color:#C9D5E5;font-size:13px;padding:8px 0}
+  .top-strip .wrap{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center}
+  .top-strip a{color:var(--amber);text-decoration:none;font-weight:600}
+  .top-strip .badges{display:flex;gap:18px}
+  .top-strip .badges span{display:flex;align-items:center;gap:6px}
+  .top-strip .dot{width:6px;height:6px;background:#22C55E;border-radius:50%;box-shadow:0 0 8px #22C55E}
+
+  /* NAV */
+  nav{background:var(--cream);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);background:rgba(250,247,242,0.95)}
+  .nav-wrap{max-width:1280px;margin:0 auto;padding:18px 24px;display:flex;justify-content:space-between;align-items:center}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .brand-mark{width:44px;height:44px;background:var(--navy);position:relative;display:flex;align-items:center;justify-content:center;clip-path:polygon(15% 0,100% 0,85% 100%,0 100%)}
+  .brand-mark svg{width:22px;height:22px;fill:var(--amber)}
+  .brand-name{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--navy);letter-spacing:2px;line-height:1}
+  .brand-sub{font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;font-weight:600}
+  .nav-links{display:flex;gap:36px;align-items:center}
+  .nav-links a{color:var(--navy);text-decoration:none;font-weight:500;font-size:14px;letter-spacing:0.3px}
+  .nav-links a:hover{color:var(--copper)}
+  .nav-cta{background:var(--amber);color:var(--navy);padding:11px 22px;border-radius:2px;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;border:2px solid var(--amber);transition:all .2s}
+  .nav-cta:hover{background:transparent;color:var(--navy)}
+
+  /* HERO */
+  .hero{background:var(--navy);color:white;padding:100px 0 120px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:0;right:0;width:55%;height:100%;background:linear-gradient(135deg,var(--navy-2) 0%,var(--navy) 100%);clip-path:polygon(30% 0,100% 0,100% 100%,0 100%)}
+  .hero::after{content:'';position:absolute;top:-20%;right:-5%;width:600px;height:600px;background:radial-gradient(circle,rgba(255,182,39,0.08) 0%,transparent 60%);border-radius:50%}
+  .hero-wrap{max-width:1280px;margin:0 auto;padding:0 24px;position:relative;z-index:2;display:grid;grid-template-columns:1.3fr 1fr;gap:60px;align-items:center}
+  .hero-tag{display:inline-block;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:24px;padding-left:50px;position:relative}
+  .hero-tag::before{content:'';position:absolute;left:0;top:50%;width:38px;height:2px;background:var(--amber)}
+  .hero h1{font-family:'Fraunces',serif;font-size:76px;line-height:1;font-weight:700;letter-spacing:-2px;margin-bottom:24px}
+  .hero h1 .accent{color:var(--amber);font-style:italic;font-weight:600}
+  .hero-lead{font-size:18px;line-height:1.7;color:#C9D5E5;margin-bottom:36px;max-width:520px}
+  .hero-ctas{display:flex;gap:14px;margin-bottom:48px}
+  .btn-primary{background:var(--amber);color:var(--navy);padding:16px 32px;border-radius:2px;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .2s}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(255,182,39,0.25)}
+  .btn-ghost{background:transparent;color:white;padding:16px 32px;border:2px solid rgba(255,255,255,0.2);border-radius:2px;font-weight:600;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .2s}
+  .btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+  .hero-stats{display:flex;gap:48px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.1)}
+  .stat-num{font-family:'Fraunces',serif;font-size:42px;color:var(--amber);font-weight:700;line-height:1}
+  .stat-lbl{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A9BB5;margin-top:6px;font-weight:600}
+
+  /* HERO CARD */
+  .hero-card{background:white;color:var(--text);border-radius:4px;padding:36px;box-shadow:0 40px 80px rgba(0,0,0,0.3);position:relative}
+  .hero-card::before{content:'24/7';position:absolute;top:-18px;right:24px;background:var(--copper);color:white;font-family:'Bebas Neue',sans-serif;font-size:22px;padding:6px 16px;letter-spacing:3px}
+  .hero-card h3{font-family:'Fraunces',serif;font-size:24px;margin-bottom:6px;color:var(--navy)}
+  .hero-card .sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+  .quick-form label{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;color:var(--navy);margin-bottom:6px;margin-top:14px}
+  .quick-form input,.quick-form select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:2px;font-size:14px;font-family:inherit;background:#FAFAF8;color:var(--text)}
+  .quick-form input:focus,.quick-form select:focus{outline:none;border-color:var(--amber)}
+  .quick-form button{width:100%;background:var(--navy);color:white;padding:14px;border:none;border-radius:2px;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;margin-top:20px;cursor:pointer;transition:all .2s}
+  .quick-form button:hover{background:var(--copper)}
+
+  /* TRUST BAR */
+  .trust-bar{background:white;border-bottom:1px solid var(--line);padding:36px 0}
+  .trust-wrap{max-width:1280px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(5,1fr);gap:32px;align-items:center}
+  .trust-item{display:flex;align-items:center;gap:14px;border-right:1px solid var(--line);padding-right:24px}
+  .trust-item:last-child{border-right:none}
+  .trust-icon{width:42px;height:42px;background:var(--navy);display:flex;align-items:center;justify-content:center;border-radius:2px;flex-shrink:0}
+  .trust-icon svg{width:22px;height:22px;fill:var(--amber)}
+  .trust-text{font-size:13px;line-height:1.3}
+  .trust-text strong{display:block;color:var(--navy);font-weight:700;margin-bottom:2px}
+  .trust-text span{color:var(--muted);font-size:11px}
+
+  /* SECTION HEADERS */
+  section{padding:110px 0}
+  .section-wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+  .section-head{text-align:center;margin-bottom:72px;max-width:720px;margin-left:auto;margin-right:auto}
+  .section-tag{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--copper);font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:14px}
+  .section-tag::before,.section-tag::after{content:'';width:32px;height:1px;background:var(--copper)}
+  .section-head h2{font-family:'Fraunces',serif;font-size:54px;line-height:1.05;letter-spacing:-1.5px;color:var(--navy);font-weight:700;margin-bottom:20px}
+  .section-head h2 em{color:var(--copper);font-style:italic}
+  .section-head p{font-size:17px;color:var(--muted);line-height:1.7}
+
+  /* SERVICES */
+  .services{background:var(--cream)}
+  .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .service{background:white;padding:36px 32px;border-radius:4px;border:1px solid var(--line);transition:all .3s;position:relative;overflow:hidden}
+  .service:hover{transform:translateY(-6px);border-color:var(--amber);box-shadow:0 24px 48px rgba(10,22,40,0.08)}
+  .service::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--amber);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+  .service:hover::before{transform:scaleX(1)}
+  .service-num{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--copper);letter-spacing:3px;margin-bottom:20px}
+  .service-icon{width:56px;height:56px;background:var(--navy);display:flex;align-items:center;justify-content:center;border-radius:2px;margin-bottom:24px}
+  .service-icon svg{width:28px;height:28px;fill:var(--amber)}
+  .service h3{font-family:'Fraunces',serif;font-size:24px;color:var(--navy);margin-bottom:12px;line-height:1.2}
+  .service p{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:18px}
+  .service ul{list-style:none;padding:0}
+  .service ul li{font-size:13px;color:var(--text);padding:5px 0 5px 22px;position:relative}
+  .service ul li::before{content:'';position:absolute;left:0;top:11px;width:12px;height:2px;background:var(--copper)}
+
+  /* WHY */
+  .why{background:var(--navy);color:white;position:relative;overflow:hidden}
+  .why::before{content:'';position:absolute;top:-200px;left:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,182,39,0.06) 0%,transparent 70%);border-radius:50%}
+  .why .section-head h2{color:white}
+  .why .section-head h2 em{color:var(--amber)}
+  .why .section-head p{color:#9AABC2}
+  .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;z-index:2}
+  .why-card{background:var(--navy-2);padding:36px 28px;border-radius:4px;border:1px solid var(--navy-3);transition:all .3s}
+  .why-card:hover{border-color:var(--amber);transform:translateY(-4px)}
+  .why-num{font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--amber);line-height:1;margin-bottom:18px;letter-spacing:2px}
+  .why-card h4{font-family:'Fraunces',serif;font-size:20px;margin-bottom:10px;font-weight:600}
+  .why-card p{font-size:13px;color:#9AABC2;line-height:1.65}
+
+  /* PROCESS */
+  .process{background:white}
+  .process-list{max-width:920px;margin:0 auto;position:relative}
+  .process-list::before{content:'';position:absolute;left:40px;top:30px;bottom:30px;width:2px;background:var(--line)}
+  .process-step{display:flex;gap:32px;margin-bottom:48px;align-items:flex-start;position:relative}
+  .process-step:last-child{margin-bottom:0}
+  .step-num{width:82px;height:82px;background:var(--navy);color:var(--amber);font-family:'Bebas Neue',sans-serif;font-size:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;position:relative;z-index:2;border:4px solid white;box-shadow:0 0 0 1px var(--line)}
+  .step-content{padding-top:14px}
+  .step-content h4{font-family:'Fraunces',serif;font-size:24px;color:var(--navy);margin-bottom:8px}
+  .step-content p{font-size:15px;color:var(--muted);line-height:1.7}
+
+  /* TESTIMONIALS */
+  .testimonials{background:var(--cream)}
+  .test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .test{background:white;padding:36px 32px;border-radius:4px;border:1px solid var(--line);position:relative}
+  .test-stars{color:var(--amber);font-size:16px;letter-spacing:3px;margin-bottom:18px}
+  .test-quote{font-family:'Fraunces',serif;font-size:18px;line-height:1.55;color:var(--navy);margin-bottom:24px;font-style:italic}
+  .test-meta{display:flex;align-items:center;gap:14px;padding-top:20px;border-top:1px solid var(--line)}
+  .test-avatar{width:44px;height:44px;background:var(--navy);color:var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px}
+  .test-name{font-weight:700;color:var(--navy);font-size:14px}
+  .test-loc{font-size:12px;color:var(--muted)}
+
+  /* CTA */
+  .cta{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);color:white;padding:90px 0;position:relative;overflow:hidden}
+  .cta::before{content:'';position:absolute;right:-100px;top:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,182,39,0.1) 0%,transparent 70%);border-radius:50%}
+  .cta-wrap{max-width:1280px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1.5fr 1fr;gap:60px;align-items:center;position:relative;z-index:2}
+  .cta h2{font-family:'Fraunces',serif;font-size:48px;line-height:1.1;margin-bottom:18px;letter-spacing:-1px}
+  .cta h2 em{color:var(--amber);font-style:italic}
+  .cta p{font-size:17px;color:#C9D5E5;line-height:1.6;max-width:520px}
+  .cta-box{background:var(--amber);padding:36px;border-radius:4px;text-align:center}
+  .cta-box .phone{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--navy);letter-spacing:2px;line-height:1;margin-bottom:8px}
+  .cta-box .label{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--navy);font-weight:700;margin-bottom:18px}
+  .cta-box .or{font-size:11px;letter-spacing:2px;color:var(--navy);margin:14px 0;font-weight:600}
+  .cta-box a{display:block;background:var(--navy);color:var(--amber);padding:14px;text-decoration:none;font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase}
+
+  /* FOOTER */
+  footer{background:#070F1C;color:#8A9BB5;padding:72px 0 24px}
+  .foot-wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+  .foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+  .foot-brand .brand{margin-bottom:18px}
+  .foot-brand .brand-name{color:white}
+  .foot-brand p{font-size:13px;line-height:1.7;margin-bottom:18px}
+  .foot-col h5{color:white;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;font-weight:700}
+  .foot-col a{display:block;color:#8A9BB5;text-decoration:none;font-size:14px;padding:5px 0}
+  .foot-col a:hover{color:var(--amber)}
+  .foot-bottom{border-top:1px solid #152841;padding-top:24px;display:flex;justify-content:space-between;font-size:12px}
+  .foot-bottom .built{color:var(--amber)}
+
+  @media (max-width:980px){
+    .hero-wrap,.cta-wrap{grid-template-columns:1fr}
+    .hero h1{font-size:48px}
+    .service-grid,.why-grid,.test-grid,.foot-grid{grid-template-columns:1fr}
+    .trust-wrap{grid-template-columns:repeat(2,1fr)}
+    .trust-item{border-right:none}
+    .nav-links{display:none}
+    .section-head h2{font-size:36px}
+  }
+</style>
+
+<style id="kpc-protect">
+  body {
+    -webkit-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text; -moz-user-select: text;
+    -ms-user-select: text; user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img, svg {
+    -webkit-user-drag: none; user-drag: none;
+    -webkit-touch-callout: none;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="top-strip">
+  <div class="wrap">
+    <div class="badges">
+      <span><span class="dot"></span> 24/7 EMERGENCY SERVICE AVAILABLE</span>
+      <span>LIC #00000-X</span>
+      <span>Fully Insured & Bonded</span>
+    </div>
+    <div>Call <a href="tel:+15550100100">(555) 010-0100</a></div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-wrap">
+    <a href="#" class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24"><path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21z"/></svg></div>
+      <div>
+        <div class="brand-name">APEX ELECTRICAL CO.</div>
+        <div class="brand-sub">Master Electricians · Est. 2005</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#why">Why Us</a>
+      <a href="#process">Process</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#contact" class="nav-cta">Get a Quote</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" style="padding:90px 0 110px">
+  <div class="hero-wrap">
+    <div>
+      <div class="hero-tag">Serving the Tri-State Region</div>
+      <h1>Wiring done <span class="accent">right.</span><br>Service that <span class="accent">shows up.</span></h1>
+      <p class="hero-lead">Licensed master electricians serving homeowners, contractors, and commercial properties across the tri-state. Honest estimates, code-compliant installs, and the rare habit of calling you back.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn-primary">Request a Quote →</a>
+        <a href="tel:+15550100100" class="btn-ghost">Call (555) 010-0100</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">22+</div>
+          <div class="stat-lbl">Years in Business</div>
+        </div>
+        <div>
+          <div class="stat-num">4,800</div>
+          <div class="stat-lbl">Jobs Completed</div>
+        </div>
+        <div>
+          <div class="stat-num">5.0★</div>
+          <div class="stat-lbl">Google Rating</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <h3>Get a Free Estimate</h3>
+      <p class="sub">Most quotes returned within 4 business hours.</p>
+      <form class="quick-form" onsubmit="event.preventDefault();alert('Thanks! A an estimator will be in touch within 4 business hours.');">
+        <label>Full Name</label>
+        <input type="text" placeholder="John Smith" required>
+        <label>Phone</label>
+        <input type="tel" placeholder="(555) 010-0000" required>
+        <label>What do you need?</label>
+        <select>
+          <option>Panel Upgrade / Service Change</option>
+          <option>EV Charger Installation</option>
+          <option>Whole-Home Generator</option>
+          <option>Remodel / Addition Wiring</option>
+          <option>Commercial / Industrial</option>
+          <option>Emergency Service</option>
+          <option>Something Else</option>
+        </select>
+        <button type="submit">Request Free Quote</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="trust-bar">
+  <div class="trust-wrap">
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+      <div class="trust-text"><strong>Licensed & Bonded</strong><span>Master Electrician #00000-X</span></div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+      <div class="trust-text"><strong>$2M Insurance</strong><span>General Liability + Workers' Comp</span></div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+      <div class="trust-text"><strong>NEC Compliant</strong><span>2023 Code · Permitted Work</span></div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg></div>
+      <div class="trust-text"><strong>5-Star Rated</strong><span>200+ Google Reviews</span></div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+      <div class="trust-text"><strong>24/7 Emergency</strong><span>Same-day response window</span></div>
+    </div>
+  </div>
+</div>
+
+<section id="services" class="services">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-tag">What We Do</div>
+      <h2>Full-service electrical <em>for homes & businesses</em></h2>
+      <p>From a tripped breaker to a 400-amp commercial service upgrade — one licensed team, one accountable point of contact, and one phone number that actually picks up.</p>
+    </div>
+    <div class="service-grid">
+
+      <div class="service">
+        <div class="service-num">01 / RESIDENTIAL</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 3l-9 8h3v8h12v-8h3l-9-8z"/></svg></div>
+        <h3>Whole-Home Electrical</h3>
+        <p>Panel upgrades, rewires, lighting, dedicated circuits — everything that keeps a household running quietly behind the walls.</p>
+        <ul>
+          <li>200A / 400A panel & service upgrades</li>
+          <li>Knob-and-tube replacement</li>
+          <li>Recessed lighting & dimmer systems</li>
+          <li>Kitchen & bath remodel circuits</li>
+        </ul>
+      </div>
+
+      <div class="service">
+        <div class="service-num">02 / EV CHARGING</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M19.77 7.23l.01-.01-3.72-3.72L15 4.56l2.11 2.11c-.94.36-1.61 1.26-1.61 2.33 0 1.38 1.12 2.5 2.5 2.5.36 0 .69-.08 1-.21v7.21c0 .55-.45 1-1 1s-1-.45-1-1V14c0-1.1-.9-2-2-2h-1V5c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v16h10v-7.5h1.5v5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V9c0-.69-.28-1.32-.73-1.77zM12 10H6V5h6v5zm6 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg></div>
+        <h3>EV Charger Installation</h3>
+        <p>Certified installer for Tesla, ChargePoint, Wallbox, JuiceBox, and ClipperCreek — Level 2 home installs and commercial fleet stations.</p>
+        <ul>
+          <li>Load calculation & permit handling</li>
+          <li>Hardwired & plug-in installs</li>
+          <li>NY/NJ utility rebate paperwork</li>
+          <li>Multi-charger commercial setups</li>
+        </ul>
+      </div>
+
+      <div class="service">
+        <div class="service-num">03 / GENERATORS</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M14.69 2.21L4.33 11.49c-.64.58-.28 1.65.58 1.73L13 14l-4.85 6.76c-.22.31-.19.74.08 1.01.3.3.77.31 1.08.02l10.36-9.28c.64-.58.28-1.65-.58-1.73L11 10l4.85-6.76c.22-.31.19-.74-.08-1.01-.3-.3-.77-.31-1.08-.02z"/></svg></div>
+        <h3>Standby Generators</h3>
+        <p>Authorized Generac, Kohler, and Briden Generators dealer. Sizing, install, ATS wiring, and annual service contracts.</p>
+        <ul>
+          <li>Whole-home automatic transfer switches</li>
+          <li>Natural gas & propane installations</li>
+          <li>Permit, inspection & startup included</li>
+          <li>Annual maintenance plans</li>
+        </ul>
+      </div>
+
+      <div class="service">
+        <div class="service-num">04 / COMMERCIAL</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg></div>
+        <h3>Commercial & Industrial</h3>
+        <p>Tenant fit-outs, service entrances, three-phase work, parking lot lighting, and ongoing facility electrical service contracts.</p>
+        <ul>
+          <li>New construction & TI rough-in</li>
+          <li>Three-phase 480V installs</li>
+          <li>Emergency egress & exit lighting</li>
+          <li>Property manager service agreements</li>
+        </ul>
+      </div>
+
+      <div class="service">
+        <div class="service-num">05 / SMART HOME</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></div>
+        <h3>Smart Home & Lighting</h3>
+        <p>Lutron Caseta and RadioRA installations, Control4, smart panels, and the cabling that has to go in before drywall closes up.</p>
+        <ul>
+          <li>Lutron certified installer</li>
+          <li>Whole-home lighting design</li>
+          <li>Low-voltage & structured wiring</li>
+          <li>Pre-wire consultation on new builds</li>
+        </ul>
+      </div>
+
+      <div class="service">
+        <div class="service-num">06 / EMERGENCY</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.5 2 12s4.47 10 9.99 10C17.52 22 22 17.5 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg></div>
+        <h3>24/7 Emergency Service</h3>
+        <p>Power out? Burning smell? Tripped main? A licensed electrician on the road within the hour, every hour, including weekends.</p>
+        <ul>
+          <li>Loss of power diagnostics</li>
+          <li>Storm damage & service restoration</li>
+          <li>Burning smell / arc fault response</li>
+          <li>Insurance documentation included</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="why" class="why">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-tag" style="color:var(--amber)">Why Apex</div>
+      <h2>The boring stuff <em>done correctly</em></h2>
+      <p>Anyone can run wire. Doing it to code, to spec, and to the inspector's actual rule book — that's the part that separates a established electrical shop from a guy with a van.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-num">01</div>
+        <h4>Master Electrician On-Site</h4>
+        <p>Not a dispatcher, not an apprentice. Every job is supervised by a licensed master who signs his name to the permit.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-num">02</div>
+        <h4>Pulled Permits, Every Time</h4>
+        <p>We file the permits, schedule the inspections, and hand you the closed paperwork. No "off the books" jobs that bite you at resale.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-num">03</div>
+        <h4>Flat-Rate Pricing</h4>
+        <p>Estimates in writing before we start. No "$400 to turn on a breaker" surprise invoices at the end.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-num">04</div>
+        <h4>2-Year Workmanship Warranty</h4>
+        <p>If we touched it, we stand behind it. One callback policy: we come out, we fix it, end of conversation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process" class="process">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-tag">How It Works</div>
+      <h2>From phone call <em>to lights on</em></h2>
+      <p>A predictable, transparent process — because nobody likes guessing what's happening with their electrical work.</p>
+    </div>
+    <div class="process-list">
+
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Schedule the Site Visit</h4>
+          <p>Tell us what's going on. We'll book a free on-site assessment within 48 business hours — usually same-week. No high-pressure sales call.</p>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Written Quote, Flat-Rate</h4>
+          <p>You get a line-item written estimate within 4 business hours of the visit. Materials, labor, permit fees, timeline — all in one number. No "we'll see when we open the wall" upcharges.</p>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Permits & Scheduling</h4>
+          <p>We pull the permit, schedule the work, coordinate inspections, and call the utility if a meter pull is needed. You do nothing.</p>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>The Work — Done Right</h4>
+          <p>Master electrician on every job. Drop cloths. Clean truck. Daily walk-through. Photos of every junction box before drywall closes.</p>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>Inspection Passed, Paperwork in Hand</h4>
+          <p>We meet the inspector, get the green tag, and hand you the closed permit packet. Your file is on record with the municipality. Done.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="testimonials" class="testimonials">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-tag">Real Reviews</div>
+      <h2>What our neighbors <em>actually say</em></h2>
+      <p>Verified Google reviews. Real people. Real jobs. Real receipts.</p>
+    </div>
+    <div class="test-grid">
+
+      <div class="test">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"They installed a Tesla charger and upgraded our panel in one day. Quoted Tuesday, finished Friday, inspector signed off the next week. No drama."</div>
+        <div class="test-meta">
+          <div class="test-avatar">ML</div>
+          <div>
+            <div class="test-name">Margaret L.</div>
+            <div class="test-loc">Maplewood Heights · Panel + EV Install</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="test">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"Called at 11pm with no power. Tech was at the house by midnight, had us back on by 1:30am. Charged us the quoted emergency rate — not a penny more."</div>
+        <div class="test-meta">
+          <div class="test-avatar">RK</div>
+          <div>
+            <div class="test-name">Robert K.</div>
+            <div class="test-loc">Riverdale · Emergency Service</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="test">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"We use Apex for all four of our properties now. They show up, they communicate, and they don't disappear after the deposit. Rare in this trade."</div>
+        <div class="test-meta">
+          <div class="test-avatar">JW</div>
+          <div>
+            <div class="test-name">James W.</div>
+            <div class="test-loc">Property Mgr · 4 Commercial Sites</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="cta">
+  <div class="cta-wrap">
+    <div>
+      <h2>Ready to get it <em>done right?</em></h2>
+      <p>Free estimates, honest answers, and a licensed master electrician on every job. Reach out and we'll be in touch the same business day.</p>
+    </div>
+    <div class="cta-box">
+      <div class="label">Call us anytime</div>
+      <div class="phone">(555) 010-0100</div>
+      <div class="or">— OR —</div>
+      <a href="#">Request Quote Online</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#" class="brand">
+          <div class="brand-mark"><svg viewBox="0 0 24 24"><path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21z"/></svg></div>
+          <div>
+            <div class="brand-name">APEX ELECTRICAL CO.</div>
+            <div class="brand-sub" style="color:#5B6B82">Master Electricians · Est. 2005</div>
+          </div>
+        </a>
+        <p>Family-owned electrical contractor serving the tri-state region for two decades. State License #00000-X. Fully insured & bonded.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Services</h5>
+        <a href="#">Panel Upgrades</a>
+        <a href="#">EV Chargers</a>
+        <a href="#">Generators</a>
+        <a href="#">Commercial</a>
+        <a href="#">Smart Home</a>
+        <a href="#">Emergency</a>
+      </div>
+      <div class="foot-col">
+        <h5>Service Area</h5>
+        <a href="#">Westchester</a>
+        <a href="#">Manhattan</a>
+        <a href="#">The Bronx</a>
+        <a href="#">Putnam County</a>
+        <a href="#">Rockland County</a>
+        <a href="#">Fairfield, CT</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+15550100100">(555) 010-0100</a>
+        <a href="mailto:info@apexelectricalco.com">info@apexelectricalco.com</a>
+        <a href="#">Serving Your Local Area<br>Available 24/7</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 Apex Electrical Co. · NY Lic #00000-X · All Rights Reserved</div>
+      <div class="built">Website by Kane PC</div>
+    </div>
+  </div>
+</footer>
+
+
+<script id="kpc-protect-js">
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+  document.addEventListener('dragstart', function(e) {
+    var t = e.target && e.target.tagName;
+    if (t === 'IMG' || t === 'svg' || t === 'SVG') e.preventDefault();
+  }, false);
+  document.addEventListener('keydown', function(e) {
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) {
+      e.preventDefault(); return false;
+    }
+  }, false);
+})();
+</script>
+
+<a href="https://kanepc.com" target="_top" id="kpc-demo-badge"
+   style="position:fixed;bottom:14px;right:14px;
+          background:rgba(20,20,20,0.92);color:#fff;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+          text-decoration:none;padding:9px 14px;border-radius:3px;
+          border:1px solid rgba(255,255,255,0.12);
+          box-shadow:0 6px 18px rgba(0,0,0,0.35);
+          z-index:2147483647;line-height:1;
+          -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);">
+  Demo &middot; Built by <span style="color:#E65100">Kane PC</span>
+</a>
+
+</body>
+</html>

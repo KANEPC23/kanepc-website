@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bella's Pizzeria — Order Online — Kane PC Sample Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coal: #1a1714;
+    --char: #242018;
+    --ember: #c94a1e;
+    --flame: #e0622e;
+    --cream: #f5efe4;
+    --parchment: #ede5d6;
+    --gold: #c8a96e;
+    --muted: #8a7f70;
+    --border: rgba(200,169,110,0.2);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--coal);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--coal);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; letter-spacing: 0.02em;
+    color: var(--cream);
+  }
+  .logo span { color: var(--gold); font-style: italic; }
+  .header-right { display: flex; align-items: center; gap: 1.5rem; }
+  .location-select {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--cream);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .location-select option { background: var(--coal); }
+  .cart-btn {
+    background: var(--ember);
+    color: var(--cream);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: background 0.2s;
+  }
+  .cart-btn:hover { background: var(--flame); }
+  .cart-count {
+    background: var(--cream); color: var(--ember);
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    font-size: 0.7rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    text-align: center;
+    padding: 5rem 2rem 4rem;
+    position: relative;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201,74,30,0.15) 0%, transparent 70%);
+  }
+  .hero-eyebrow {
+    font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    color: var(--cream);
+    margin-bottom: 1rem;
+  }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p {
+    color: var(--muted); font-size: 1rem; max-width: 460px; margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+  .coal-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.75rem; letter-spacing: 0.08em;
+    padding: 6px 14px; border-radius: 20px;
+    margin-bottom: 3rem;
+  }
+  .flame-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ember);
+    box-shadow: 0 0 6px var(--ember);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  /* ─── CATEGORY TABS ─── */
+  .tabs-bar {
+    display: flex; gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    overflow-x: auto;
+    max-width: 1140px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  /* full-width underline behind the centered tabs */
+  .tabs-wrap {
+    border-bottom: 1px solid var(--border);
+  }
+  .tabs-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: none; border: none;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tab-btn:hover { color: var(--cream); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ─── MENU GRID ─── */
+  .menu-section {
+    max-width: 1140px; margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+  .section-label {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+  }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    border: 1px solid var(--border);
+  }
+  .menu-item {
+    background: var(--char);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: 0.5rem;
+    border: 1px solid var(--border);
+    position: relative;
+    transition: background 0.2s;
+  }
+  .menu-item:hover { background: #2a2520; }
+  .item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; color: var(--cream);
+  }
+  .item-desc {
+    font-size: 0.8rem; color: var(--muted);
+    line-height: 1.6; flex: 1;
+  }
+  .item-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 0.75rem;
+  }
+  .item-price {
+    font-size: 1rem; color: var(--gold); font-weight: 500;
+  }
+  .add-btn {
+    background: transparent;
+    border: 1px solid var(--ember);
+    color: var(--ember);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 1.2rem; line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .add-btn:hover { background: var(--ember); color: var(--cream); }
+  .add-btn.blocked { border-color: var(--muted); color: var(--muted); cursor: not-allowed; opacity: 0.4; }
+  .item-tag {
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ember); margin-bottom: 2px;
+  }
+
+  /* ─── DIVIDER ─── */
+  .section-divider {
+    height: 1px; background: var(--border);
+    margin: 0 2rem;
+  }
+
+  /* ─── CART DRAWER ─── */
+  .cart-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 200;
+    backdrop-filter: blur(2px);
+  }
+  .cart-overlay.open { display: block; }
+  .cart-drawer {
+    position: fixed; right: 0; top: 0; bottom: 0;
+    width: min(440px, 100vw);
+    background: var(--char);
+    border-left: 1px solid var(--border);
+    z-index: 201;
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .cart-drawer.open { transform: translateX(0); }
+  .cart-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+  }
+  .close-btn {
+    background: none; border: none;
+    color: var(--muted); font-size: 1.5rem;
+    cursor: pointer; line-height: 1;
+    padding: 4px;
+  }
+  .close-btn:hover { color: var(--cream); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+  .cart-empty {
+    text-align: center; color: var(--muted);
+    padding: 3rem 0; font-size: 0.9rem;
+  }
+  .cart-line {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .cart-line-info { flex: 1; }
+  .cart-line-name { font-size: 0.95rem; color: var(--cream); margin-bottom: 4px; }
+  .cart-line-price { font-size: 0.85rem; color: var(--gold); }
+  .qty-ctrl {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .qty-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--cream);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s;
+  }
+  .qty-btn:hover { border-color: var(--ember); color: var(--ember); }
+  .qty-val { font-size: 0.9rem; min-width: 14px; text-align: center; }
+  .cart-footer { padding: 1.5rem; border-top: 1px solid var(--border); }
+  .subtotal-row {
+    display: flex; justify-content: space-between;
+    margin-bottom: 6px; font-size: 0.85rem; color: var(--muted);
+  }
+  .total-row {
+    display: flex; justify-content: space-between;
+    font-size: 1.1rem; color: var(--cream);
+    margin-bottom: 1.25rem; padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .total-row span:last-child { color: var(--gold); font-weight: 500; }
+  .checkout-btn {
+    width: 100%; background: var(--ember);
+    border: none; color: var(--cream);
+    padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 500;
+    border-radius: 4px; cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: background 0.2s;
+  }
+  .checkout-btn:hover { background: var(--flame); }
+  .checkout-btn:disabled { background: var(--muted); cursor: not-allowed; }
+
+  /* ─── CHECKOUT MODAL ─── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 300;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(3px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--char);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: min(520px, 94vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+  }
+  .modal h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; margin-bottom: 0.25rem;
+  }
+  .modal-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 2rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-row.full { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .form-group input, .form-group select {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--cream);
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--gold); }
+  .form-group select option { background: var(--coal); }
+  .order-type-tabs {
+    display: flex; gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 4px; overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .ot-btn {
+    flex: 1; background: none; border: none;
+    color: var(--muted); padding: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    cursor: pointer; transition: all 0.2s;
+    border-right: 1px solid var(--border);
+  }
+  .ot-btn:last-child { border-right: none; }
+  .ot-btn.active { background: var(--ember); color: var(--cream); }
+  .order-summary {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 4px; padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .order-summary-title {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.75rem;
+  }
+  .summary-line {
+    display: flex; justify-content: space-between;
+    font-size: 0.85rem; color: var(--muted);
+    padding: 3px 0;
+  }
+  .summary-total {
+    display: flex; justify-content: space-between;
+    font-size: 1rem; color: var(--cream);
+    margin-top: 0.5rem; padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .place-order-btn {
+    width: 100%; background: var(--ember);
+    border: none; color: var(--cream);
+    padding: 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem; font-weight: 500;
+    border-radius: 4px; cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+  }
+  .place-order-btn:hover { background: var(--flame); }
+
+  /* ─── SUCCESS STATE ─── */
+  .success-state {
+    display: none; text-align: center; padding: 2rem;
+  }
+  .success-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(201,74,30,0.15);
+    border: 1px solid var(--ember);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.75rem; margin: 0 auto 1.5rem;
+  }
+  .success-state h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; margin-bottom: 0.5rem;
+  }
+  .success-state p { color: var(--muted); line-height: 1.6; max-width: 320px; margin: 0 auto 1.5rem; }
+  .order-num { color: var(--gold); font-size: 1.4rem; font-weight: 500; margin-bottom: 0.5rem; }
+  .est-time { color: var(--ember); font-size: 0.9rem; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+  .footer-sub { color: var(--muted); font-size: 0.8rem; line-height: 1.7; }
+  .footer-col h4 {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.75rem;
+  }
+  .footer-col p { color: var(--muted); font-size: 0.85rem; line-height: 1.8; }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    color: var(--muted); font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--ember); color: var(--cream);
+    padding: 10px 20px; border-radius: 4px;
+    font-size: 0.85rem; font-weight: 500;
+    z-index: 400;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ─── FROZEN SECTION ─── */
+  .frozen-section {
+    background: linear-gradient(180deg, var(--coal) 0%, #0d1a2a 100%);
+    border-top: 1px solid rgba(100,160,220,0.2);
+    border-bottom: 1px solid rgba(100,160,220,0.2);
+    padding: 4rem 2rem;
+  }
+  .frozen-inner { max-width: 1100px; margin: 0 auto; }
+  .frozen-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2.5rem;
+  }
+  .frozen-eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: #6ab0dc; margin-bottom: 0.5rem;
+  }
+  .frozen-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--cream); margin-bottom: 0.5rem;
+  }
+  .frozen-sub { color: var(--muted); font-size: 0.88rem; line-height: 1.7; max-width: 440px; }
+  .frozen-trust { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+  .trust-item { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--muted); }
+  .trust-icon { font-size: 0.9rem; }
+  .frozen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    border: 1px solid rgba(100,160,220,0.15);
+  }
+  .frozen-card {
+    background: rgba(13,26,42,0.8);
+    border: 1px solid rgba(100,160,220,0.12);
+    display: flex; flex-direction: column;
+    transition: background 0.2s;
+  }
+  .frozen-card:hover { background: rgba(20,38,58,0.9); }
+  .frozen-img-placeholder {
+    height: 160px;
+    background: radial-gradient(circle at 50% 60%, rgba(201,74,30,0.25), rgba(13,26,42,0.6));
+    display: flex; align-items: center; justify-content: center;
+    position: relative; border-bottom: 1px solid rgba(100,160,220,0.1);
+  }
+  .frozen-img-placeholder.pep {
+    background: radial-gradient(circle at 50% 60%, rgba(160,30,30,0.3), rgba(13,26,42,0.6));
+  }
+  .pizza-emoji { font-size: 3.5rem; }
+  .frozen-badge {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(100,160,220,0.15);
+    border: 1px solid rgba(100,160,220,0.3);
+    color: #6ab0dc; font-size: 0.65rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 3px;
+  }
+  .frozen-card-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+  .frozen-sku-tag { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: #6ab0dc; }
+  .frozen-item-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--cream); }
+  .frozen-item-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.6; flex: 1; }
+  .frozen-price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 0.75rem; }
+  .frozen-price { font-size: 1.1rem; color: var(--gold); font-weight: 500; }
+  .frozen-per { font-size: 0.75rem; color: var(--muted); }
+  .frozen-qty-wrap { display: flex; align-items: center; gap: 10px; }
+  .fqty-btn {
+    background: none; border: 1px solid rgba(100,160,220,0.25);
+    color: #6ab0dc; width: 28px; height: 28px; border-radius: 50%;
+    font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .fqty-btn:hover { background: rgba(100,160,220,0.15); }
+  .fqty-val { font-size: 0.95rem; min-width: 16px; text-align: center; color: var(--cream); }
+  .ship-card { padding: 1.25rem; }
+  .calc-ship-btn {
+    width: 100%; background: rgba(100,160,220,0.12);
+    border: 1px solid rgba(100,160,220,0.3);
+    color: #6ab0dc; padding: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    border-radius: 4px; cursor: pointer; transition: all 0.2s;
+  }
+  .calc-ship-btn:hover { background: rgba(100,160,220,0.22); }
+  .ship-result-row {
+    display: flex; justify-content: space-between;
+    font-size: 0.82rem; color: var(--muted); padding: 4px 0;
+    border-bottom: 1px solid rgba(100,160,220,0.08);
+  }
+  .ship-result-row.total {
+    color: var(--cream); font-size: 1rem;
+    border-bottom: none; padding-top: 8px; margin-top: 4px;
+  }
+  .ship-result-row.total span:last-child { color: var(--gold); }
+  .frozen-checkout-btn {
+    width: 100%; background: var(--ember);
+    border: none; color: var(--cream);
+    padding: 11px; margin-top: 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    border-radius: 4px; cursor: pointer; transition: background 0.2s;
+  }
+  .frozen-checkout-btn:hover { background: var(--flame); }
+  .frozen-disclaimer {
+    margin-top: 1.5rem; font-size: 0.75rem; color: var(--muted);
+    line-height: 1.7; border-top: 1px solid rgba(100,160,220,0.1);
+    padding-top: 1rem;
+  }
+
+  @media(max-width:900px) {
+    .menu-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media(max-width:600px) {
+    .header-right { gap: 0.75rem; }
+    .location-select { display: none; }
+    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .tabs-bar { padding: 0 1rem; }
+    .menu-section { padding: 2rem 1rem; }
+    .menu-grid { grid-template-columns: 1fr; }
+    footer { padding: 2rem 1rem; }
+  }
+</style>
+
+<style id="kpc-protect">
+  body {
+    -webkit-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text; -moz-user-select: text;
+    -ms-user-select: text; user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img, svg {
+    -webkit-user-drag: none; user-drag: none;
+    -webkit-touch-callout: none;
+  }
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">Bella's <span>Pizza</span></div>
+  <div class="header-right">
+    <select class="location-select" id="locationSelect">
+      <option value="wpb">West Palm Beach, FL</option>
+      <option value="bk">Brooklyn, NY</option>
+    </select>
+    <button class="cart-btn" onclick="openCart()">
+      <span>&#128722; Cart</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Est. 2012 · Brooklyn Heritage</p>
+  <h1>Coal-Fired Pizza,<br><em>Straight from Brooklyn</em></h1>
+  <p>Thin crusts. House-made ingredients. The original Grimaldi recipe, now in the NORA District.</p>
+  <div class="coal-badge"><span class="flame-dot"></span> Coal-fired ovens · Never gas</div>
+</section>
+
+<!-- CATEGORY TABS -->
+<div class="tabs-wrap">
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="filterCategory('all', this)">All</button>
+    <button class="tab-btn" onclick="filterCategory('pizza', this)">Pizzas</button>
+    <button class="tab-btn" onclick="filterCategory('salad', this)">Salads</button>
+    <button class="tab-btn" onclick="filterCategory('drink', this)">Drinks</button>
+    <button class="tab-btn" onclick="filterCategory('dessert', this)">Desserts</button>
+  </div>
+</div>
+
+<!-- MENU -->
+<section class="menu-section">
+  <p class="section-label" id="sectionLabel">Full Menu</p>
+  <div id="pieBanner" style="display:none;align-items:center;justify-content:space-between;border:1px solid;border-radius:4px;padding:10px 16px;margin-bottom:1.25rem;font-size:0.85rem;font-weight:500;transition:all 0.3s;"></div>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<!-- FROZEN NATIONWIDE SECTION -->
+<section class="frozen-section" id="frozenSection">
+  <div class="frozen-inner">
+    <div class="frozen-header">
+      <div>
+        <p class="frozen-eyebrow">&#10052; Ship Nationwide · Arrives Frozen</p>
+        <h2 class="frozen-title">Take &amp; Bake at Home</h2>
+        <p class="frozen-sub">The same coal-fired recipe — prepped, frozen, and shipped to your door in cold-chain insulated packaging. Bake in your oven in 12 minutes.</p>
+      </div>
+      <div class="frozen-trust">
+        <div class="trust-item"><span class="trust-icon">&#10052;</span><span>Dry-ice packed</span></div>
+        <div class="trust-item"><span class="trust-icon">&#9992;</span><span>2-day express</span></div>
+        <div class="trust-item"><span class="trust-icon">&#128481;</span><span>Ships Mon–Wed</span></div>
+      </div>
+    </div>
+
+    <div class="frozen-grid">
+      <!-- Margherita -->
+      <div class="frozen-card">
+        <div class="frozen-img-wrap">
+          <div class="frozen-img-placeholder">
+            <span class="pizza-emoji">&#127829;</span>
+            <span class="frozen-badge">&#10052; Frozen</span>
+          </div>
+        </div>
+        <div class="frozen-card-body">
+          <p class="frozen-sku-tag">Take &amp; Bake · 19oz</p>
+          <p class="frozen-item-name">Margherita</p>
+          <p class="frozen-item-desc">San Marzano tomato, fresh mozzarella, basil. The one that started it all. As seen on FreshDirect.</p>
+          <div class="frozen-price-row">
+            <div>
+              <span class="frozen-price">$21.99</span>
+              <span class="frozen-per"> / pie</span>
+            </div>
+            <div class="frozen-qty-wrap">
+              <button class="fqty-btn" onclick="changeFrozenQty('margherita',-1)">−</button>
+              <span class="fqty-val" id="fq-margherita">0</span>
+              <button class="fqty-btn" onclick="changeFrozenQty('margherita',1)">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pepperoni -->
+      <div class="frozen-card">
+        <div class="frozen-img-wrap">
+          <div class="frozen-img-placeholder pep">
+            <span class="pizza-emoji">&#127829;</span>
+            <span class="frozen-badge">&#10052; Frozen</span>
+          </div>
+        </div>
+        <div class="frozen-card-body">
+          <p class="frozen-sku-tag">Take &amp; Bake · 20oz</p>
+          <p class="frozen-item-name">Pepperoni</p>
+          <p class="frozen-item-desc">San Marzano tomato, fresh mozzarella, house-cured pepperoni. Classic Brooklyn done right.</p>
+          <div class="frozen-price-row">
+            <div>
+              <span class="frozen-price">$22.99</span>
+              <span class="frozen-per"> / pie</span>
+            </div>
+            <div class="frozen-qty-wrap">
+              <button class="fqty-btn" onclick="changeFrozenQty('pepperoni',-1)">−</button>
+              <span class="fqty-val" id="fq-pepperoni">0</span>
+              <button class="fqty-btn" onclick="changeFrozenQty('pepperoni',1)">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping calculator -->
+      <div class="frozen-card ship-card">
+        <p class="frozen-sku-tag">Shipping Calculator</p>
+        <p class="frozen-item-name" style="margin-bottom:0.75rem;">Estimate Your Order</p>
+        <div class="ship-calc">
+          <div class="form-group" style="margin-bottom:0.75rem;">
+            <label style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Destination ZIP</label>
+            <input type="text" id="shipZip" maxlength="5" placeholder="e.g. 10001" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--cream);padding:9px 12px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.9rem;width:100%;outline:none;">
+          </div>
+          <button class="calc-ship-btn" onclick="calcShipping()">Calculate Shipping →</button>
+          <div id="shipResult" style="margin-top:1rem;display:none;">
+            <div class="ship-result-row"><span>Pies ordered</span><span id="srPies">—</span></div>
+            <div class="ship-result-row"><span>Subtotal</span><span id="srSub">—</span></div>
+            <div class="ship-result-row"><span>Cold-chain shipping</span><span id="srShip">—</span></div>
+            <div class="ship-result-row total"><span>Estimated Total</span><span id="srTotal">—</span></div>
+            <button class="frozen-checkout-btn" onclick="openFrozenCheckout()">Order Now →</button>
+          </div>
+          <div id="shipNote" style="margin-top:0.75rem;font-size:0.75rem;color:var(--muted);line-height:1.6;display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="frozen-disclaimer">
+      &#10052; Orders ship Monday–Wednesday to ensure arrival before the weekend. Orders placed after Wednesday noon ship the following week.
+      All pies are vacuum-sealed and packed with dry ice. Stays frozen for 48 hours in transit.
+    </div>
+  </div>
+</section>
+
+<!-- FROZEN CHECKOUT MODAL -->
+<div class="modal-overlay" id="frozenModal">
+  <div class="modal">
+    <div id="frozenForm">
+      <h2>Ship Nationwide</h2>
+      <p class="modal-sub">Take &amp; Bake · Cold-chain delivery to your door</p>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="Patsy"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Grimaldi"></div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group"><label>Email</label><input type="email" placeholder="you@email.com"></div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group"><label>Shipping Address</label><input type="text" placeholder="100 Market Street"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>City</label><input type="text" placeholder="New York"></div>
+        <div class="form-group"><label>State / ZIP</label><input type="text" placeholder="NY 10001"></div>
+      </div>
+      <div class="form-row full" style="margin-top:0.5rem;">
+        <div class="form-group"><label>Card Number</label><input type="text" placeholder="4242 4242 4242 4242"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Expiry</label><input type="text" placeholder="MM/YY"></div>
+        <div class="form-group"><label>CVV</label><input type="text" placeholder="123"></div>
+      </div>
+      <div class="order-summary" id="frozenOrderSummary" style="margin-top:1rem;"></div>
+      <button class="place-order-btn" onclick="placeFrozenOrder()">Place Frozen Order →</button>
+      <button onclick="closeFrozenModal()" style="width:100%;background:none;border:none;color:var(--muted);padding:10px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:6px;">Cancel</button>
+    </div>
+    <div class="success-state" id="frozenSuccessState">
+      <div class="success-icon">&#10003;</div>
+      <h2>Order Confirmed!</h2>
+      <p class="order-num" id="frozenOrderNum">#FRZ-0000</p>
+      <p class="est-time">Ships within 1–2 business days</p>
+      <p style="color:var(--muted);font-size:0.85rem;margin-top:1rem;line-height:1.7;">Packed with dry ice. A tracking number will be emailed to you.<br>Bake instructions included in the box.</p>
+      <button onclick="closeFrozenModal()" style="margin-top:1.5rem;background:var(--ember);border:none;color:var(--cream);padding:12px 28px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <p class="footer-brand">Bella's Pizzeria</p>
+    <p class="footer-sub">The return of Patsy Grimaldi.<br>Coal-fired, thin crust, no shortcuts.</p>
+  </div>
+  <div class="footer-col">
+    <h4>West Palm Beach</h4>
+    <p>875 N Railroad Ave<br>West Palm Beach, FL 33401<br>(555) 010-0200<br><br>Mon–Fri: 4pm – 9pm<br>Sat–Sun: 12pm – 9pm</p>
+  </div>
+  <div class="footer-col">
+    <h4>Brooklyn</h4>
+    <p>19 Old Fulton St<br>Brooklyn, NY 11201<br><br>Mon–Fri: 4pm – 9pm<br>Sat–Sun: 12pm – 9pm</p>
+  </div>
+</footer>
+<div class="footer-bottom">© 2025 Bella's Pizzeria · Proudly serving since 2012 · Demo by Kane PC</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h2>Your Order</h2>
+    <button class="close-btn" onclick="closeCart()">×</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <p class="cart-empty">Your cart is empty.<br>Add something delicious.</p>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="subtotal-row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+    <div class="subtotal-row"><span>Tax (7%)</span><span id="cartTax">$0.00</span></div>
+    <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <div id="checkoutForm">
+      <h2>Checkout</h2>
+      <p class="modal-sub">Order from Bella's — <span id="checkoutLocation">West Palm Beach</span></p>
+
+      <div class="order-type-tabs">
+        <button class="ot-btn active" onclick="setOrderType('pickup', this)">Pickup</button>
+        <button class="ot-btn" onclick="setOrderType('delivery', this)">Delivery</button>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Patsy" id="fname">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Grimaldi" id="lname">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" placeholder="(555) 010-0100" id="phone">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="you@email.com" id="email">
+        </div>
+      </div>
+
+      <div id="deliveryFields" style="display:none;">
+        <div class="form-row full">
+          <div class="form-group">
+            <label>Delivery Address</label>
+            <input type="text" placeholder="100 Market Street, West Palm Beach, FL">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row full" style="margin-top:1rem;">
+        <div class="form-group">
+          <label>Payment</label>
+          <select>
+            <option>Credit / Debit Card</option>
+            <option>Apple Pay</option>
+            <option>Google Pay</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Card Number</label>
+          <input type="text" placeholder="4242 4242 4242 4242">
+        </div>
+        <div class="form-group">
+          <label>Expiry / CVV</label>
+          <input type="text" placeholder="MM/YY  ·  CVV">
+        </div>
+      </div>
+
+      <div class="order-summary" id="orderSummary"></div>
+
+      <button class="place-order-btn" onclick="placeOrder()">Place Order →</button>
+      <button onclick="closeCheckout()" style="width:100%;background:none;border:none;color:var(--muted);padding:10px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:6px;">Cancel</button>
+    </div>
+
+    <div class="success-state" id="successState">
+      <div class="success-icon">&#10003;</div>
+      <h2>Order Placed!</h2>
+      <p class="order-num" id="successOrderNum">#JUL-0000</p>
+      <p class="est-time" id="successEta">Ready in approximately 25–30 min</p>
+      <p style="color:var(--muted);font-size:0.85rem;margin-top:1rem;line-height:1.7;">
+        A confirmation will be sent to your email.<br>We'll text you when your order is ready.
+      </p>
+      <button onclick="closeAll()" style="margin-top:1.5rem;background:var(--ember);border:none;color:var(--cream);padding:12px 28px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const MENU = [
+  { id:1, cat:'pizza', tag:'House Specialty', name:'Margherita', desc:'San Marzano tomato, fresh mozzarella di bufala, fresh basil, extra virgin olive oil', price:22 },
+  { id:2, cat:'pizza', tag:'Fan Favorite', name:'Meatball', desc:'House tomato, fresh mozzarella, Bella\'s legendary house-made meatballs, ricotta dollops', price:24 },
+  { id:3, cat:'pizza', tag:'', name:'Prosciutto & Arugula', desc:'White base, prosciutto di Parma, fresh arugula, shaved parmigiano, lemon drizzle', price:26 },
+  { id:4, cat:'pizza', tag:'', name:'White Pie', desc:'Ricotta, fresh mozzarella, roasted garlic, olive oil, sea salt, cracked pepper', price:23 },
+  { id:5, cat:'pizza', tag:'', name:'Wild Mushroom', desc:'House tomato, fresh mozzarella, roasted crimini & shiitake mushrooms, thyme', price:23 },
+  { id:6, cat:'pizza', tag:'', name:'Sausage & Peppers', desc:'Tomato, fresh mozzarella, house Italian sausage, roasted sweet peppers, basil', price:25 },
+  { id:7, cat:'salad', tag:'', name:'Arugula Salad', desc:'Baby arugula, goat cheese, toasted walnuts, cherry tomatoes, lemon-honey vinaigrette', price:16 },
+  { id:8, cat:'salad', tag:'', name:'Classic Caesar', desc:'Romaine hearts, house-made Caesar dressing, parmigiano, house croutons', price:15 },
+  { id:9, cat:'drink', tag:'', name:'House Red Wine', desc:'Rotating Italian selection — ask your server for today\'s pour', price:12 },
+  { id:10, cat:'drink', tag:'', name:'House White Wine', desc:'Light and crisp — pairs beautifully with the Margherita', price:12 },
+  { id:11, cat:'drink', tag:'', name:'Draft Beer', desc:'Rotating local and Italian craft selections on tap', price:9 },
+  { id:12, cat:'drink', tag:'', name:'San Pellegrino', desc:'750ml bottle, still or sparkling', price:5 },
+  { id:13, cat:'dessert', tag:'Signature', name:'Pistachio Ring Dings', desc:'Our famous house-made pistachio cream–filled chocolate cake bites. The stuff of legend.', price:10 },
+  { id:14, cat:'dessert', tag:'', name:'Classic Cannoli', desc:'Crispy shell, house ricotta filling, mini chocolate chips, pistachios', price:9 },
+  { id:15, cat:'dessert', tag:'', name:'Tiramisu', desc:'Espresso-soaked ladyfingers, mascarpone cream, cocoa — made fresh daily', price:11 },
+];
+
+const PIE_LIMIT = 5;
+let cart = {};
+let currentCat = 'all';
+let orderType = 'pickup';
+
+function getPieCount() {
+  return MENU.filter(i => i.cat === 'pizza')
+    .reduce((sum, i) => sum + (cart[i.id] || 0), 0);
+}
+
+function renderMenu(cat) {
+  const grid = document.getElementById('menuGrid');
+  const label = document.getElementById('sectionLabel');
+  const items = cat === 'all' ? MENU : MENU.filter(i => i.cat === cat);
+  const labels = { all:'Full Menu', pizza:'Coal-Fired Pizzas', salad:'Salads', drink:'Drinks', dessert:'Desserts' };
+  label.textContent = labels[cat] || 'Full Menu';
+  const pies = getPieCount();
+  const atLimit = pies >= PIE_LIMIT;
+  grid.innerHTML = items.map(item => {
+    const isPizza = item.cat === 'pizza';
+    const blocked = isPizza && atLimit && !(cart[item.id] > 0);
+    return `
+    <div class="menu-item" id="item-${item.id}">
+      ${item.tag ? `<p class="item-tag">${item.tag}</p>` : ''}
+      <p class="item-name">${item.name}</p>
+      <p class="item-desc">${item.desc}</p>
+      <div class="item-footer">
+        <span class="item-price">$${item.price}</span>
+        <button class="add-btn ${cart[item.id] ? 'added' : ''} ${blocked ? 'blocked' : ''}"
+          onclick="addToCart(${item.id})"
+          id="btn-${item.id}"
+          ${blocked ? 'disabled title="5-pie limit reached"' : ''}>
+          ${blocked ? '—' : '+'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+  updatePieBanner();
+}
+
+function updatePieBanner() {
+  const pies = getPieCount();
+  const banner = document.getElementById('pieBanner');
+  if (!banner) return;
+  if (pies === 0) { banner.style.display = 'none'; return; }
+  banner.style.display = 'flex';
+  const remaining = PIE_LIMIT - pies;
+  if (remaining > 0) {
+    banner.style.background = 'rgba(200,169,110,0.1)';
+    banner.style.borderColor = 'rgba(200,169,110,0.3)';
+    banner.innerHTML = `<span style="color:var(--gold)">&#x1F355; ${pies} of ${PIE_LIMIT} pies</span><span style="color:var(--muted);font-size:0.8rem">${remaining} more allowed online</span>`;
+  } else {
+    banner.style.background = 'rgba(201,74,30,0.12)';
+    banner.style.borderColor = 'rgba(201,74,30,0.35)';
+    banner.innerHTML = `<span style="color:var(--ember)">&#x1F355; 5-pie max reached</span><span style="color:var(--muted);font-size:0.8rem">Need 6+? Call <a href="tel:5617666200" style="color:var(--gold);text-decoration:none">(555) 010-0200</a></span>`;
+  }
+}
+
+function filterCategory(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderMenu(cat);
+}
+
+function addToCart(id) {
+  const item = MENU.find(i => i.id === id);
+  if (item.cat === 'pizza' && getPieCount() >= PIE_LIMIT) {
+    showToast('5-pie max — call us for larger orders');
+    return;
+  }
+  cart[id] = (cart[id] || 0) + 1;
+  updateCartUI();
+  showToast(`${item.name} added`);
+  const btn = document.getElementById('btn-'+id);
+  if(btn) { btn.classList.add('added'); btn.textContent = '✓'; setTimeout(()=>{ renderMenu(currentCat); },600); }
+}
+
+function updateCartUI() {
+  const total = Object.values(cart).reduce((s,v) => s+v, 0);
+  document.getElementById('cartCount').textContent = total;
+  renderCartItems();
+  updatePieBanner();
+}
+
+function renderCartItems() {
+  const el = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+  const keys = Object.keys(cart).filter(k => cart[k] > 0);
+  if(!keys.length) {
+    el.innerHTML = '<p class="cart-empty">Your cart is empty.<br>Add something delicious.</p>';
+    footer.style.display = 'none'; return;
+  }
+  const pies = getPieCount();
+  let sub = 0;
+  let html = '';
+  if (pies >= PIE_LIMIT) {
+    html += `<div style="background:rgba(201,74,30,0.1);border:1px solid rgba(201,74,30,0.3);border-radius:4px;padding:10px 14px;margin-bottom:1rem;font-size:0.8rem;color:var(--muted);line-height:1.6;">
+      <strong style="color:var(--ember);display:block;margin-bottom:2px;">5-pie online limit reached</strong>
+      Need more? Call <a href="tel:5617666200" style="color:var(--gold)">(555) 010-0200</a> and we'll take care of you.
+    </div>`;
+  }
+  html += keys.map(id => {
+    const item = MENU.find(i => i.id == id);
+    const lineTotal = item.price * cart[id];
+    sub += lineTotal;
+    return `<div class="cart-line">
+      <div class="cart-line-info">
+        <p class="cart-line-name">${item.name}</p>
+        <p class="cart-line-price">$${lineTotal.toFixed(2)}</p>
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="changeQty(${id},-1)">−</button>
+        <span class="qty-val">${cart[id]}</span>
+        <button class="qty-btn" onclick="changeQty(${id},1)" ${item.cat==='pizza' && pies>=PIE_LIMIT ? 'disabled style="opacity:0.3;cursor:not-allowed"' : ''}>+</button>
+      </div>
+    </div>`;
+  }).join('');
+  el.innerHTML = html;
+  const tax = sub * 0.07;
+  const total = sub + tax;
+  document.getElementById('cartSubtotal').textContent = '$'+sub.toFixed(2);
+  document.getElementById('cartTax').textContent = '$'+tax.toFixed(2);
+  document.getElementById('cartTotal').textContent = '$'+total.toFixed(2);
+  footer.style.display = 'block';
+}
+
+function changeQty(id, delta) {
+  const item = MENU.find(i => i.id == id);
+  if (delta > 0 && item.cat === 'pizza' && getPieCount() >= PIE_LIMIT) {
+    showToast('5-pie max — call us for larger orders');
+    return;
+  }
+  cart[id] = Math.max(0, (cart[id]||0) + delta);
+  if(cart[id] === 0) delete cart[id];
+  updateCartUI();
+  renderMenu(currentCat);
+}
+
+function openCart() {
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartDrawer').classList.add('open');
+}
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartDrawer').classList.remove('open');
+}
+
+function setOrderType(type, el) {
+  orderType = type;
+  document.querySelectorAll('.ot-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('deliveryFields').style.display = type === 'delivery' ? 'block' : 'none';
+}
+
+function openCheckout() {
+  closeCart();
+  const locName = document.getElementById('locationSelect').value === 'wpb' ? 'West Palm Beach' : 'Brooklyn, NY';
+  document.getElementById('checkoutLocation').textContent = locName;
+  buildOrderSummary();
+  document.getElementById('checkoutForm').style.display = 'block';
+  document.getElementById('successState').style.display = 'none';
+  document.getElementById('checkoutModal').classList.add('open');
+}
+function closeCheckout() { document.getElementById('checkoutModal').classList.remove('open'); }
+
+function buildOrderSummary() {
+  const keys = Object.keys(cart).filter(k => cart[k] > 0);
+  let sub = 0;
+  let html = '<p class="order-summary-title">Order Summary</p>';
+  keys.forEach(id => {
+    const item = MENU.find(i => i.id == id);
+    const line = item.price * cart[id];
+    sub += line;
+    html += `<div class="summary-line"><span>${item.name} × ${cart[id]}</span><span>$${line.toFixed(2)}</span></div>`;
+  });
+  const tax = sub * 0.07;
+  const total = sub + tax;
+  html += `<div class="summary-line"><span>Tax</span><span>$${tax.toFixed(2)}</span></div>`;
+  html += `<div class="summary-total"><span>Total</span><span>$${total.toFixed(2)}</span></div>`;
+  document.getElementById('orderSummary').innerHTML = html;
+}
+
+function placeOrder() {
+  const num = 'JUL-' + Math.floor(1000 + Math.random() * 9000);
+  const eta = orderType === 'delivery' ? '45–55 minutes' : '25–30 min';
+  document.getElementById('successOrderNum').textContent = '#' + num;
+  document.getElementById('successEta').textContent = orderType === 'delivery' ? `Delivery in approximately ${eta}` : `Ready for pickup in approximately ${eta}`;
+  document.getElementById('checkoutForm').style.display = 'none';
+  document.getElementById('successState').style.display = 'block';
+  cart = {};
+  updateCartUI();
+}
+
+function closeAll() {
+  closeCheckout();
+  renderMenu(currentCat);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+
+const FROZEN_ITEMS = {
+  margherita: { name: 'Margherita Take & Bake', price: 21.99, oz: 19 },
+  pepperoni:  { name: 'Pepperoni Take & Bake',  price: 22.99, oz: 20 },
+};
+let frozenCart = { margherita: 0, pepperoni: 0 };
+
+function changeFrozenQty(sku, delta) {
+  frozenCart[sku] = Math.max(0, frozenCart[sku] + delta);
+  document.getElementById('fq-' + sku).textContent = frozenCart[sku];
+  document.getElementById('shipResult').style.display = 'none';
+}
+
+function calcShipping() {
+  const zip = document.getElementById('shipZip').value.trim();
+  const totalPies = frozenCart.margherita + frozenCart.pepperoni;
+  if (totalPies === 0) { showToast('Add at least one frozen pie first'); return; }
+  if (zip.length !== 5 || isNaN(zip)) { showToast('Enter a valid 5-digit ZIP'); return; }
+  const sub = Object.keys(frozenCart).reduce((s,k) => s + frozenCart[k] * FROZEN_ITEMS[k].price, 0);
+  const prefix = parseInt(zip.substring(0,3));
+  let shipCost, zone, noteText;
+  if (prefix >= 100 && prefix <= 149) {
+    shipCost = 0; zone = 'Metro NY/NJ';
+    noteText = 'Free overnight delivery for Metro New York & New Jersey orders!';
+  } else if (prefix >= 330 && prefix <= 349) {
+    shipCost = 14.99; zone = 'Florida';
+    noteText = '2-day express shipping. Packed with gel packs — arrives cold and ready to bake.';
+  } else if ((prefix >= 900 && prefix <= 961) || (prefix >= 970 && prefix <= 979)) {
+    shipCost = 24.99; zone = 'West Coast';
+    noteText = '2-day express with dry ice. Ships Monday–Wednesday only to ensure freshness on arrival.';
+  } else {
+    shipCost = 18.99; zone = 'Nationwide';
+    noteText = '2-day express with dry ice. Ships Monday–Wednesday only to ensure weekend delivery.';
+  }
+  if (sub >= 100) { shipCost = Math.max(0, shipCost - 5); noteText = 'Free shipping discount applied on orders over $100! ' + noteText; }
+  const total = sub + shipCost;
+  document.getElementById('srPies').textContent = totalPies + ' pie' + (totalPies > 1 ? 's' : '') + ' to ' + zone;
+  document.getElementById('srSub').textContent = '$' + sub.toFixed(2);
+  document.getElementById('srShip').textContent = shipCost === 0 ? 'FREE' : '$' + shipCost.toFixed(2);
+  document.getElementById('srTotal').textContent = '$' + total.toFixed(2);
+  document.getElementById('shipResult').style.display = 'block';
+  document.getElementById('shipNote').style.display = 'block';
+  document.getElementById('shipNote').textContent = noteText;
+}
+
+function openFrozenCheckout() {
+  const totalPies = frozenCart.margherita + frozenCart.pepperoni;
+  if (totalPies === 0) { showToast('Add at least one frozen pie'); return; }
+  const sub = Object.keys(frozenCart).reduce((s,k) => s + frozenCart[k] * FROZEN_ITEMS[k].price, 0);
+  const zip = document.getElementById('shipZip').value.trim();
+  const prefix = parseInt((zip || '100').substring(0,3));
+  let ship = 18.99;
+  if (prefix >= 100 && prefix <= 149) ship = 0;
+  else if (prefix >= 330 && prefix <= 349) ship = 14.99;
+  else if ((prefix >= 900 && prefix <= 961) || (prefix >= 970 && prefix <= 979)) ship = 24.99;
+  if (sub >= 100) ship = Math.max(0, ship - 5);
+  let html = '<p class="order-summary-title">Frozen Order Summary</p>';
+  Object.keys(frozenCart).forEach(k => {
+    if (frozenCart[k] > 0) {
+      html += `<div class="summary-line"><span>${FROZEN_ITEMS[k].name} × ${frozenCart[k]}</span><span>$${(frozenCart[k]*FROZEN_ITEMS[k].price).toFixed(2)}</span></div>`;
+    }
+  });
+  html += `<div class="summary-line"><span>Cold-chain shipping</span><span>${ship===0?'FREE':'$'+ship.toFixed(2)}</span></div>`;
+  html += `<div class="summary-total"><span>Total</span><span>$${(sub+ship).toFixed(2)}</span></div>`;
+  document.getElementById('frozenOrderSummary').innerHTML = html;
+  document.getElementById('frozenForm').style.display = 'block';
+  document.getElementById('frozenSuccessState').style.display = 'none';
+  document.getElementById('frozenModal').classList.add('open');
+}
+
+function closeFrozenModal() {
+  document.getElementById('frozenModal').classList.remove('open');
+}
+
+function placeFrozenOrder() {
+  const num = 'FRZ-' + Math.floor(1000 + Math.random() * 9000);
+  document.getElementById('frozenOrderNum').textContent = '#' + num;
+  document.getElementById('frozenForm').style.display = 'none';
+  document.getElementById('frozenSuccessState').style.display = 'block';
+  frozenCart = { margherita: 0, pepperoni: 0 };
+  document.getElementById('fq-margherita').textContent = '0';
+  document.getElementById('fq-pepperoni').textContent = '0';
+  document.getElementById('shipResult').style.display = 'none';
+}
+
+
+</script>
+
+<script id="kpc-protect-js">
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+  document.addEventListener('dragstart', function(e) {
+    var t = e.target && e.target.tagName;
+    if (t === 'IMG' || t === 'svg' || t === 'SVG') e.preventDefault();
+  }, false);
+  document.addEventListener('keydown', function(e) {
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) {
+      e.preventDefault(); return false;
+    }
+  }, false);
+})();
+</script>
+
+<a href="https://kanepc.com" target="_top" id="kpc-demo-badge"
+   style="position:fixed;bottom:14px;right:14px;
+          background:rgba(20,20,20,0.92);color:#fff;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+          text-decoration:none;padding:9px 14px;border-radius:3px;
+          border:1px solid rgba(255,255,255,0.12);
+          box-shadow:0 6px 18px rgba(0,0,0,0.35);
+          z-index:2147483647;line-height:1;
+          -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);">
+  Demo &middot; Built by <span style="color:#E65100">Kane PC</span>
+</a>
+
+</body>
+</html>

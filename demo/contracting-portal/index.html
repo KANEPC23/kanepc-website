@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cornerstone Builders | Project &amp; Receivables Portal — Kane PC Sample Build</title>
+<meta name="theme-color" content="#0F172A" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* Cornerstone brand */
+    --klg-ink: #0F172A;
+    --klg-ink-2: #1E293B;
+    --klg-ink-3: #334155;
+    --klg-line: #E2E8F0;
+    --klg-line-2: #CBD5E1;
+    --klg-bg: #F8FAFC;
+    --klg-card: #FFFFFF;
+    --klg-yellow: #FBBF24;
+    --klg-yellow-deep: #F59E0B;
+
+    /* Kane PC brand accents */
+    --kpc-green: #1B5E20;
+    --kpc-green-2: #2E7D32;
+    --kpc-orange: #E65100;
+    --kpc-orange-2: #F57C00;
+
+    /* Aging tier palette */
+    --tier-current: #1B5E20;
+    --tier-30:      #43A047;
+    --tier-60:      #FB8C00;
+    --tier-90:      #E65100;
+    --tier-over:    #C62828;
+
+    /* Status palette */
+    --status-active:    #1B5E20;
+    --status-permit:    #2563EB;
+    --status-hold:      #F59E0B;
+    --status-complete:  #475569;
+    --status-issue:     #C62828;
+
+    --text:        #0F172A;
+    --text-mute:   #64748B;
+    --text-dim:    #94A3B8;
+
+    --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 1px rgba(15,23,42,0.03);
+    --shadow:    0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+    --shadow-lg: 0 10px 25px -8px rgba(15,23,42,0.18), 0 4px 10px -3px rgba(15,23,42,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'IBM Plex Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--klg-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+  /* ===== Layout ===== */
+  .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+  /* ===== Sidebar ===== */
+  .sidebar {
+    background: var(--klg-ink);
+    color: #E2E8F0;
+    display: flex; flex-direction: column;
+    position: sticky; top: 0; height: 100vh;
+  }
+  .brand {
+    padding: 20px 20px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand-mark {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: var(--klg-yellow);
+    color: var(--klg-ink);
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 16px;
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .brand-mark::after {
+    content: ''; position: absolute; inset: auto 0 0 0; height: 6px;
+    background: repeating-linear-gradient(45deg,
+      var(--klg-ink) 0 4px, var(--klg-yellow) 4px 8px);
+  }
+  .brand-text { line-height: 1.15; }
+  .brand-text .name { font-weight: 700; font-size: 15px; letter-spacing: 0.2px; color: #fff; }
+  .brand-text .sub  { font-size: 11px; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.8px; }
+
+  .nav { padding: 14px 10px; flex: 1; }
+  .nav-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px;
+    color: #64748B; padding: 12px 12px 8px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-radius: 6px;
+    color: #CBD5E1; cursor: pointer;
+    font-weight: 500; font-size: 13.5px;
+    transition: background .15s ease, color .15s ease;
+    user-select: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+  .nav-item.active {
+    background: rgba(251,191,36,0.10);
+    color: #FDE68A;
+    box-shadow: inset 2px 0 0 var(--klg-yellow);
+  }
+  .nav-item .ico { width: 18px; height: 18px; opacity: 0.9; flex-shrink: 0; }
+  .nav-item .badge {
+    margin-left: auto;
+    background: rgba(230,81,0,0.18); color: #FCA88B;
+    font-size: 11px; padding: 1px 7px; border-radius: 10px;
+    font-weight: 600;
+  }
+
+  .sidebar-foot {
+    padding: 14px 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 11px; color: #64748B; line-height: 1.5;
+  }
+  .powered { display: flex; align-items: center; gap: 8px; }
+  .powered-dot { width: 8px; height: 8px; border-radius: 2px; background: var(--kpc-green); }
+  .powered b { color: #CBD5E1; font-weight: 600; }
+
+  /* ===== Main ===== */
+  .main { display: flex; flex-direction: column; min-width: 0; }
+
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--klg-line);
+    padding: 14px 28px;
+    display: flex; align-items: center; gap: 16px;
+    position: sticky; top: 0; z-index: 5;
+  }
+  .crumb { font-size: 12px; color: var(--text-mute); }
+  .crumb b { color: var(--text); font-weight: 600; }
+  .top-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .search {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--klg-bg);
+    border: 1px solid var(--klg-line);
+    padding: 7px 12px; border-radius: 8px;
+    min-width: 260px;
+  }
+  .search input { background: transparent; border: 0; outline: 0; font: inherit; flex: 1; color: var(--text); }
+  .search input::placeholder { color: var(--text-dim); }
+
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid var(--klg-line); background: #fff;
+    display: grid; place-items: center; cursor: pointer;
+    position: relative;
+    transition: all .15s ease;
+  }
+  .icon-btn:hover { border-color: var(--klg-line-2); background: var(--klg-bg); }
+  .icon-btn .dot { position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--kpc-orange); box-shadow: 0 0 0 2px #fff; }
+
+  .user-chip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 10px 4px 4px; border-radius: 999px;
+    border: 1px solid var(--klg-line);
+    background: #fff; cursor: pointer;
+  }
+  .user-chip:hover { border-color: var(--klg-line-2); }
+  .avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--kpc-green), var(--kpc-green-2));
+    color: #fff; display: grid; place-items: center;
+    font-weight: 600; font-size: 12px;
+  }
+  .user-chip .nm { font-size: 13px; font-weight: 600; }
+  .user-chip .role { font-size: 11px; color: var(--text-mute); }
+
+  /* ===== Content ===== */
+  .content { padding: 24px 28px 48px; max-width: 1500px; }
+  .view { display: none; }
+  .view.active { display: block; animation: fadeIn .25s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  .view-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 22px; gap: 16px; flex-wrap: wrap; }
+  .view-header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; color: var(--klg-ink); }
+  .view-header p { color: var(--text-mute); font-size: 13.5px; margin-top: 4px; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 14px; border-radius: 8px; border: 0;
+    font: inherit; font-weight: 600; font-size: 13px;
+    cursor: pointer; transition: all .15s ease;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--kpc-green); color: #fff; }
+  .btn-primary:hover { background: var(--kpc-green-2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(27,94,32,0.25); }
+  .btn-secondary { background: #fff; color: var(--klg-ink); border: 1px solid var(--klg-line); }
+  .btn-secondary:hover { background: var(--klg-bg); border-color: var(--klg-line-2); }
+  .btn-warning { background: var(--kpc-orange); color: #fff; }
+  .btn-warning:hover { background: var(--kpc-orange-2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(230,81,0,0.25); }
+
+  /* ===== KPI cards ===== */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .kpi {
+    background: var(--klg-card);
+    border: 1px solid var(--klg-line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    position: relative; overflow: hidden;
+    transition: all .2s ease;
+  }
+  .kpi:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+  .kpi::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--accent, var(--klg-line));
+  }
+  .kpi[data-tone="green"]  { --accent: var(--kpc-green); }
+  .kpi[data-tone="blue"]   { --accent: #2563EB; }
+  .kpi[data-tone="orange"] { --accent: var(--kpc-orange); }
+  .kpi[data-tone="red"]    { --accent: var(--tier-over); }
+  .kpi .label { font-size: 11.5px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+  .kpi .value { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin: 6px 0 4px; color: var(--klg-ink); }
+  .kpi .meta  { font-size: 12px; color: var(--text-mute); display: flex; align-items: center; gap: 6px; }
+  .kpi .delta { font-weight: 600; padding: 1px 6px; border-radius: 4px; font-size: 11px; }
+  .kpi .delta.up   { background: rgba(27,94,32,0.10); color: var(--kpc-green); }
+  .kpi .delta.down { background: rgba(198,40,40,0.10); color: var(--tier-over); }
+
+  /* ===== Cards / panels ===== */
+  .grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+  .card {
+    background: var(--klg-card);
+    border: 1px solid var(--klg-line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; border-bottom: 1px solid var(--klg-line);
+  }
+  .card-head h3 {
+    font-size: 14px; font-weight: 600; color: var(--klg-ink);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-head .h-sub { font-size: 12px; color: var(--text-mute); margin-top: 2px; }
+  .card-head a { color: var(--kpc-green); font-size: 12px; font-weight: 600; text-decoration: none; cursor: pointer; }
+  .card-head a:hover { text-decoration: underline; }
+  .card-body { padding: 16px 18px; }
+  .card-body.flush { padding: 0; }
+
+  /* ===== Tables ===== */
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 11px 16px; text-align: left; font-size: 13px; }
+  thead th {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px;
+    color: var(--text-mute); font-weight: 600;
+    border-bottom: 1px solid var(--klg-line);
+    background: #FAFBFC;
+  }
+  tbody tr { border-bottom: 1px solid var(--klg-line); transition: background .12s ease; }
+  tbody tr:last-child { border-bottom: 0; }
+  tbody tr:hover { background: #FAFBFC; cursor: pointer; }
+  td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+  td.right { text-align: right; }
+
+  /* ===== Pills / badges ===== */
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 2px 9px; border-radius: 999px;
+    font-size: 11px; font-weight: 600;
+    border: 1px solid currentColor;
+    background: color-mix(in srgb, currentColor 8%, transparent);
+  }
+  .pill .pdot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .pill.active     { color: var(--status-active); }
+  .pill.permit     { color: var(--status-permit); }
+  .pill.hold       { color: var(--status-hold); }
+  .pill.complete   { color: var(--status-complete); }
+  .pill.issue      { color: var(--status-issue); }
+
+  .tier {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 10px; border-radius: 6px;
+    font-size: 11.5px; font-weight: 600;
+    color: #fff;
+  }
+  .tier.t-current { background: var(--tier-current); }
+  .tier.t-30      { background: var(--tier-30); }
+  .tier.t-60      { background: var(--tier-60); }
+  .tier.t-90      { background: var(--tier-90); }
+  .tier.t-over    { background: var(--tier-over); }
+
+  /* ===== Progress bar ===== */
+  .progress-wrap { display: flex; align-items: center; gap: 10px; min-width: 120px; }
+  .progress { flex: 1; height: 6px; background: var(--klg-line); border-radius: 999px; overflow: hidden; }
+  .progress .fill { height: 100%; background: var(--kpc-green); border-radius: 999px; transition: width .4s ease; }
+  .progress.warn .fill { background: var(--kpc-orange); }
+  .progress .pct { font-size: 11px; color: var(--text-mute); min-width: 30px; }
+
+  /* ===== Aging tier strip ===== */
+  .aging-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .tier-card {
+    background: #fff;
+    border: 1px solid var(--klg-line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-left: 4px solid var(--c, var(--klg-line));
+    transition: all .15s ease;
+    cursor: pointer;
+  }
+  .tier-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+  .tier-card[data-tier="current"] { --c: var(--tier-current); }
+  .tier-card[data-tier="30"]      { --c: var(--tier-30); }
+  .tier-card[data-tier="60"]      { --c: var(--tier-60); }
+  .tier-card[data-tier="90"]      { --c: var(--tier-90); }
+  .tier-card[data-tier="over"]    { --c: var(--tier-over); }
+  .tier-card .t-name { font-size: 11.5px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
+  .tier-card .t-amt  { font-size: 20px; font-weight: 700; margin-top: 6px; color: var(--klg-ink); letter-spacing: -0.4px; }
+  .tier-card .t-meta { font-size: 11.5px; color: var(--text-mute); margin-top: 3px; }
+
+  /* ===== Filter row ===== */
+  .filters {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px;
+    background: #FAFBFC;
+    border-bottom: 1px solid var(--klg-line);
+    flex-wrap: wrap;
+  }
+  .chip {
+    font-size: 12px; font-weight: 500;
+    padding: 5px 11px; border-radius: 999px;
+    border: 1px solid var(--klg-line); background: #fff; cursor: pointer;
+    color: var(--text); transition: all .12s ease;
+  }
+  .chip:hover { border-color: var(--klg-line-2); }
+  .chip.on { background: var(--klg-ink); border-color: var(--klg-ink); color: #fff; }
+
+  /* ===== Permit cards ===== */
+  .permit-row .pdate { font-size: 11.5px; color: var(--text-mute); }
+  .permit-row .urgent { color: var(--tier-over); font-weight: 600; }
+
+  /* ===== AR Aging bar chart ===== */
+  .agebar-row { display: grid; grid-template-columns: 90px 1fr 110px; gap: 12px; align-items: center; padding: 9px 0; }
+  .agebar-row .lbl { font-size: 12px; color: var(--text); font-weight: 500; }
+  .agebar-row .amt { font-family: 'IBM Plex Mono', monospace; font-size: 13px; text-align: right; font-weight: 600; }
+  .agebar-track { height: 22px; background: var(--klg-bg); border-radius: 6px; overflow: hidden; position: relative; }
+  .agebar-fill  { height: 100%; border-radius: 6px; transition: width .5s cubic-bezier(.22,1,.36,1); }
+
+  /* ===== Job detail modal ===== */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(15,23,42,0.55);
+    display: none; align-items: center; justify-content: center;
+    z-index: 100; backdrop-filter: blur(2px);
+  }
+  .modal-backdrop.open { display: flex; animation: fadeIn .2s ease; }
+  .modal {
+    background: #fff; width: min(820px, 92vw); max-height: 88vh;
+    border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-lg);
+    display: flex; flex-direction: column;
+  }
+  .modal-head {
+    padding: 18px 22px; border-bottom: 1px solid var(--klg-line);
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  }
+  .modal-head h2 { font-size: 18px; font-weight: 700; color: var(--klg-ink); letter-spacing: -0.3px; }
+  .modal-head .sub { font-size: 12.5px; color: var(--text-mute); margin-top: 3px; }
+  .modal-close {
+    background: var(--klg-bg); border: 1px solid var(--klg-line);
+    width: 30px; height: 30px; border-radius: 8px;
+    display: grid; place-items: center; cursor: pointer; color: var(--text-mute);
+  }
+  .modal-close:hover { background: var(--klg-line); }
+  .modal-body { padding: 20px 22px; overflow-y: auto; }
+  .modal-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .modal-stat { background: var(--klg-bg); border-radius: 8px; padding: 12px 14px; }
+  .modal-stat .l { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-mute); font-weight: 600; }
+  .modal-stat .v { font-size: 17px; font-weight: 700; margin-top: 4px; color: var(--klg-ink); }
+  .modal-stat .v.mono { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+
+  .section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-mute); font-weight: 600; margin: 18px 0 10px; }
+  .timeline { border-left: 2px solid var(--klg-line); padding-left: 16px; }
+  .timeline-item { position: relative; padding-bottom: 14px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -22px; top: 4px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--kpc-green);
+  }
+  .timeline-item.warn::before { border-color: var(--kpc-orange); }
+  .timeline-item .ti-date { font-size: 11px; color: var(--text-mute); }
+  .timeline-item .ti-title { font-size: 13px; font-weight: 600; color: var(--klg-ink); margin-top: 1px; }
+  .timeline-item .ti-meta { font-size: 12px; color: var(--text-mute); margin-top: 2px; }
+
+  /* ===== Documents / SharePoint-style ===== */
+  .doc-row { display: flex; align-items: center; gap: 12px; }
+  .file-icon {
+    width: 34px; height: 34px; border-radius: 7px;
+    display: grid; place-items: center; flex-shrink: 0;
+    font-size: 10px; font-weight: 700; color: #fff;
+    letter-spacing: 0.3px;
+  }
+  .file-icon.pdf      { background: linear-gradient(135deg, #DC2626, #991B1B); }
+  .file-icon.dwg      { background: linear-gradient(135deg, #2563EB, #1E40AF); }
+  .file-icon.docx     { background: linear-gradient(135deg, #1D4ED8, #1E3A8A); }
+  .file-icon.xlsx     { background: linear-gradient(135deg, #1B5E20, #14532D); }
+  .file-icon.img      { background: linear-gradient(135deg, #EC4899, #BE185D); }
+  .file-icon.zip      { background: linear-gradient(135deg, #6B7280, #374151); }
+  .file-meta { display: flex; flex-direction: column; min-width: 0; }
+  .file-meta .fname { font-weight: 600; color: var(--klg-ink); font-size: 13.5px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 360px; }
+  .file-meta .fsub  { font-size: 11.5px; color: var(--text-mute); margin-top: 1px; }
+
+  .doc-cat {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 2px 8px; border-radius: 6px;
+    font-size: 11px; font-weight: 600;
+    background: var(--cb, var(--klg-bg));
+    color: var(--cc, var(--text));
+    border: 1px solid var(--cbo, var(--klg-line));
+  }
+  .doc-cat[data-cat="drawing"]  { --cb: #DBEAFE; --cc: #1E40AF; --cbo: #BFDBFE; }
+  .doc-cat[data-cat="permit"]   { --cb: #DCFCE7; --cc: #166534; --cbo: #BBF7D0; }
+  .doc-cat[data-cat="contract"] { --cb: #F3E8FF; --cc: #6B21A8; --cbo: #E9D5FF; }
+  .doc-cat[data-cat="change"]   { --cb: #FFEDD5; --cc: #9A3412; --cbo: #FED7AA; }
+  .doc-cat[data-cat="coi"]      { --cb: #F1F5F9; --cc: #334155; --cbo: #E2E8F0; }
+  .doc-cat[data-cat="log"]      { --cb: #FEF3C7; --cc: #92400E; --cbo: #FDE68A; }
+  .doc-cat[data-cat="photo"]    { --cb: #FCE7F3; --cc: #9D174D; --cbo: #FBCFE8; }
+  .doc-cat[data-cat="submittal"]{ --cb: #E0E7FF; --cc: #3730A3; --cbo: #C7D2FE; }
+
+  .shared-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; color: var(--text-mute);
+  }
+  .shared-chip svg { color: var(--kpc-green); }
+
+  /* ===== Photo gallery ===== */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    padding: 18px;
+  }
+  .photo-card {
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--klg-ink);
+    aspect-ratio: 4 / 3;
+    position: relative;
+    cursor: pointer;
+    transition: all .2s ease;
+    border: 1px solid var(--klg-line);
+  }
+  .photo-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .photo-card img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block;
+    transition: transform .4s ease;
+  }
+  .photo-card:hover img { transform: scale(1.04); }
+  .photo-card .ph-fallback {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(135deg, var(--klg-ink-2) 0%, var(--klg-ink) 100%);
+    display: grid; place-items: center;
+    color: var(--klg-yellow);
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
+    font-weight: 600;
+  }
+  .photo-card .ph-overlay {
+    position: absolute; inset: auto 0 0 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.78));
+    padding: 26px 12px 10px;
+    color: #fff;
+  }
+  .photo-card .ph-label { font-size: 12.5px; font-weight: 600; line-height: 1.3; }
+  .photo-card .ph-meta  { font-size: 11px; color: #CBD5E1; margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+  .photo-card .ph-tag {
+    position: absolute; top: 8px; left: 8px;
+    background: rgba(0,0,0,0.72); color: #fff;
+    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px;
+    padding: 3px 8px; border-radius: 4px;
+    backdrop-filter: blur(4px);
+  }
+  .photo-card .ph-job {
+    position: absolute; top: 8px; right: 8px;
+    background: var(--klg-yellow); color: var(--klg-ink);
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ===== Lightbox ===== */
+  .lightbox {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.88);
+    display: none; align-items: center; justify-content: center;
+    z-index: 200; padding: 40px;
+  }
+  .lightbox.open { display: flex; animation: fadeIn .2s ease; }
+  .lightbox img { max-width: 100%; max-height: 100%; border-radius: 6px; }
+  .lightbox .lb-close {
+    position: absolute; top: 20px; right: 20px;
+    background: rgba(255,255,255,0.12); color: #fff;
+    width: 38px; height: 38px; border-radius: 50%;
+    display: grid; place-items: center; cursor: pointer;
+    border: 0;
+  }
+  .lightbox .lb-info {
+    position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
+    color: #fff; padding: 10px 18px; border-radius: 8px;
+    font-size: 13px; text-align: center;
+  }
+  .lightbox .lb-info b { display: block; font-weight: 600; margin-bottom: 2px; }
+
+  /* ===== Section tab pills inside docs view ===== */
+  .seg {
+    display: inline-flex;
+    background: var(--klg-bg);
+    border: 1px solid var(--klg-line);
+    border-radius: 8px;
+    padding: 3px;
+  }
+  .seg button {
+    background: transparent; border: 0; font: inherit;
+    padding: 6px 14px; border-radius: 6px;
+    font-size: 12.5px; font-weight: 600;
+    color: var(--text-mute); cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .seg button.on { background: #fff; color: var(--klg-ink); box-shadow: var(--shadow-sm); }
+  .seg button:not(.on):hover { color: var(--text); }
+
+  /* ===== Footer ===== */
+  .footer {
+    text-align: center; padding: 22px;
+    font-size: 11.5px; color: var(--text-mute);
+    border-top: 1px solid var(--klg-line);
+    background: #fff;
+  }
+  .footer b { color: var(--kpc-green); }
+
+  /* ===== Action toast ===== */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--klg-ink); color: #fff;
+    padding: 12px 18px; border-radius: 10px;
+    box-shadow: var(--shadow-lg);
+    font-size: 13px; font-weight: 500;
+    transform: translateY(20px); opacity: 0;
+    transition: all .25s cubic-bezier(.22,1,.36,1);
+    z-index: 200;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast .tdot { width: 8px; height: 8px; border-radius: 50%; background: var(--kpc-green); }
+
+  /* ===== Demo banner ===== */
+  .demo-banner {
+    background: linear-gradient(90deg, rgba(251,191,36,0.18), rgba(251,191,36,0.06));
+    border-top: 1px solid var(--klg-yellow);
+    border-bottom: 1px solid var(--klg-yellow);
+    padding: 8px 28px;
+    font-size: 12px; color: var(--klg-ink);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .demo-banner b { font-weight: 700; }
+
+  /* ===== Mini icons via SVG ===== */
+  svg.ico { stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ===== Responsive (lite) ===== */
+  @media (max-width: 1100px) {
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .aging-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 800px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+    .nav { display: none; }
+  }
+</style>
+
+<style id="kpc-protect">
+  body {
+    -webkit-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text; -moz-user-select: text;
+    -ms-user-select: text; user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img, svg {
+    -webkit-user-drag: none; user-drag: none;
+    -webkit-touch-callout: none;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="app">
+  <!-- ============================== SIDEBAR ============================== -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">Cornerstone</div>
+      <div class="brand-text">
+        <div class="name">Cornerstone Builders</div>
+        <div class="sub">Operations Portal</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-label">Workspace</div>
+      <div class="nav-item active" data-view="dashboard">
+        <svg class="ico" viewBox="0 0 24 24" width="18" height="18"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" data-view="jobs">
+        <svg class="ico" viewBox="0 0 24 24" width="18" height="18"><path d="M2 7h20"/><path d="M5 7v13h14V7"/><path d="M9 7V4h6v3"/></svg>
+        Active Jobs <span class="badge" id="nav-jobs-count">12</span>
+      </div>
+      <div class="nav-item" data-view="permits">
+        <svg class="ico" viewBox="0 0 24 24" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
+        Permits <span class="badge" id="nav-permits-badge">3</span>
+      </div>
+      <div class="nav-item" data-view="documents">
+        <svg class="ico" viewBox="0 0 24 24" width="18" height="18"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Documents <span class="badge" id="nav-docs-badge">847</span>
+      </div>
+      <div class="nav-item" data-view="receivables">
+        <svg class="ico" viewBox="0 0 24 24" width="18" height="18"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Receivables <span class="badge" id="nav-ar-badge">$ 412k</span>
+      </div>
+
+      <div class="nav-label" style="margin-top: 8px;">Operations</div>
+      <div class="nav-item" data-view="dashboard">
+        <svg class="ico" viewBox="0 0 24 24" width="18" height="18"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="17" cy="7" r="3"/><path d="M21 21v-1.5a3 3 0 0 0-2.5-3"/></svg>
+        Crews
+      </div>
+      <div class="nav-item" data-view="dashboard">
+        <svg class="ico" viewBox="0 0 24 24" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Schedule
+      </div>
+      <div class="nav-item" data-view="dashboard">
+        <svg class="ico" viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        Settings
+      </div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="powered">
+        <div class="powered-dot"></div>
+        <div>Powered by <b>Kane PC</b><br/>v1.0 · Demo Build</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================== MAIN ============================== -->
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><b id="crumb">Dashboard</b> · Cornerstone Builders · Office</div>
+      <div class="top-actions">
+        <div class="search">
+          <svg class="ico" viewBox="0 0 24 24" width="16" height="16" style="color:#94A3B8;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input placeholder="Search jobs, permits, customers…" />
+        </div>
+        <button class="icon-btn" title="Notifications">
+          <svg class="ico" viewBox="0 0 24 24" width="16" height="16"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+          <span class="dot"></span>
+        </button>
+        <div class="user-chip">
+          <div class="avatar">KM</div>
+          <div>
+            <div class="nm">Ken Mitchell</div>
+            <div class="role">Project Manager</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="demo-banner">
+      <svg class="ico" viewBox="0 0 24 24" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <span><b>DEMO BUILD</b> — Sample data. Built for Cornerstone Builders by Kane PC. Click any job row to see the project detail view.</span>
+    </div>
+
+    <main class="content">
+
+      <!-- ====================== DASHBOARD ====================== -->
+      <section id="view-dashboard" class="view active">
+        <div class="view-header">
+          <div>
+            <h1>Operations Dashboard</h1>
+            <p>Snapshot for Tuesday, May 19, 2026 · Updated 2 min ago</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary">Export PDF</button>
+            <button class="btn btn-primary">
+              <svg class="ico" viewBox="0 0 24 24" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+              New Job
+            </button>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi" data-tone="green">
+            <div class="label">Active Jobs</div>
+            <div class="value">12</div>
+            <div class="meta"><span class="delta up">+2</span> vs last month</div>
+          </div>
+          <div class="kpi" data-tone="blue">
+            <div class="label">Open Permits</div>
+            <div class="value">18</div>
+            <div class="meta"><span class="delta up">3 awaiting issuance</span></div>
+          </div>
+          <div class="kpi" data-tone="orange">
+            <div class="label">A/R Outstanding</div>
+            <div class="value mono">$412,840</div>
+            <div class="meta"><span class="delta down">+$28k</span> vs last week</div>
+          </div>
+          <div class="kpi" data-tone="red">
+            <div class="label">Past Due 60+</div>
+            <div class="value mono">$87,260</div>
+            <div class="meta"><span class="delta down">4 customers</span></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>Active Jobs · This Week</h3>
+                <div class="h-sub">Click a row for full project detail</div>
+              </div>
+              <a data-jump="jobs">View all →</a>
+            </div>
+            <div class="card-body flush">
+              <table id="dash-jobs">
+                <thead>
+                  <tr>
+                    <th>Job #</th>
+                    <th>Project</th>
+                    <th>PM</th>
+                    <th>Status</th>
+                    <th style="width: 160px;">Progress</th>
+                    <th class="right">Contract</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>A/R Aging</h3>
+                <div class="h-sub">By tier · drill in on Receivables</div>
+              </div>
+              <a data-jump="receivables">Open →</a>
+            </div>
+            <div class="card-body">
+              <div id="aging-bars"></div>
+              <div style="display: flex; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--klg-line);">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600;">Total Outstanding</div>
+                  <div class="mono" style="font-size: 22px; font-weight: 700; margin-top: 3px; color: var(--klg-ink);">$412,840</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 11px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600;">DSO</div>
+                  <div class="mono" style="font-size: 22px; font-weight: 700; margin-top: 3px; color: var(--klg-ink);">42 <span style="font-size: 12px; color: var(--text-mute); font-weight: 400;">days</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>Recent Documents</h3>
+                <div class="h-sub">Latest from SharePoint · click to open</div>
+              </div>
+              <a data-jump="documents">Browse all →</a>
+            </div>
+            <div class="card-body flush">
+              <table id="dash-docs">
+                <thead>
+                  <tr>
+                    <th>File</th>
+                    <th>Category</th>
+                    <th>Job</th>
+                    <th class="right">Modified</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>Latest Site Photos</h3>
+                <div class="h-sub">From field crews · last 48 hours</div>
+              </div>
+              <a data-jump="documents" id="dash-photos-link">View gallery →</a>
+            </div>
+            <div class="photo-grid" id="dash-photos" style="grid-template-columns: repeat(3, 1fr); padding: 14px 18px;"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>Permits Requiring Attention</h3>
+                <div class="h-sub">Expiring, denied, or awaiting issuance</div>
+              </div>
+              <a data-jump="permits">All permits →</a>
+            </div>
+            <div class="card-body flush">
+              <table id="dash-permits">
+                <thead>
+                  <tr>
+                    <th>Permit #</th>
+                    <th>Type</th>
+                    <th>Job</th>
+                    <th>Status</th>
+                    <th class="right">Expires</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>Recent Activity</h3>
+                <div class="h-sub">Last 48 hours</div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="timeline">
+                <div class="timeline-item">
+                  <div class="ti-date">Today · 11:24 AM</div>
+                  <div class="ti-title">Payment received — Cushman &amp; Wakefield</div>
+                  <div class="ti-meta">$48,200 applied to Job #2604 (Midtown Plaza Buildout)</div>
+                </div>
+                <div class="timeline-item warn">
+                  <div class="ti-date">Today · 9:18 AM</div>
+                  <div class="ti-title">Permit expiring in 7 days — NYC DOB Alt-2</div>
+                  <div class="ti-meta">Permit #B00714829 on Job #2618 (Hudson View Facade)</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="ti-date">Yesterday · 4:02 PM</div>
+                  <div class="ti-title">Job #2622 moved to In Progress</div>
+                  <div class="ti-meta">Tarrytown HVAC Replacement · PM: Rich</div>
+                </div>
+                <div class="timeline-item warn">
+                  <div class="ti-date">Yesterday · 2:41 PM</div>
+                  <div class="ti-title">Invoice 60+ days overdue</div>
+                  <div class="ti-meta">Yonkers Apartments — $32,400 (Tier 3 escalation triggered)</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="ti-date">Yesterday · 10:15 AM</div>
+                  <div class="ti-title">Permit issued — Westchester County</div>
+                  <div class="ti-meta">Building permit on Job #2620 (Stamford Medical Office)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== JOBS ====================== -->
+      <section id="view-jobs" class="view">
+        <div class="view-header">
+          <div>
+            <h1>Active Jobs</h1>
+            <p>All projects currently in flight · 12 active · 3 pending start · 4 closing out</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary">Export</button>
+            <button class="btn btn-primary">
+              <svg class="ico" viewBox="0 0 24 24" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+              New Job
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="filters">
+            <span class="chip on" data-filter-job="all">All Jobs</span>
+            <span class="chip" data-filter-job="active">In Progress</span>
+            <span class="chip" data-filter-job="permit">Awaiting Permit</span>
+            <span class="chip" data-filter-job="hold">On Hold</span>
+            <span class="chip" data-filter-job="complete">Closing Out</span>
+            <div style="margin-left: auto; font-size: 12px; color: var(--text-mute);">
+              <span id="jobs-count">12 jobs</span> · <span class="mono" id="jobs-value">$5.42M total contract</span>
+            </div>
+          </div>
+          <div class="card-body flush">
+            <table id="jobs-table">
+              <thead>
+                <tr>
+                  <th>Job #</th>
+                  <th>Project / Site</th>
+                  <th>Customer</th>
+                  <th>PM</th>
+                  <th>Status</th>
+                  <th style="width: 140px;">Progress</th>
+                  <th class="right">Contract</th>
+                  <th class="right">A/R Balance</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== PERMITS ====================== -->
+      <section id="view-permits" class="view">
+        <div class="view-header">
+          <div>
+            <h1>Permits</h1>
+            <p>NYC DOB · Westchester County · Trade permits · 18 open · 3 require attention</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary">Export</button>
+            <button class="btn btn-primary">
+              <svg class="ico" viewBox="0 0 24 24" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+              File New Permit
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-bottom: 16px;">
+          <div class="kpi" data-tone="blue">
+            <div class="label">Filed</div>
+            <div class="value">8</div>
+            <div class="meta">Awaiting plan review</div>
+          </div>
+          <div class="kpi" data-tone="green">
+            <div class="label">Active / Issued</div>
+            <div class="value">7</div>
+            <div class="meta">In good standing</div>
+          </div>
+          <div class="kpi" data-tone="red">
+            <div class="label">Attention</div>
+            <div class="value">3</div>
+            <div class="meta">Expiring or denied</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="filters">
+            <span class="chip on" data-filter-permit="all">All</span>
+            <span class="chip" data-filter-permit="filed">Filed</span>
+            <span class="chip" data-filter-permit="issued">Issued</span>
+            <span class="chip" data-filter-permit="expiring">Expiring</span>
+            <span class="chip" data-filter-permit="denied">Denied</span>
+            <div style="margin-left: auto; font-size: 12px; color: var(--text-mute);">
+              <span id="permits-count">18 permits</span>
+            </div>
+          </div>
+          <div class="card-body flush">
+            <table id="permits-table">
+              <thead>
+                <tr>
+                  <th>Permit #</th>
+                  <th>Type</th>
+                  <th>Authority</th>
+                  <th>Job</th>
+                  <th>Status</th>
+                  <th>Filed</th>
+                  <th class="right">Expires</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== DOCUMENTS ====================== -->
+      <section id="view-documents" class="view">
+        <div class="view-header">
+          <div>
+            <h1>Documents &amp; Site Photos</h1>
+            <p>847 files · 312 site photos · Synced with SharePoint · Last sync 4 min ago</p>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <div class="seg" id="doc-seg">
+              <button class="on" data-mode="files">
+                <svg class="ico" viewBox="0 0 24 24" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                Files
+              </button>
+              <button data-mode="photos">
+                <svg class="ico" viewBox="0 0 24 24" width="14" height="14"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                Photos
+              </button>
+            </div>
+            <button class="btn btn-secondary">Open in SharePoint</button>
+            <button class="btn btn-primary">
+              <svg class="ico" viewBox="0 0 24 24" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              Upload
+            </button>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi" data-tone="blue">
+            <div class="label">Drawings &amp; Plans</div>
+            <div class="value">218</div>
+            <div class="meta">DWG, PDF · across 12 jobs</div>
+          </div>
+          <div class="kpi" data-tone="green">
+            <div class="label">Site Photos</div>
+            <div class="value">312</div>
+            <div class="meta">Last 7 days: <b>+47</b></div>
+          </div>
+          <div class="kpi" data-tone="orange">
+            <div class="label">Pending Review</div>
+            <div class="value">9</div>
+            <div class="meta">Submittals &amp; change orders</div>
+          </div>
+          <div class="kpi" data-tone="red">
+            <div class="label">COIs Expiring</div>
+            <div class="value">2</div>
+            <div class="meta">Within 30 days</div>
+          </div>
+        </div>
+
+        <!-- ----- FILES MODE ----- -->
+        <div id="doc-files-pane" class="card">
+          <div class="filters">
+            <span class="chip on" data-filter-doc="all">All</span>
+            <span class="chip" data-filter-doc="drawing">Drawings</span>
+            <span class="chip" data-filter-doc="permit">Permits</span>
+            <span class="chip" data-filter-doc="contract">Contracts</span>
+            <span class="chip" data-filter-doc="change">Change Orders</span>
+            <span class="chip" data-filter-doc="submittal">Submittals</span>
+            <span class="chip" data-filter-doc="coi">COI / Insurance</span>
+            <span class="chip" data-filter-doc="log">Daily Logs</span>
+            <div style="margin-left: auto; font-size: 12px; color: var(--text-mute);">
+              <span id="doc-count">22 files</span>
+            </div>
+          </div>
+          <div class="card-body flush">
+            <table id="docs-table">
+              <thead>
+                <tr>
+                  <th style="width: 44%;">Name</th>
+                  <th>Category</th>
+                  <th>Job</th>
+                  <th>Modified</th>
+                  <th>Modified By</th>
+                  <th class="right">Size</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ----- PHOTOS MODE ----- -->
+        <div id="doc-photos-pane" class="card" style="display: none;">
+          <div class="filters">
+            <span class="chip on" data-filter-photo="all">All Photos</span>
+            <span class="chip" data-filter-photo="progress">Progress</span>
+            <span class="chip" data-filter-photo="punch">Punch List</span>
+            <span class="chip" data-filter-photo="safety">Safety</span>
+            <span class="chip" data-filter-photo="before">Before</span>
+            <span class="chip" data-filter-photo="after">After / Final</span>
+            <span class="chip" data-filter-photo="issue">Issue / Damage</span>
+            <div style="margin-left: auto; font-size: 12px; color: var(--text-mute);">
+              <span id="photo-count">24 photos</span> · GPS &amp; timestamp embedded
+            </div>
+          </div>
+          <div class="photo-grid" id="photo-grid"></div>
+        </div>
+      </section>
+
+      <!-- ====================== RECEIVABLES ====================== -->
+      <section id="view-receivables" class="view">
+        <div class="view-header">
+          <div>
+            <h1>Receivables</h1>
+            <p>A/R aging by tier · click a tier card to filter the table below</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary">Export A/R</button>
+            <button class="btn btn-warning">
+              <svg class="ico" viewBox="0 0 24 24" width="14" height="14"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+              Send Tier 3 Notices
+            </button>
+          </div>
+        </div>
+
+        <div class="aging-strip">
+          <div class="tier-card" data-tier="current" data-tier-key="current">
+            <div class="t-name">Current</div>
+            <div class="t-amt mono">$184,560</div>
+            <div class="t-meta">Tier 1 · 0–30 days · 14 invoices</div>
+          </div>
+          <div class="tier-card" data-tier="30" data-tier-key="30">
+            <div class="t-name">31–60 Days</div>
+            <div class="t-amt mono">$141,020</div>
+            <div class="t-meta">Tier 2 · standard follow-up · 8 invoices</div>
+          </div>
+          <div class="tier-card" data-tier="60" data-tier-key="60">
+            <div class="t-name">61–90 Days</div>
+            <div class="t-amt mono">$54,860</div>
+            <div class="t-meta">Tier 3 · formal notice · 4 invoices</div>
+          </div>
+          <div class="tier-card" data-tier="90" data-tier-key="90">
+            <div class="t-name">91–120 Days</div>
+            <div class="t-amt mono">$24,800</div>
+            <div class="t-meta">Tier 4 · PM escalation · 2 invoices</div>
+          </div>
+          <div class="tier-card" data-tier="over" data-tier-key="over">
+            <div class="t-name">120+ Days</div>
+            <div class="t-amt mono">$7,600</div>
+            <div class="t-meta">Tier 5 · collections review · 1 invoice</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="filters">
+            <span class="chip on" data-filter-ar="all">All Invoices</span>
+            <span class="chip" data-filter-ar="current">Tier 1 · Current</span>
+            <span class="chip" data-filter-ar="30">Tier 2 · 31–60</span>
+            <span class="chip" data-filter-ar="60">Tier 3 · 61–90</span>
+            <span class="chip" data-filter-ar="90">Tier 4 · 91–120</span>
+            <span class="chip" data-filter-ar="over">Tier 5 · 120+</span>
+            <div style="margin-left: auto; font-size: 12px; color: var(--text-mute);">
+              <span id="ar-count">29 invoices</span> · <span class="mono" id="ar-total">$412,840 outstanding</span>
+            </div>
+          </div>
+          <div class="card-body flush">
+            <table id="ar-table">
+              <thead>
+                <tr>
+                  <th>Invoice #</th>
+                  <th>Customer</th>
+                  <th>Job</th>
+                  <th>Issued</th>
+                  <th>Age</th>
+                  <th>Tier</th>
+                  <th class="right">Balance</th>
+                  <th class="right">Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; padding: 14px 18px; background: #fff; border: 1px solid var(--klg-line); border-radius: 10px;">
+          <div style="font-size: 12px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 600; margin-bottom: 8px;">Collection Tier Policy</div>
+          <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; font-size: 12.5px;">
+            <div><b style="color: var(--tier-current);">Tier 1 · Current</b><br><span style="color: var(--text-mute);">Standard 30-day terms. No action required.</span></div>
+            <div><b style="color: var(--tier-30);">Tier 2 · 31–60</b><br><span style="color: var(--text-mute);">Automated friendly reminder + statement.</span></div>
+            <div><b style="color: var(--tier-60);">Tier 3 · 61–90</b><br><span style="color: var(--text-mute);">Formal notice. PM call to customer.</span></div>
+            <div><b style="color: var(--tier-90);">Tier 4 · 91–120</b><br><span style="color: var(--text-mute);">Stop-work review. Owner sign-off required.</span></div>
+            <div><b style="color: var(--tier-over);">Tier 5 · 120+</b><br><span style="color: var(--text-mute);">Lien notice prep. Outside collections.</span></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      Built for <b>Cornerstone Builders</b> by Kane PC · 200 Commerce Ave., White Plains, NY · Demo build, sample data only.
+    </footer>
+  </div>
+</div>
+
+<!-- ============================== MODAL ============================== -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h2 id="m-title">Job Detail</h2>
+        <div class="sub" id="m-sub">—</div>
+      </div>
+      <div class="modal-close" id="m-close">
+        <svg class="ico" viewBox="0 0 24 24" width="16" height="16"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="modal-stat"><div class="l">Contract</div><div class="v mono" id="m-contract">—</div></div>
+        <div class="modal-stat"><div class="l">Billed to Date</div><div class="v mono" id="m-billed">—</div></div>
+        <div class="modal-stat"><div class="l">A/R Balance</div><div class="v mono" id="m-ar">—</div></div>
+        <div class="modal-stat"><div class="l">% Complete</div><div class="v" id="m-pct">—</div></div>
+      </div>
+
+      <div class="section-title">Project Info</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 13px;">
+        <div><div style="color: var(--text-mute); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 2px;">Customer</div><span id="m-customer">—</span></div>
+        <div><div style="color: var(--text-mute); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 2px;">PM</div><span id="m-pm">—</span></div>
+        <div><div style="color: var(--text-mute); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 2px;">Site</div><span id="m-site">—</span></div>
+        <div><div style="color: var(--text-mute); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 2px;">Started</div><span id="m-started">—</span></div>
+      </div>
+
+      <div class="section-title">Permits on This Job</div>
+      <div id="m-permits" style="font-size: 13px;"></div>
+
+      <div class="section-title">Documents</div>
+      <div id="m-docs" style="font-size: 13px;"></div>
+
+      <div class="section-title">Site Photos</div>
+      <div id="m-photos" class="photo-grid" style="padding: 0; grid-template-columns: repeat(4, 1fr); gap: 8px;"></div>
+
+      <div class="section-title">Recent Activity</div>
+      <div class="timeline" id="m-timeline"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span class="tdot"></span>
+  <span id="toast-msg">Done</span>
+</div>
+
+<!-- ============================== LIGHTBOX ============================== -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lb-close">
+    <svg class="ico" viewBox="0 0 24 24" width="18" height="18"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <img id="lb-img" src="" alt="" />
+  <div class="lb-info"><b id="lb-title"></b><span id="lb-meta"></span></div>
+</div>
+
+<script>
+/* ============================== SAMPLE DATA ============================== */
+
+const JOBS = [
+  { id: '2604', name: 'Midtown Plaza Tenant Buildout', site: '350 Park Ave, NYC',
+    customer: 'Cushman & Wakefield', pm: 'Ken Mitchell', status: 'active',
+    pct: 68, contract: 485000, billed: 329800, ar: 0, started: '2026-01-14' },
+  { id: '2607', name: 'Westchester Medical Lobby Renovation', site: '100 Woods Rd, Valhalla',
+    customer: 'Westchester Medical Group', pm: 'Tom Reyes', status: 'active',
+    pct: 42, contract: 310000, billed: 130200, ar: 42800, started: '2026-02-03' },
+  { id: '2611', name: 'Bronx Distribution Center Fit-out', site: '1455 Bronx River Ave',
+    customer: 'Hudson Logistics LLC', pm: 'Ken Mitchell', status: 'active',
+    pct: 31, contract: 1245000, billed: 386000, ar: 124500, started: '2026-02-18' },
+  { id: '2614', name: 'Greenwich Retail Storefront', site: '78 Greenwich Ave',
+    customer: 'Atlas Retail Holdings', pm: 'Rich Patel', status: 'active',
+    pct: 78, contract: 95000, billed: 74100, ar: 18500, started: '2026-03-04' },
+  { id: '2616', name: 'Yonkers Apartments Common Areas', site: '850 Bronx River Rd',
+    customer: 'Riverside Property Mgmt', pm: 'Rich Patel', status: 'active',
+    pct: 55, contract: 245000, billed: 134700, ar: 32400, started: '2026-03-11' },
+  { id: '2618', name: 'Hudson View Roof & Facade', site: '1801 Riverdale Ave',
+    customer: 'Hudson View Condo Assoc.', pm: 'Tom Reyes', status: 'permit',
+    pct: 12, contract: 625000, billed: 75000, ar: 75000, started: '2026-03-20' },
+  { id: '2620', name: 'Stamford Medical Office Buildout', site: '1010 Washington Blvd, Stamford',
+    customer: 'Coastal Medical Partners', pm: 'Ken Mitchell', status: 'active',
+    pct: 22, contract: 410000, billed: 90200, ar: 28400, started: '2026-04-01' },
+  { id: '2622', name: 'Tarrytown HVAC Replacement', site: '660 White Plains Rd',
+    customer: 'Tarrytown Office Park', pm: 'Rich Patel', status: 'active',
+    pct: 18, contract: 185000, billed: 33300, ar: 33300, started: '2026-04-15' },
+  { id: '2624', name: 'Mt. Kisco Retail Renovation', site: '125 N Bedford Rd',
+    customer: 'Mt. Kisco Plaza LLC', pm: 'Tom Reyes', status: 'permit',
+    pct: 5, contract: 178000, billed: 0, ar: 0, started: '2026-04-22' },
+  { id: '2626', name: 'White Plains Lobby Refresh', site: '11 Martine Ave',
+    customer: 'White Plains Plaza Corp', pm: 'Rich Patel', status: 'hold',
+    pct: 35, contract: 220000, billed: 77000, ar: 38500, started: '2026-03-29' },
+  { id: '2628', name: 'Greenburgh Warehouse Annex', site: '450 Saw Mill River Rd',
+    customer: 'Greenburgh Industrial', pm: 'Ken Mitchell', status: 'active',
+    pct: 48, contract: 520000, billed: 249600, ar: 19440, started: '2026-02-25' },
+  { id: '2630', name: 'New Rochelle Restaurant Conversion', site: '32 Division St',
+    customer: 'Castello Restaurants Inc.', pm: 'Tom Reyes', status: 'complete',
+    pct: 96, contract: 285000, billed: 273600, ar: 0, started: '2026-01-08' },
+];
+
+const PERMITS = [
+  { num: 'B00714829', type: 'DOB Alt-2', auth: 'NYC DOB',          job: '2618', jobName: 'Hudson View Facade',          status: 'expiring', filed: '2025-12-04', expires: '2026-05-26' },
+  { num: 'WC-26-0418', type: 'Building',  auth: 'Westchester Co.',  job: '2607', jobName: 'WMC Lobby Renovation',         status: 'issued',   filed: '2026-01-22', expires: '2026-07-22' },
+  { num: 'B00721155', type: 'DOB Alt-1',  auth: 'NYC DOB',          job: '2611', jobName: 'Bronx Distribution',           status: 'issued',   filed: '2026-02-01', expires: '2026-08-01' },
+  { num: 'EL-26-1141', type: 'Electrical', auth: 'NYC DOB',         job: '2611', jobName: 'Bronx Distribution',           status: 'issued',   filed: '2026-02-10', expires: '2026-08-10' },
+  { num: 'PL-26-0892', type: 'Plumbing',  auth: 'NYC DOB',          job: '2611', jobName: 'Bronx Distribution',           status: 'filed',    filed: '2026-04-18', expires: null },
+  { num: 'WC-26-0521', type: 'Building',  auth: 'Westchester Co.',  job: '2624', jobName: 'Mt. Kisco Retail',             status: 'denied',   filed: '2026-04-08', expires: null },
+  { num: 'STM-26-118', type: 'Building',  auth: 'Stamford CT',      job: '2620', jobName: 'Stamford Medical Office',      status: 'issued',   filed: '2026-03-18', expires: '2026-09-18' },
+  { num: 'MEC-26-447', type: 'Mechanical', auth: 'NYC DOB',         job: '2622', jobName: 'Tarrytown HVAC',               status: 'filed',    filed: '2026-04-19', expires: null },
+  { num: 'GW-26-0066', type: 'Sign',       auth: 'Greenwich CT',    job: '2614', jobName: 'Greenwich Retail',             status: 'issued',   filed: '2026-03-09', expires: '2026-09-09' },
+  { num: 'WC-26-0337', type: 'Plumbing',   auth: 'Westchester Co.', job: '2616', jobName: 'Yonkers Apartments',           status: 'issued',   filed: '2026-03-15', expires: '2026-09-15' },
+  { num: 'B00718340', type: 'DOB Alt-2',  auth: 'NYC DOB',          job: '2616', jobName: 'Yonkers Apartments',           status: 'expiring', filed: '2025-11-21', expires: '2026-05-23' },
+  { num: 'WC-26-0612', type: 'Mechanical', auth: 'Westchester Co.', job: '2628', jobName: 'Greenburgh Warehouse',         status: 'issued',   filed: '2026-02-28', expires: '2026-08-28' },
+  { num: 'B00723104', type: 'DOB Alt-1',  auth: 'NYC DOB',          job: '2604', jobName: 'Midtown Plaza Buildout',       status: 'issued',   filed: '2026-01-18', expires: '2026-07-18' },
+  { num: 'EL-26-1208', type: 'Electrical', auth: 'NYC DOB',         job: '2604', jobName: 'Midtown Plaza Buildout',       status: 'issued',   filed: '2026-01-25', expires: '2026-07-25' },
+  { num: 'PL-26-0945', type: 'Plumbing',  auth: 'NYC DOB',          job: '2604', jobName: 'Midtown Plaza Buildout',       status: 'filed',    filed: '2026-04-30', expires: null },
+  { num: 'WP-26-1014', type: 'Building',  auth: 'White Plains',     job: '2626', jobName: 'WP Lobby Refresh',             status: 'denied',   filed: '2026-04-02', expires: null },
+  { num: 'WP-26-1019', type: 'Electrical', auth: 'White Plains',    job: '2626', jobName: 'WP Lobby Refresh',             status: 'filed',    filed: '2026-04-12', expires: null },
+  { num: 'B00725822', type: 'DOB Alt-2',  auth: 'NYC DOB',          job: '2630', jobName: 'New Rochelle Restaurant',      status: 'issued',   filed: '2025-12-15', expires: '2026-06-15' },
+];
+
+const INVOICES = [
+  // Current
+  { num: 'INV-26-0418', cust: 'Cushman & Wakefield',  jobId: '2604', age: 8,  bal: 48200,  tier: 'current' },
+  { num: 'INV-26-0421', cust: 'Hudson Logistics LLC',  jobId: '2611', age: 12, bal: 62400,  tier: 'current' },
+  { num: 'INV-26-0427', cust: 'Coastal Medical Partners', jobId: '2620', age: 5, bal: 28400, tier: 'current' },
+  { num: 'INV-26-0430', cust: 'Tarrytown Office Park',  jobId: '2622', age: 18, bal: 33300, tier: 'current' },
+  { num: 'INV-26-0433', cust: 'Greenburgh Industrial',  jobId: '2628', age: 22, bal: 19440, tier: 'current' },
+  { num: 'INV-26-0438', cust: 'Westchester Medical Group', jobId: '2607', age: 26, bal: 18200, tier: 'current' },
+  { num: 'INV-26-0419', cust: 'Atlas Retail Holdings',  jobId: '2614', age: 9, bal: 18500, tier: 'current' },
+  // 30-60
+  { num: 'INV-26-0388', cust: 'Westchester Medical Group', jobId: '2607', age: 38, bal: 24600, tier: '30' },
+  { num: 'INV-26-0391', cust: 'Hudson Logistics LLC',  jobId: '2611', age: 41, bal: 62100, tier: '30' },
+  { num: 'INV-26-0376', cust: 'Hudson View Condo Assoc.', jobId: '2618', age: 52, bal: 38500, tier: '30' },
+  { num: 'INV-26-0364', cust: 'White Plains Plaza Corp', jobId: '2626', age: 58, bal: 15820, tier: '30' },
+  // 60-90
+  { num: 'INV-26-0312', cust: 'Riverside Property Mgmt', jobId: '2616', age: 72, bal: 32400, tier: '60' },
+  { num: 'INV-26-0298', cust: 'Hudson View Condo Assoc.', jobId: '2618', age: 78, bal: 14600, tier: '60' },
+  { num: 'INV-26-0289', cust: 'White Plains Plaza Corp', jobId: '2626', age: 82, bal: 7860, tier: '60' },
+  // 90+
+  { num: 'INV-26-0244', cust: 'White Plains Plaza Corp', jobId: '2626', age: 102, bal: 14820, tier: '90' },
+  { num: 'INV-26-0231', cust: 'Atlas Retail Holdings',  jobId: '2614', age: 115, bal: 9980, tier: '90' },
+  // 120+
+  { num: 'INV-26-0188', cust: 'Atlas Retail Holdings',  jobId: '2614', age: 132, bal: 7600, tier: 'over' },
+];
+
+const AGING_TOTALS = { current: 184560, '30': 141020, '60': 54860, '90': 24800, over: 7600 };
+
+const DOCUMENTS = [
+  // Job 2604 - Midtown Plaza
+  { id: 'D-001', name: 'A-101 Architectural Plans REV-3.pdf',          ext: 'pdf',  cat: 'drawing',   job: '2604', size: '4.2 MB', mod: '2026-05-18', by: 'M. Garcia (Arch)',  shared: true  },
+  { id: 'D-002', name: 'M-201 Mechanical Drawings.dwg',                ext: 'dwg',  cat: 'drawing',   job: '2604', size: '8.1 MB', mod: '2026-05-15', by: 'K. Mitchell',       shared: true  },
+  { id: 'D-003', name: 'NYC DOB Alt-1 Approval B00723104.pdf',         ext: 'pdf',  cat: 'permit',    job: '2604', size: '1.8 MB', mod: '2026-01-19', by: 'Office',            shared: false },
+  { id: 'D-004', name: 'Master Contract - Cushman Wakefield.pdf',      ext: 'pdf',  cat: 'contract',  job: '2604', size: '892 KB', mod: '2026-01-08', by: 'K. Logan',          shared: true  },
+  { id: 'D-005', name: 'CO-03 Additional Electrical Scope.pdf',        ext: 'pdf',  cat: 'change',    job: '2604', size: '425 KB', mod: '2026-04-22', by: 'K. Mitchell',       shared: true  },
+  { id: 'D-006', name: 'Daily Log 2026-05-19.pdf',                     ext: 'pdf',  cat: 'log',       job: '2604', size: '312 KB', mod: '2026-05-19', by: 'K. Mitchell',       shared: false },
+  { id: 'D-007', name: 'Submittal-12 HVAC Equipment Cut Sheets.pdf',   ext: 'pdf',  cat: 'submittal', job: '2604', size: '6.4 MB', mod: '2026-05-12', by: 'Carrier Dist.',     shared: true  },
+
+  // Job 2611 - Bronx Distribution
+  { id: 'D-008', name: 'S-201 Structural Steel Plans.dwg',             ext: 'dwg',  cat: 'drawing',   job: '2611', size: '12.7 MB', mod: '2026-05-17', by: 'Falcon Structural', shared: true  },
+  { id: 'D-009', name: 'Hudson Logistics Master Contract.pdf',         ext: 'pdf',  cat: 'contract',  job: '2611', size: '1.2 MB', mod: '2026-02-12', by: 'K. Logan',          shared: true  },
+  { id: 'D-010', name: 'CO-01 Loading Dock Reconfiguration.pdf',       ext: 'pdf',  cat: 'change',    job: '2611', size: '684 KB', mod: '2026-03-28', by: 'T. Reyes',          shared: false },
+  { id: 'D-011', name: 'NYC DOB Plumbing Filing PL-26-0892.pdf',       ext: 'pdf',  cat: 'permit',    job: '2611', size: '2.4 MB', mod: '2026-04-18', by: 'Office',            shared: false },
+
+  // Job 2618 - Hudson View Facade
+  { id: 'D-012', name: 'Facade Restoration Specs.pdf',                 ext: 'pdf',  cat: 'drawing',   job: '2618', size: '3.8 MB', mod: '2026-04-30', by: 'M. Garcia (Arch)',  shared: true  },
+  { id: 'D-013', name: 'Hudson View HOA Contract.pdf',                 ext: 'pdf',  cat: 'contract',  job: '2618', size: '745 KB', mod: '2026-03-18', by: 'K. Logan',          shared: true  },
+  { id: 'D-014', name: 'Permit Expiration Notice DOB Alt-2.pdf',       ext: 'pdf',  cat: 'permit',    job: '2618', size: '128 KB', mod: '2026-05-18', by: 'NYC DOB',           shared: false },
+
+  // Job 2607 - WMC Lobby
+  { id: 'D-015', name: 'WMC Lobby Renderings.pdf',                     ext: 'pdf',  cat: 'drawing',   job: '2607', size: '14.2 MB', mod: '2026-02-05', by: 'M. Garcia (Arch)', shared: true  },
+  { id: 'D-016', name: 'WCMC Master Service Agreement.pdf',            ext: 'pdf',  cat: 'contract',  job: '2607', size: '1.4 MB', mod: '2026-02-01', by: 'K. Logan',          shared: true  },
+  { id: 'D-017', name: 'Daily Log 2026-05-19 - WMC.pdf',               ext: 'pdf',  cat: 'log',       job: '2607', size: '298 KB', mod: '2026-05-19', by: 'T. Reyes',          shared: false },
+
+  // Job 2620 - Stamford Medical
+  { id: 'D-018', name: 'Stamford Medical Office Plans REV-2.dwg',      ext: 'dwg',  cat: 'drawing',   job: '2620', size: '9.4 MB', mod: '2026-04-12', by: 'M. Garcia (Arch)',  shared: true  },
+  { id: 'D-019', name: 'Coastal Medical Partners Contract.pdf',        ext: 'pdf',  cat: 'contract',  job: '2620', size: '928 KB', mod: '2026-03-22', by: 'K. Logan',          shared: true  },
+
+  // Job 2622 - Tarrytown HVAC
+  { id: 'D-020', name: 'HVAC Replacement Scope of Work.docx',          ext: 'docx', cat: 'contract',  job: '2622', size: '184 KB', mod: '2026-04-10', by: 'R. Patel',          shared: true  },
+  { id: 'D-021', name: 'Carrier Rooftop Unit Submittals.pdf',          ext: 'pdf',  cat: 'submittal', job: '2622', size: '4.1 MB', mod: '2026-04-19', by: 'Carrier Dist.',     shared: false },
+
+  // Company-wide
+  { id: 'D-022', name: 'Certificate of Insurance 2026 - GL+Auto.pdf',  ext: 'pdf',  cat: 'coi',       job: 'all',  size: '186 KB', mod: '2026-01-02', by: 'Office',            shared: true  },
+  { id: 'D-023', name: 'Certificate of Insurance 2026 - Workers Comp.pdf', ext:'pdf', cat: 'coi',    job: 'all',  size: '174 KB', mod: '2026-01-02', by: 'Office',            shared: true  },
+  { id: 'D-024', name: 'Subcontractor COI Roster.xlsx',                ext: 'xlsx', cat: 'coi',       job: 'all',  size: '92 KB',  mod: '2026-05-14', by: 'Office',            shared: false },
+];
+
+// Site photos — Unsplash URLs (real construction photography) with picsum fallback via onerror
+const PHOTOS = [
+  { id: 'P-001', job: '2604', label: 'East elevation framing complete', tag: 'progress', date: '2026-05-18', by: 'K. Mitchell',
+    url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=70' },
+  { id: 'P-002', job: '2604', label: 'Level 8 drywall — South wing',    tag: 'progress', date: '2026-05-17', by: 'K. Mitchell',
+    url: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=600&q=70' },
+  { id: 'P-003', job: '2611', label: 'Bronx site — roof deck pour',     tag: 'progress', date: '2026-05-16', by: 'T. Reyes',
+    url: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=70' },
+  { id: 'P-004', job: '2618', label: 'Hudson View — facade prep',       tag: 'before',   date: '2026-05-15', by: 'T. Reyes',
+    url: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=70' },
+  { id: 'P-005', job: '2607', label: 'WMC lobby — millwork delivery',   tag: 'progress', date: '2026-05-15', by: 'T. Reyes',
+    url: 'https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=600&q=70' },
+  { id: 'P-006', job: '2622', label: 'Rooftop unit set — Tarrytown',    tag: 'progress', date: '2026-05-14', by: 'R. Patel',
+    url: 'https://images.unsplash.com/photo-1429497419816-9ca5cfb4571a?w=600&q=70' },
+  { id: 'P-007', job: '2604', label: 'Punch list — corridor finishes',  tag: 'punch',    date: '2026-05-14', by: 'K. Mitchell',
+    url: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=600&q=70' },
+  { id: 'P-008', job: '2611', label: 'Fall protection — perimeter',     tag: 'safety',   date: '2026-05-13', by: 'T. Reyes',
+    url: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=600&q=70' },
+  { id: 'P-009', job: '2616', label: 'Yonkers — water damage discovery', tag: 'issue',   date: '2026-05-13', by: 'R. Patel',
+    url: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&q=70' },
+  { id: 'P-010', job: '2620', label: 'Stamford MOB — MEP rough-in',     tag: 'progress', date: '2026-05-12', by: 'K. Mitchell',
+    url: 'https://images.unsplash.com/photo-1581094271901-8022df4466f9?w=600&q=70' },
+  { id: 'P-011', job: '2614', label: 'Greenwich storefront — final',    tag: 'after',    date: '2026-05-11', by: 'R. Patel',
+    url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=70' },
+  { id: 'P-012', job: '2618', label: 'Brick repointing — north face',   tag: 'progress', date: '2026-05-10', by: 'T. Reyes',
+    url: 'https://images.unsplash.com/photo-1517089596392-fb9a9033e05b?w=600&q=70' },
+  { id: 'P-013', job: '2604', label: 'Midtown — before tenant work',    tag: 'before',   date: '2026-01-15', by: 'K. Mitchell',
+    url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=70' },
+  { id: 'P-014', job: '2628', label: 'Greenburgh — slab pour day 1',    tag: 'progress', date: '2026-05-09', by: 'K. Mitchell',
+    url: 'https://images.unsplash.com/photo-1517581177682-a085bb7ffb15?w=600&q=70' },
+  { id: 'P-015', job: '2616', label: 'Yonkers common area — after',     tag: 'after',    date: '2026-05-08', by: 'R. Patel',
+    url: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=70' },
+  { id: 'P-016', job: '2607', label: 'WMC — temporary partitions up',   tag: 'progress', date: '2026-05-07', by: 'T. Reyes',
+    url: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&q=70' },
+  { id: 'P-017', job: '2611', label: 'Bronx — hardhat zone signage',    tag: 'safety',   date: '2026-05-06', by: 'T. Reyes',
+    url: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=70' },
+  { id: 'P-018', job: '2622', label: 'Tarrytown — old unit removal',    tag: 'before',   date: '2026-04-30', by: 'R. Patel',
+    url: 'https://images.unsplash.com/photo-1448630360428-65456885c650?w=600&q=70' },
+  { id: 'P-019', job: '2630', label: 'New Rochelle — final walkthrough',tag: 'after',    date: '2026-05-05', by: 'T. Reyes',
+    url: 'https://images.unsplash.com/photo-1574359411659-15573a27fd0c?w=600&q=70' },
+  { id: 'P-020', job: '2604', label: 'Elevator lobby — punch items',    tag: 'punch',    date: '2026-05-04', by: 'K. Mitchell',
+    url: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=70' },
+  { id: 'P-021', job: '2618', label: 'Cornice damage — discovered',     tag: 'issue',    date: '2026-05-03', by: 'T. Reyes',
+    url: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600&q=70' },
+  { id: 'P-022', job: '2620', label: 'Stamford — exam room rough-in',   tag: 'progress', date: '2026-05-02', by: 'K. Mitchell',
+    url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=70' },
+  { id: 'P-023', job: '2628', label: 'Warehouse — steel erection',      tag: 'progress', date: '2026-05-01', by: 'K. Mitchell',
+    url: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=70' },
+  { id: 'P-024', job: '2614', label: 'Greenwich — signage install',     tag: 'after',    date: '2026-04-29', by: 'R. Patel',
+    url: 'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=600&q=70' },
+];
+
+const docCatLabels = {
+  drawing:   'Drawing',
+  permit:    'Permit',
+  contract:  'Contract',
+  change:    'Change Order',
+  submittal: 'Submittal',
+  coi:       'COI / Insurance',
+  log:       'Daily Log',
+  photo:     'Photo',
+};
+const photoTagLabels = {
+  progress: 'Progress',
+  punch:    'Punch List',
+  safety:   'Safety',
+  before:   'Before',
+  after:    'After / Final',
+  issue:    'Issue',
+};
+
+/* ============================== HELPERS ============================== */
+
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const fmt = n => '$' + n.toLocaleString('en-US');
+const statusLabels = {
+  active:   { label: 'In Progress',     css: 'active' },
+  permit:   { label: 'Awaiting Permit', css: 'permit' },
+  hold:     { label: 'On Hold',         css: 'hold' },
+  complete: { label: 'Closing Out',     css: 'complete' },
+};
+const permitLabels = {
+  filed:    { label: 'Filed',    css: 'permit' },
+  issued:   { label: 'Issued',   css: 'active' },
+  expiring: { label: 'Expiring', css: 'hold'   },
+  denied:   { label: 'Denied',   css: 'issue'  },
+};
+const tierLabels = {
+  current: '1 · Current',
+  '30':    '2 · 31–60',
+  '60':    '3 · 61–90',
+  '90':    '4 · 91–120',
+  over:    '5 · 120+',
+};
+const tierCss = {
+  current: 't-current',
+  '30':    't-30',
+  '60':    't-60',
+  '90':    't-90',
+  over:    't-over',
+};
+const tierColor = {
+  current: 'var(--tier-current)',
+  '30':    'var(--tier-30)',
+  '60':    'var(--tier-60)',
+  '90':    'var(--tier-90)',
+  over:    'var(--tier-over)',
+};
+
+function pill(s, map) {
+  const m = map[s];
+  return `<span class="pill ${m.css}"><span class="pdot"></span>${m.label}</span>`;
+}
+function progressHtml(pct, warn=false) {
+  return `<div class="progress-wrap"><div class="progress${warn?' warn':''}"><div class="fill" style="width:${pct}%"></div></div><span class="pct">${pct}%</span></div>`;
+}
+
+/* ============================== RENDER ============================== */
+
+// Dashboard — recent jobs
+function renderDashJobs() {
+  const tbody = $('#dash-jobs tbody');
+  const top = JOBS.filter(j => j.status === 'active').slice(0, 5);
+  tbody.innerHTML = top.map(j => `
+    <tr data-job="${j.id}">
+      <td class="mono" style="color:var(--text-mute);">#${j.id}</td>
+      <td><b>${j.name}</b><br><span style="font-size:11.5px;color:var(--text-mute);">${j.site}</span></td>
+      <td>${j.pm}</td>
+      <td>${pill(j.status, statusLabels)}</td>
+      <td>${progressHtml(j.pct)}</td>
+      <td class="num"><b>${fmt(j.contract)}</b></td>
+    </tr>
+  `).join('');
+}
+
+// Dashboard — permits needing attention
+function renderDashPermits() {
+  const tbody = $('#dash-permits tbody');
+  const flagged = PERMITS.filter(p => p.status === 'expiring' || p.status === 'denied').slice(0, 5);
+  tbody.innerHTML = flagged.map(p => `
+    <tr>
+      <td class="mono" style="color:var(--text-mute);">${p.num}</td>
+      <td><b>${p.type}</b><br><span style="font-size:11.5px;color:var(--text-mute);">${p.auth}</span></td>
+      <td><span style="font-size:12.5px;">${p.jobName}</span><br><span style="font-size:11px;color:var(--text-mute);">Job #${p.job}</span></td>
+      <td>${pill(p.status, permitLabels)}</td>
+      <td class="right" style="font-size:12.5px;${p.status==='expiring'?'color:var(--tier-over);font-weight:600;':''}">${p.expires || '—'}</td>
+    </tr>
+  `).join('');
+}
+
+// Dashboard — AR aging bars
+function renderAgingBars() {
+  const tiers = ['current','30','60','90','over'];
+  const labels = ['Current','31–60','61–90','91–120','120+'];
+  const total = Object.values(AGING_TOTALS).reduce((s,v) => s+v, 0);
+  const wrap = $('#aging-bars');
+  wrap.innerHTML = tiers.map((t, i) => {
+    const v = AGING_TOTALS[t];
+    const pct = (v / total * 100).toFixed(0);
+    return `
+      <div class="agebar-row">
+        <div class="lbl">${labels[i]}</div>
+        <div class="agebar-track">
+          <div class="agebar-fill" style="width:${pct}%; background:${tierColor[t]};"></div>
+        </div>
+        <div class="amt">${fmt(v)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Jobs view
+let currentJobFilter = 'all';
+function renderJobs() {
+  const tbody = $('#jobs-table tbody');
+  const list = JOBS.filter(j => currentJobFilter === 'all' || j.status === currentJobFilter);
+  tbody.innerHTML = list.map(j => `
+    <tr data-job="${j.id}">
+      <td class="mono" style="color:var(--text-mute);">#${j.id}</td>
+      <td><b>${j.name}</b><br><span style="font-size:11.5px;color:var(--text-mute);">${j.site}</span></td>
+      <td>${j.customer}</td>
+      <td>${j.pm}</td>
+      <td>${pill(j.status, statusLabels)}</td>
+      <td>${progressHtml(j.pct, j.status==='hold')}</td>
+      <td class="num"><b>${fmt(j.contract)}</b></td>
+      <td class="num" style="${j.ar > 30000 ? 'color:var(--kpc-orange);font-weight:600;' : ''}">${j.ar ? fmt(j.ar) : '—'}</td>
+    </tr>
+  `).join('');
+  const totalContract = list.reduce((s, j) => s + j.contract, 0);
+  $('#jobs-count').textContent = `${list.length} jobs`;
+  $('#jobs-value').textContent = `${fmt(totalContract)} total contract`;
+}
+
+// Permits view
+let currentPermitFilter = 'all';
+function renderPermits() {
+  const tbody = $('#permits-table tbody');
+  const list = PERMITS.filter(p => currentPermitFilter === 'all' || p.status === currentPermitFilter);
+  tbody.innerHTML = list.map(p => `
+    <tr>
+      <td class="mono" style="color:var(--text-mute);">${p.num}</td>
+      <td><b>${p.type}</b></td>
+      <td>${p.auth}</td>
+      <td><span style="font-size:12.5px;">${p.jobName}</span><br><span style="font-size:11px;color:var(--text-mute);">Job #${p.job}</span></td>
+      <td>${pill(p.status, permitLabels)}</td>
+      <td style="font-size:12.5px;color:var(--text-mute);">${p.filed}</td>
+      <td class="right" style="font-size:12.5px;${p.status==='expiring'?'color:var(--tier-over);font-weight:600;':''}">${p.expires || '—'}</td>
+    </tr>
+  `).join('');
+  $('#permits-count').textContent = `${list.length} permits`;
+}
+
+// AR view
+let currentArFilter = 'all';
+function renderAR() {
+  const tbody = $('#ar-table tbody');
+  const list = INVOICES.filter(i => currentArFilter === 'all' || i.tier === currentArFilter);
+  tbody.innerHTML = list.map(i => {
+    const action = i.tier === 'current'
+      ? '<button class="btn btn-secondary" style="padding:5px 10px;font-size:12px;" onclick="event.stopPropagation();notify(\'Statement sent\');">Statement</button>'
+      : (i.tier === '30' || i.tier === '60'
+          ? '<button class="btn btn-warning" style="padding:5px 10px;font-size:12px;" onclick="event.stopPropagation();notify(\'Reminder sent\');">Send Reminder</button>'
+          : '<button class="btn btn-warning" style="padding:5px 10px;font-size:12px;background:var(--tier-over);" onclick="event.stopPropagation();notify(\'Escalated to PM\');">Escalate</button>');
+    return `
+      <tr data-job="${i.jobId}">
+        <td class="mono" style="color:var(--text-mute);">${i.num}</td>
+        <td><b>${i.cust}</b></td>
+        <td style="font-size:12.5px;color:var(--text-mute);">Job #${i.jobId}</td>
+        <td style="font-size:12.5px;color:var(--text-mute);">${daysAgo(i.age)}</td>
+        <td class="mono">${i.age} days</td>
+        <td><span class="tier ${tierCss[i.tier]}">${tierLabels[i.tier]}</span></td>
+        <td class="num"><b>${fmt(i.bal)}</b></td>
+        <td class="right">${action}</td>
+      </tr>
+    `;
+  }).join('');
+  const total = list.reduce((s, i) => s + i.bal, 0);
+  $('#ar-count').textContent = `${list.length} invoice${list.length===1?'':'s'}`;
+  $('#ar-total').textContent = `${fmt(total)} outstanding`;
+}
+
+function daysAgo(d) {
+  const dt = new Date(2026, 4, 19);
+  dt.setDate(dt.getDate() - d);
+  return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function fileRow(d) {
+  const ext = d.ext.toUpperCase();
+  const iconCls = ['pdf','dwg','docx','xlsx','zip'].includes(d.ext) ? d.ext : 'pdf';
+  const jobLabel = d.job === 'all'
+    ? '<span style="color:var(--text-mute);font-size:12px;">Company-wide</span>'
+    : (() => {
+        const j = JOBS.find(x => x.id === d.job);
+        return j ? `<span style="font-size:12.5px;">${j.name.split(' ').slice(0,3).join(' ')}…</span><br><span style="font-size:11px;color:var(--text-mute);">Job #${d.job}</span>` : `Job #${d.job}`;
+      })();
+  const shared = d.shared ? `<span class="shared-chip" title="Shared with client"><svg class="ico" width="11" height="11" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49"/></svg></span>` : '';
+  return `
+    <tr data-doc="${d.id}">
+      <td>
+        <div class="doc-row">
+          <div class="file-icon ${iconCls}">${ext}</div>
+          <div class="file-meta">
+            <span class="fname">${d.name} ${shared}</span>
+            <span class="fsub">${d.size}</span>
+          </div>
+        </div>
+      </td>
+      <td><span class="doc-cat" data-cat="${d.cat}">${docCatLabels[d.cat]}</span></td>
+      <td>${jobLabel}</td>
+      <td style="font-size:12.5px;color:var(--text-mute);">${d.mod}</td>
+      <td style="font-size:12.5px;">${d.by}</td>
+      <td class="num" style="color:var(--text-mute);font-size:12px;">${d.size}</td>
+    </tr>
+  `;
+}
+
+function photoCard(p, opts = {}) {
+  const j = JOBS.find(x => x.id === p.job);
+  return `
+    <div class="photo-card" data-photo="${p.id}" data-job="${p.job}">
+      <div class="ph-fallback">${(j ? j.name.split(' ').slice(0,2).join(' ') : 'Site')}</div>
+      <img src="${p.url}" alt="${p.label}" loading="lazy"
+           onload="this.previousElementSibling.style.display='none'"
+           onerror="this.style.display='none';this.previousElementSibling.style.display='grid';" />
+      <span class="ph-tag">${photoTagLabels[p.tag]}</span>
+      <span class="ph-job">#${p.job}</span>
+      ${opts.hideOverlay ? '' : `
+        <div class="ph-overlay">
+          <div class="ph-label">${p.label}</div>
+          <div class="ph-meta">${p.date} · ${p.by}</div>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+// Dashboard — recent documents
+function renderDashDocs() {
+  const tbody = $('#dash-docs tbody');
+  const recent = [...DOCUMENTS].sort((a,b) => b.mod.localeCompare(a.mod)).slice(0, 5);
+  tbody.innerHTML = recent.map(d => {
+    const ext = d.ext.toUpperCase();
+    const iconCls = ['pdf','dwg','docx','xlsx','zip'].includes(d.ext) ? d.ext : 'pdf';
+    return `
+      <tr data-doc="${d.id}">
+        <td>
+          <div class="doc-row">
+            <div class="file-icon ${iconCls}" style="width:28px;height:28px;font-size:9px;">${ext}</div>
+            <div class="file-meta">
+              <span class="fname" style="max-width:240px;">${d.name}</span>
+              <span class="fsub">${d.by} · ${d.size}</span>
+            </div>
+          </div>
+        </td>
+        <td><span class="doc-cat" data-cat="${d.cat}">${docCatLabels[d.cat]}</span></td>
+        <td style="font-size:12px;color:var(--text-mute);">${d.job === 'all' ? '—' : '#'+d.job}</td>
+        <td class="right" style="font-size:12px;color:var(--text-mute);">${d.mod}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// Dashboard — latest site photos
+function renderDashPhotos() {
+  const wrap = $('#dash-photos');
+  const recent = [...PHOTOS].slice(0, 6);
+  wrap.innerHTML = recent.map(p => photoCard(p)).join('');
+}
+
+// Documents view — files
+let currentDocFilter = 'all';
+function renderDocs() {
+  const tbody = $('#docs-table tbody');
+  const list = DOCUMENTS.filter(d => currentDocFilter === 'all' || d.cat === currentDocFilter);
+  tbody.innerHTML = list.map(fileRow).join('');
+  $('#doc-count').textContent = `${list.length} file${list.length===1?'':'s'}`;
+}
+
+// Documents view — photos
+let currentPhotoFilter = 'all';
+function renderPhotos() {
+  const wrap = $('#photo-grid');
+  const list = PHOTOS.filter(p => currentPhotoFilter === 'all' || p.tag === currentPhotoFilter);
+  wrap.innerHTML = list.map(p => photoCard(p)).join('');
+  $('#photo-count').textContent = `${list.length} photo${list.length===1?'':'s'}`;
+}
+
+/* ============================== INTERACTIONS ============================== */
+
+// Nav switching
+function switchView(view) {
+  $$('.view').forEach(v => v.classList.remove('active'));
+  const target = document.getElementById('view-' + view);
+  if (target) target.classList.add('active');
+  $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view));
+  $('#crumb').textContent = view.charAt(0).toUpperCase() + view.slice(1);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+$$('.nav-item').forEach(n => n.addEventListener('click', () => switchView(n.dataset.view)));
+$$('[data-jump]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); switchView(a.dataset.jump); }));
+
+// Job filter chips
+$$('[data-filter-job]').forEach(c => c.addEventListener('click', () => {
+  $$('[data-filter-job]').forEach(x => x.classList.remove('on'));
+  c.classList.add('on');
+  currentJobFilter = c.dataset.filterJob;
+  renderJobs();
+}));
+
+// Permit filter chips
+$$('[data-filter-permit]').forEach(c => c.addEventListener('click', () => {
+  $$('[data-filter-permit]').forEach(x => x.classList.remove('on'));
+  c.classList.add('on');
+  currentPermitFilter = c.dataset.filterPermit;
+  renderPermits();
+}));
+
+// AR filter chips
+$$('[data-filter-ar]').forEach(c => c.addEventListener('click', () => {
+  $$('[data-filter-ar]').forEach(x => x.classList.remove('on'));
+  c.classList.add('on');
+  currentArFilter = c.dataset.filterAr;
+  renderAR();
+}));
+
+// Document filter chips
+$$('[data-filter-doc]').forEach(c => c.addEventListener('click', () => {
+  $$('[data-filter-doc]').forEach(x => x.classList.remove('on'));
+  c.classList.add('on');
+  currentDocFilter = c.dataset.filterDoc;
+  renderDocs();
+}));
+
+// Photo filter chips
+$$('[data-filter-photo]').forEach(c => c.addEventListener('click', () => {
+  $$('[data-filter-photo]').forEach(x => x.classList.remove('on'));
+  c.classList.add('on');
+  currentPhotoFilter = c.dataset.filterPhoto;
+  renderPhotos();
+}));
+
+// Files / Photos segment toggle
+$$('#doc-seg button').forEach(b => b.addEventListener('click', () => {
+  $$('#doc-seg button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  const mode = b.dataset.mode;
+  $('#doc-files-pane').style.display  = mode === 'files'  ? '' : 'none';
+  $('#doc-photos-pane').style.display = mode === 'photos' ? '' : 'none';
+}));
+
+// "View gallery" on dashboard jumps to Photos mode
+$('#dash-photos-link').addEventListener('click', e => {
+  e.preventDefault();
+  switchView('documents');
+  $$('#doc-seg button').forEach(x => x.classList.toggle('on', x.dataset.mode === 'photos'));
+  $('#doc-files-pane').style.display = 'none';
+  $('#doc-photos-pane').style.display = '';
+});
+
+// Document row click → toast (would download/preview in production)
+document.addEventListener('click', e => {
+  const dr = e.target.closest('tr[data-doc]');
+  if (dr) {
+    const id = dr.dataset.doc;
+    const d = DOCUMENTS.find(x => x.id === id);
+    if (d) notify(`Opening ${d.name} from SharePoint…`);
+  }
+});
+
+// Photo click → lightbox
+document.addEventListener('click', e => {
+  const pc = e.target.closest('.photo-card');
+  if (pc) {
+    const id = pc.dataset.photo;
+    const p = PHOTOS.find(x => x.id === id);
+    if (p) openLightbox(p);
+  }
+});
+
+function openLightbox(p) {
+  $('#lb-img').src = p.url;
+  $('#lb-img').alt = p.label;
+  $('#lb-title').textContent = p.label;
+  $('#lb-meta').textContent = `Job #${p.job} · ${photoTagLabels[p.tag]} · ${p.date} · ${p.by}`;
+  $('#lightbox').classList.add('open');
+}
+$('#lb-close').addEventListener('click', () => $('#lightbox').classList.remove('open'));
+$('#lightbox').addEventListener('click', e => { if (e.target.id === 'lightbox') $('#lightbox').classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#lightbox').classList.remove('open'); });
+
+// Tier cards → drill into AR
+$$('.tier-card').forEach(card => card.addEventListener('click', () => {
+  const k = card.dataset.tierKey;
+  $$('[data-filter-ar]').forEach(x => x.classList.toggle('on', x.dataset.filterAr === k));
+  currentArFilter = k;
+  renderAR();
+  document.querySelector('#ar-table').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}));
+
+// Job row click → open modal
+document.addEventListener('click', e => {
+  const tr = e.target.closest('tr[data-job]');
+  if (tr) openJobModal(tr.dataset.job);
+});
+
+function openJobModal(jobId) {
+  const j = JOBS.find(x => x.id === jobId);
+  if (!j) return;
+  $('#m-title').textContent = `Job #${j.id} · ${j.name}`;
+  $('#m-sub').textContent = `${j.customer} · ${j.site}`;
+  $('#m-contract').textContent = fmt(j.contract);
+  $('#m-billed').textContent = fmt(j.billed);
+  $('#m-ar').textContent = j.ar ? fmt(j.ar) : '—';
+  $('#m-ar').style.color = j.ar > 30000 ? 'var(--kpc-orange)' : 'var(--klg-ink)';
+  $('#m-pct').textContent = j.pct + '%';
+  $('#m-customer').textContent = j.customer;
+  $('#m-pm').textContent = j.pm;
+  $('#m-site').textContent = j.site;
+  $('#m-started').textContent = new Date(j.started).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  // Permits on this job
+  const jobPermits = PERMITS.filter(p => p.job === j.id);
+  $('#m-permits').innerHTML = jobPermits.length
+    ? jobPermits.map(p => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--klg-line);">
+          <div>
+            <b>${p.type}</b> · <span class="mono" style="color:var(--text-mute);font-size:12px;">${p.num}</span>
+            <div style="font-size:11.5px;color:var(--text-mute);">${p.auth} · Filed ${p.filed}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            ${pill(p.status, permitLabels)}
+            ${p.expires ? `<span style="font-size:11.5px;color:var(--text-mute);">exp ${p.expires}</span>` : ''}
+          </div>
+        </div>
+      `).join('')
+    : '<span style="color:var(--text-mute);font-size:12.5px;">No permits filed for this job yet.</span>';
+
+  // Documents on this job
+  const jobDocs = DOCUMENTS.filter(d => d.job === j.id);
+  $('#m-docs').innerHTML = jobDocs.length
+    ? jobDocs.map(d => {
+        const ext = d.ext.toUpperCase();
+        const iconCls = ['pdf','dwg','docx','xlsx','zip'].includes(d.ext) ? d.ext : 'pdf';
+        return `
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--klg-line);">
+            <div class="file-icon ${iconCls}" style="width:30px;height:30px;font-size:9px;">${ext}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:600;font-size:13px;color:var(--klg-ink);">${d.name}</div>
+              <div style="font-size:11.5px;color:var(--text-mute);">${d.by} · ${d.mod} · ${d.size}</div>
+            </div>
+            <span class="doc-cat" data-cat="${d.cat}">${docCatLabels[d.cat]}</span>
+          </div>
+        `;
+      }).join('')
+    : '<span style="color:var(--text-mute);font-size:12.5px;">No documents on this job yet.</span>';
+
+  // Photos on this job
+  const jobPhotos = PHOTOS.filter(p => p.job === j.id);
+  $('#m-photos').innerHTML = jobPhotos.length
+    ? jobPhotos.slice(0, 8).map(p => photoCard(p, { hideOverlay: false })).join('')
+    : '<span style="color:var(--text-mute);font-size:12.5px;">No site photos uploaded for this job yet.</span>';
+
+  // Invoices/timeline
+  const jobInvs = INVOICES.filter(i => i.jobId === j.id);
+  const tl = [
+    { date: 'Today', title: `${j.pct}% complete · ${j.status === 'active' ? 'On schedule' : 'Status: ' + statusLabels[j.status].label}`, meta: `${fmt(j.billed)} billed of ${fmt(j.contract)} contract`, warn: false },
+    ...(jobInvs.length ? [{ date: 'Open invoices', title: `${jobInvs.length} invoice${jobInvs.length===1?'':'s'} totaling ${fmt(jobInvs.reduce((s,i)=>s+i.bal,0))}`, meta: jobInvs.map(i => `${i.num} (${i.age}d)`).join(' · '), warn: jobInvs.some(i => i.tier !== 'current') }] : []),
+    { date: new Date(j.started).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), title: 'Project kicked off', meta: `Assigned to ${j.pm}`, warn: false },
+  ];
+  $('#m-timeline').innerHTML = tl.map(t => `
+    <div class="timeline-item${t.warn ? ' warn' : ''}">
+      <div class="ti-date">${t.date}</div>
+      <div class="ti-title">${t.title}</div>
+      <div class="ti-meta">${t.meta}</div>
+    </div>
+  `).join('');
+
+  $('#modal').classList.add('open');
+}
+
+$('#m-close').addEventListener('click', () => $('#modal').classList.remove('open'));
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') $('#modal').classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#modal').classList.remove('open'); });
+
+// Toast
+let toastTimer;
+function notify(msg) {
+  const t = $('#toast');
+  $('#toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ============================== INIT ============================== */
+renderDashJobs();
+renderDashPermits();
+renderDashDocs();
+renderDashPhotos();
+renderAgingBars();
+renderJobs();
+renderPermits();
+renderDocs();
+renderPhotos();
+renderAR();
+</script>
+
+
+<script id="kpc-protect-js">
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+  document.addEventListener('dragstart', function(e) {
+    var t = e.target && e.target.tagName;
+    if (t === 'IMG' || t === 'svg' || t === 'SVG') e.preventDefault();
+  }, false);
+  document.addEventListener('keydown', function(e) {
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) {
+      e.preventDefault(); return false;
+    }
+  }, false);
+})();
+</script>
+
+<a href="https://kanepc.com" target="_top" id="kpc-demo-badge"
+   style="position:fixed;bottom:14px;right:14px;
+          background:rgba(20,20,20,0.92);color:#fff;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+          text-decoration:none;padding:9px 14px;border-radius:3px;
+          border:1px solid rgba(255,255,255,0.12);
+          box-shadow:0 6px 18px rgba(0,0,0,0.35);
+          z-index:2147483647;line-height:1;
+          -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);">
+  Demo &middot; Built by <span style="color:#E65100">Kane PC</span>
+</a>
+
+</body>
+</html>

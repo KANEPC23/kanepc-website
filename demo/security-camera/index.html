@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kane PC Surveillance Console · Heritage Pawn & Loan — Kane PC Sample Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-0: #0a0a0b;
+    --bg-1: #0f0f12;
+    --bg-2: #16161a;
+    --bg-3: #1c1c22;
+    --border: #2a2a32;
+    --border-bright: #3a3a44;
+    --text-primary: #e8e8ea;
+    --text-secondary: #8a8a92;
+    --text-tertiary: #5a5a64;
+    --kane-green: #00855a;
+    --kane-green-dark: #005030;
+    --kane-orange: #F47321;
+    --green: #00855a;
+    --green-bright: #00b574;
+    --green-dim: #005030;
+    --red: #ff3d5a;
+    --red-dim: #7a1d2c;
+    --amber: #F47321;
+    --amber-dim: #7a3a10;
+    --blue: #00a2ff;
+    --hik: #d92020;
+    --unifi: #006fff;
+    --hanwha: #f89525;
+    --pii: #e833ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg-0);
+    color: var(--text-primary);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-size: 13px;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  /* ===== APP LAYOUT ===== */
+  .app {
+    display: grid;
+    grid-template-rows: 52px 1fr 28px;
+    grid-template-columns: 260px 1fr 280px;
+    grid-template-areas:
+      "topbar topbar topbar"
+      "sidebar main rightbar"
+      "statusbar statusbar statusbar";
+    height: 100vh;
+  }
+
+  /* ===== TOP BAR ===== */
+  .topbar {
+    grid-area: topbar;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 16px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-mark {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--kane-green) 0%, var(--kane-green-dark) 100%);
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 14px;
+    color: #ffffff;
+    box-shadow: 0 0 0 1px var(--kane-orange), 0 0 12px rgba(0, 133, 90, 0.4);
+  }
+  .brand-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  .brand-name .accent { color: var(--kane-orange); }
+  .brand-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    letter-spacing: 1px;
+    margin-top: 1px;
+    text-transform: uppercase;
+  }
+  .topbar-spacer { flex: 1; }
+  .topbar-search {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 3px;
+    width: 320px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-primary);
+    outline: none;
+  }
+  .topbar-search:focus { border-color: var(--green-dim); }
+  .topbar-search::placeholder { color: var(--text-tertiary); }
+  .topbar-btn {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 3px;
+    transition: all 0.15s;
+  }
+  .topbar-btn:hover { background: var(--bg-3); color: var(--text-primary); }
+  .topbar-btn .badge {
+    background: var(--red);
+    color: white;
+    padding: 1px 5px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 600;
+  }
+  .user-pod {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 16px;
+    border-left: 1px solid var(--border);
+    margin-left: 4px;
+  }
+  .user-avatar {
+    width: 28px; height: 28px;
+    background: var(--bg-3);
+    border: 1px solid var(--border-bright);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+  }
+  .user-info { line-height: 1.2; }
+  .user-name { font-size: 12px; font-weight: 500; }
+  .user-role { font-size: 10px; color: var(--text-tertiary); font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.5px; }
+
+  /* ===== LEFT SIDEBAR ===== */
+  .sidebar {
+    grid-area: sidebar;
+    background: var(--bg-1);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sidebar-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .sidebar-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+  .borough-group { border-bottom: 1px solid var(--border); }
+  .borough-header {
+    padding: 10px 16px;
+    background: var(--bg-1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .borough-header:hover { background: var(--bg-2); }
+  .borough-meta { color: var(--text-tertiary); font-size: 10px; }
+
+  .site-list { padding: 4px 0 8px; }
+  .site {
+    padding: 7px 16px 7px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+    border-left: 2px solid transparent;
+    transition: all 0.12s;
+  }
+  .site:hover { background: var(--bg-2); }
+  .site.active {
+    background: var(--bg-2);
+    border-left-color: var(--green);
+    color: var(--text-primary);
+  }
+  .site-name { display: flex; align-items: center; gap: 8px; }
+  .site-status {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 4px var(--green);
+  }
+  .site-status.warn { background: var(--amber); box-shadow: 0 0 4px var(--amber); }
+  .site-status.err { background: var(--red); box-shadow: 0 0 4px var(--red); }
+  .site-status.off { background: var(--text-tertiary); box-shadow: none; }
+  .site-cams {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-tertiary);
+  }
+
+  /* ===== MAIN AREA ===== */
+  .main {
+    grid-area: main;
+    background: var(--bg-0);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .main-header {
+    padding: 14px 20px;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .breadcrumb-path {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.5px;
+  }
+  .breadcrumb-name {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.3px;
+  }
+  .breadcrumb-meta {
+    display: flex;
+    gap: 14px;
+    margin-top: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+  .breadcrumb-meta .ok { color: var(--green); }
+
+  .main-controls { display: flex; gap: 8px; align-items: center; }
+  .ctl-group {
+    display: flex;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .ctl-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    border-right: 1px solid var(--border);
+    transition: all 0.12s;
+  }
+  .ctl-btn:last-child { border-right: none; }
+  .ctl-btn:hover { background: var(--bg-3); color: var(--text-primary); }
+  .ctl-btn.active {
+    background: var(--bg-3);
+    color: var(--green);
+  }
+  .ctl-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  /* ===== CAMERA GRID ===== */
+  .grid-wrap {
+    flex: 1;
+    padding: 14px;
+    overflow: auto;
+  }
+  .cam-grid {
+    display: grid;
+    gap: 10px;
+    height: 100%;
+  }
+  .cam-grid.g2x2 { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); }
+  .cam-grid.g3x3 { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); }
+  .cam-grid.g4x4 { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); }
+
+  .cam {
+    position: relative;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    cursor: pointer;
+    min-height: 0;
+    transition: border-color 0.15s;
+  }
+  .cam:hover { border-color: var(--border-bright); }
+  .cam.pii { border-color: var(--pii); box-shadow: 0 0 0 1px rgba(232, 51, 255, 0.2); }
+  .cam.offline .cam-feed,
+  .cam.offline .cam-overlay { opacity: 0.25; filter: grayscale(1); }
+  .cam.alert {
+    border-color: var(--red);
+    animation: alert-pulse 1.5s infinite;
+  }
+  @keyframes alert-pulse {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(255, 61, 90, 0.3); }
+    50% { box-shadow: 0 0 16px 2px rgba(255, 61, 90, 0.5); }
+  }
+
+  .cam-feed {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .cam-feed canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* HUD overlays */
+  .cam-overlay { position: absolute; inset: 0; pointer-events: none; }
+  .cam-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 8px 10px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .cam-id {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 6px var(--red);
+    animation: live-pulse 1.5s infinite;
+  }
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  .vendor-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    padding: 2px 5px;
+    border-radius: 2px;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .vendor-badge.hik { background: var(--hik); color: white; }
+  .vendor-badge.unifi { background: var(--unifi); color: white; }
+  .vendor-badge.hanwha { background: var(--hanwha); color: #1a0c00; }
+
+  .cam-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 8px 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .cam-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+  .cam-position {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+  .cam-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-align: right;
+    line-height: 1.3;
+  }
+  .cam-fps {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+
+  .cam-pii-tag {
+    position: absolute;
+    top: 8px; right: 50%;
+    transform: translateX(50%);
+    background: var(--pii);
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  .cam-offline-mark {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+  .cam-offline-mark span {
+    background: var(--bg-2);
+    border: 1px solid var(--red-dim);
+    color: var(--red);
+    padding: 4px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    border-radius: 2px;
+  }
+
+  .alert-banner {
+    position: absolute;
+    top: 28px; left: 8px; right: 8px;
+    background: rgba(255, 61, 90, 0.9);
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ===== RIGHT SIDEBAR ===== */
+  .rightbar {
+    grid-area: rightbar;
+    background: var(--bg-1);
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+  }
+  .panel {
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+  }
+  .panel-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .panel-title .pulse {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 4px var(--green);
+    animation: live-pulse 1.5s infinite;
+  }
+
+  .event {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--bg-2);
+    font-size: 12px;
+  }
+  .event:last-child { border-bottom: none; }
+  .event-icon {
+    width: 22px; height: 22px;
+    border-radius: 3px;
+    background: var(--bg-2);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+  .event-icon.alert { background: rgba(255, 61, 90, 0.15); color: var(--red); }
+  .event-icon.motion { background: rgba(0, 162, 255, 0.15); color: var(--blue); }
+  .event-icon.face { background: rgba(232, 51, 255, 0.15); color: var(--pii); }
+  .event-icon.system { background: rgba(255, 184, 0, 0.15); color: var(--amber); }
+  .event-body { flex: 1; min-width: 0; line-height: 1.35; }
+  .event-title { font-size: 12px; color: var(--text-primary); }
+  .event-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.3px;
+    margin-top: 2px;
+  }
+
+  .compliance-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 0;
+    font-size: 12px;
+  }
+  .compliance-row:not(:last-child) { border-bottom: 1px solid var(--bg-2); }
+  .compliance-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .compliance-name { color: var(--text-secondary); font-size: 11px; }
+  .compliance-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-primary);
+  }
+  .compliance-val.ok { color: var(--green); }
+  .compliance-val.warn { color: var(--amber); }
+  .compliance-val.err { color: var(--red); }
+  .progress {
+    height: 3px;
+    background: var(--bg-2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--green);
+    transition: width 0.3s;
+  }
+  .progress-bar.warn { background: var(--amber); }
+  .progress-bar.err { background: var(--red); }
+
+  .vendor-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .vendor-stat {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    padding: 8px;
+    border-radius: 3px;
+    text-align: center;
+  }
+  .vendor-stat .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 1px 4px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .vendor-stat .label.hik { background: var(--hik); color: white; }
+  .vendor-stat .label.unifi { background: var(--unifi); color: white; }
+  .vendor-stat .label.hanwha { background: var(--hanwha); color: #1a0c00; }
+  .vendor-stat .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .vendor-stat .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+
+  /* ===== BOTTOM STATUS BAR ===== */
+  .statusbar {
+    grid-area: statusbar;
+    background: var(--bg-1);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+  }
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+  }
+  .status-dot.warn { background: var(--amber); }
+  .status-dot.err { background: var(--red); }
+  .status-item .num { color: var(--text-primary); }
+  .status-spacer { flex: 1; }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg-1);
+    border: 1px solid var(--border-bright);
+    border-radius: 4px;
+    width: 80vw;
+    max-width: 1100px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .modal-header {
+    padding: 14px 18px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-title { font-size: 15px; font-weight: 500; }
+  .modal-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .modal-close {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    width: 28px; height: 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .modal-close:hover { background: var(--bg-3); color: var(--text-primary); }
+  .modal-body {
+    flex: 1;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 240px;
+  }
+  .modal-cam {
+    position: relative;
+    background: black;
+    overflow: hidden;
+    min-height: 400px;
+  }
+  .modal-cam canvas { width: 100%; height: 100%; display: block; }
+  .modal-info {
+    background: var(--bg-2);
+    border-left: 1px solid var(--border);
+    padding: 16px;
+    overflow-y: auto;
+    font-size: 12px;
+  }
+  .info-row {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .info-val { color: var(--text-primary); }
+  .info-val.mono { font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+
+  /* ===== UTILITY ===== */
+  .filter-pill {
+    padding: 4px 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .filter-pill.active { background: var(--bg-3); color: var(--text-primary); border-color: var(--border-bright); }
+  .filter-pill.hik.active { color: var(--hik); border-color: var(--hik); }
+  .filter-pill.unifi.active { color: var(--unifi); border-color: var(--unifi); }
+  .filter-pill.hanwha.active { color: var(--hanwha); border-color: var(--hanwha); }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg-0); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
+</style>
+
+<style id="kpc-protect">
+  body {
+    -webkit-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text; -moz-user-select: text;
+    -ms-user-select: text; user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img, svg {
+    -webkit-user-drag: none; user-drag: none;
+    -webkit-touch-callout: none;
+  }
+</style>
+
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== TOP BAR ===== -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">K</div>
+      <div>
+        <div class="brand-name">KANE <span class="accent">PC</span> · SURVEILLANCE</div>
+        <div class="brand-sub">Client: Heritage Pawn & Loan · v0.3.1</div>
+      </div>
+    </div>
+
+    <div class="topbar-spacer"></div>
+
+    <input class="topbar-search" placeholder="Search cameras, sites, events…" />
+
+    <button class="topbar-btn" id="alertsBtn">
+      ALERTS
+      <span class="badge">3</span>
+    </button>
+    <button class="topbar-btn" id="liveBtn">
+      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green)"></span>
+      LIVE
+    </button>
+
+    <div class="user-pod">
+      <div class="user-avatar">JG</div>
+      <div class="user-info">
+        <div class="user-name">Jeff Gleeman</div>
+        <div class="user-role">SECURITY · ADMIN</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LEFT SIDEBAR ===== -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Locations</div>
+      <div class="sidebar-count">30 sites</div>
+    </div>
+    <div id="siteTree"></div>
+  </div>
+
+  <!-- ===== MAIN AREA ===== -->
+  <div class="main">
+    <div class="main-header">
+      <div class="breadcrumb">
+        <div>
+          <div class="breadcrumb-path" id="bcPath">BRONX / </div>
+          <div class="breadcrumb-name" id="bcName">Fordham Road</div>
+          <div class="breadcrumb-meta" id="bcMeta">
+            <span class="ok">● 24/24 cameras online</span>
+            <span>Recording: OK</span>
+            <span>UPS: 87 min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-controls">
+        <span class="ctl-label">Filter</span>
+        <div style="display:flex;gap:6px">
+          <div class="filter-pill active" data-filter="all" onclick="setFilter('all')">All</div>
+          <div class="filter-pill hik" data-filter="hik" onclick="setFilter('hik')">Hikvision</div>
+          <div class="filter-pill unifi" data-filter="unifi" onclick="setFilter('unifi')">UniFi</div>
+          <div class="filter-pill hanwha" data-filter="hanwha" onclick="setFilter('hanwha')">Hanwha</div>
+        </div>
+        <span class="ctl-label" style="margin-left:12px">Layout</span>
+        <div class="ctl-group">
+          <button class="ctl-btn" data-layout="g2x2" onclick="setLayout('g2x2')">2×2</button>
+          <button class="ctl-btn active" data-layout="g3x3" onclick="setLayout('g3x3')">3×3</button>
+          <button class="ctl-btn" data-layout="g4x4" onclick="setLayout('g4x4')">4×4</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-wrap">
+      <div class="cam-grid g3x3" id="camGrid"></div>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT SIDEBAR ===== -->
+  <div class="rightbar">
+
+    <div class="panel">
+      <div class="panel-title">
+        <span>Fleet Composition</span>
+      </div>
+      <div class="vendor-stats">
+        <div class="vendor-stat">
+          <div class="label hik">HIK</div>
+          <div class="num">1,218</div>
+          <div class="sub">68%</div>
+        </div>
+        <div class="vendor-stat">
+          <div class="label unifi">UNIFI</div>
+          <div class="num">446</div>
+          <div class="sub">25%</div>
+        </div>
+        <div class="vendor-stat">
+          <div class="label hanwha">HAN</div>
+          <div class="num">120</div>
+          <div class="sub">7%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">
+        <span>Live Events</span>
+        <span class="pulse"></span>
+      </div>
+      <div id="eventStream"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">
+        <span>Compliance Status</span>
+      </div>
+      <div class="compliance-row">
+        <div class="compliance-label">
+          <span class="compliance-name">WISP Documentation</span>
+          <span class="compliance-val warn">IN PROGRESS</span>
+        </div>
+        <div class="progress"><div class="progress-bar warn" style="width:35%"></div></div>
+      </div>
+      <div class="compliance-row">
+        <div class="compliance-label">
+          <span class="compliance-name">Network Segmentation</span>
+          <span class="compliance-val">18/30</span>
+        </div>
+        <div class="progress"><div class="progress-bar" style="width:60%"></div></div>
+      </div>
+      <div class="compliance-row">
+        <div class="compliance-label">
+          <span class="compliance-name">Hikvision Migration</span>
+          <span class="compliance-val">12%</span>
+        </div>
+        <div class="progress"><div class="progress-bar warn" style="width:12%"></div></div>
+      </div>
+      <div class="compliance-row">
+        <div class="compliance-label">
+          <span class="compliance-name">MFA Enforcement</span>
+          <span class="compliance-val ok">100%</span>
+        </div>
+        <div class="progress"><div class="progress-bar" style="width:100%"></div></div>
+      </div>
+      <div class="compliance-row">
+        <div class="compliance-label">
+          <span class="compliance-name">UPS Coverage</span>
+          <span class="compliance-val">24/30</span>
+        </div>
+        <div class="progress"><div class="progress-bar" style="width:80%"></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== STATUS BAR ===== -->
+  <div class="statusbar">
+    <div class="status-item">
+      <span class="status-dot"></span>
+      <span><span class="num" id="totalOnline">1,776</span> / 1,784 ONLINE</span>
+    </div>
+    <div class="status-item">
+      <span class="status-dot"></span>
+      <span>RECORDING: <span class="num">ALL SITES</span></span>
+    </div>
+    <div class="status-item">
+      <span class="status-dot warn"></span>
+      <span>STORAGE: <span class="num">73%</span> AVG</span>
+    </div>
+    <div class="status-item">
+      <span>BANDWIDTH: <span class="num" id="bw">412 Mbps</span></span>
+    </div>
+    <div class="status-spacer"></div>
+    <div class="status-item">
+      <span>API: <span class="num">v0.3.1</span></span>
+    </div>
+    <div class="status-item">
+      <span>UPTIME: <span class="num">14d 06h</span></span>
+    </div>
+    <div class="status-item">
+      <span id="clock"></span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle">Camera Detail</div>
+        <div class="modal-sub" id="modalSub">CAM-001 · HIKVISION DS-2CD2386G2</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-cam">
+        <canvas id="modalCanvas"></canvas>
+      </div>
+      <div class="modal-info" id="modalInfo"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========================================================================
+// KANE PC SURVEILLANCE CONSOLE - Heritage Pawn & Loan Multi-Vendor Demo
+// v0.3.1 - Kane PC / 2026
+// ========================================================================
+
+// ---- SITE DATA ---------------------------------------------------------
+const SITES = [
+  // Manhattan
+  { id: 's01', name: 'Harlem 125th St', borough: 'Manhattan', cams: 58, status: 'ok' },
+  { id: 's02', name: 'East Harlem 116th', borough: 'Manhattan', cams: 52, status: 'ok' },
+  { id: 's03', name: 'Washington Heights', borough: 'Manhattan', cams: 64, status: 'ok' },
+  { id: 's04', name: 'Inwood', borough: 'Manhattan', cams: 48, status: 'ok' },
+  { id: 's05', name: 'Lower East Side', borough: 'Manhattan', cams: 56, status: 'warn' },
+  { id: 's06', name: 'Chinatown', borough: 'Manhattan', cams: 62, status: 'ok' },
+  // Bronx
+  { id: 's07', name: 'Fordham Road', borough: 'Bronx', cams: 78, status: 'ok' },
+  { id: 's08', name: 'Grand Concourse', borough: 'Bronx', cams: 64, status: 'ok' },
+  { id: 's09', name: 'Tremont Ave', borough: 'Bronx', cams: 56, status: 'ok' },
+  { id: 's10', name: 'Westchester Ave', borough: 'Bronx', cams: 52, status: 'ok' },
+  { id: 's11', name: 'The Hub (149th)', borough: 'Bronx', cams: 68, status: 'err' },
+  { id: 's12', name: 'Mott Haven', borough: 'Bronx', cams: 48, status: 'ok' },
+  { id: 's13', name: 'Castle Hill', borough: 'Bronx', cams: 44, status: 'ok' },
+  // Brooklyn
+  { id: 's14', name: 'Flatbush Ave', borough: 'Brooklyn', cams: 72, status: 'ok' },
+  { id: 's15', name: 'Fulton St Mall', borough: 'Brooklyn', cams: 84, status: 'ok' },
+  { id: 's16', name: 'Bay Ridge', borough: 'Brooklyn', cams: 46, status: 'ok' },
+  { id: 's17', name: 'East New York', borough: 'Brooklyn', cams: 58, status: 'warn' },
+  { id: 's18', name: 'Brownsville', borough: 'Brooklyn', cams: 62, status: 'ok' },
+  { id: 's19', name: 'Borough Park', borough: 'Brooklyn', cams: 54, status: 'ok' },
+  { id: 's20', name: 'Bushwick', borough: 'Brooklyn', cams: 48, status: 'ok' },
+  { id: 's21', name: 'Coney Island', borough: 'Brooklyn', cams: 42, status: 'ok' },
+  // Queens
+  { id: 's22', name: 'Jamaica Center', borough: 'Queens', cams: 76, status: 'ok' },
+  { id: 's23', name: 'Flushing', borough: 'Queens', cams: 64, status: 'ok' },
+  { id: 's24', name: 'Jackson Heights', borough: 'Queens', cams: 58, status: 'ok' },
+  { id: 's25', name: 'Astoria', borough: 'Queens', cams: 48, status: 'ok' },
+  { id: 's26', name: 'Far Rockaway', borough: 'Queens', cams: 42, status: 'ok' },
+  { id: 's27', name: 'Ridgewood', borough: 'Queens', cams: 44, status: 'ok' },
+  // Other
+  { id: 's28', name: 'Port Richmond', borough: 'Staten Island', cams: 38, status: 'ok' },
+  { id: 's29', name: 'Yonkers Central', borough: 'Westchester', cams: 52, status: 'ok' },
+  { id: 's30', name: 'New Rochelle', borough: 'Westchester', cams: 46, status: 'ok' }
+];
+
+// ---- CAMERA TEMPLATES (per site) ---------------------------------------
+const CAMERA_TEMPLATES = [
+  { id: 1, name: 'Main Entry', position: 'EXT-ENTRY-01', vendor: 'unifi', model: 'UniFi G5 Pro', pii: false },
+  { id: 2, name: 'Sales Floor Front', position: 'INT-FLOOR-01', vendor: 'unifi', model: 'UniFi G5 Pro', pii: false },
+  { id: 3, name: 'Pawn Intake Counter', position: 'INT-COUNTER-01', vendor: 'hanwha', model: 'XND-9082RV 4K', pii: true },
+  { id: 4, name: 'Jewelry Case A', position: 'INT-CASE-01', vendor: 'hanwha', model: 'XNV-8081Z', pii: false },
+  { id: 5, name: 'Jewelry Case B', position: 'INT-CASE-02', vendor: 'hikvision', model: 'DS-2CD2386G2-I', pii: false },
+  { id: 6, name: 'ID Scanner Station', position: 'INT-PII-01', vendor: 'hanwha', model: 'XND-8081RV', pii: true },
+  { id: 7, name: 'Safe Interior', position: 'VLT-INT-01', vendor: 'hanwha', model: 'XNV-9082R 4K', pii: false },
+  { id: 8, name: 'Vault Approach', position: 'VLT-APP-01', vendor: 'hikvision', model: 'DS-2CD2H43G2-IZS', pii: false },
+  { id: 9, name: 'Back Office', position: 'INT-OFC-01', vendor: 'hikvision', model: 'DS-2CD2143G2-I', pii: false },
+  { id: 10, name: 'Side Exit', position: 'EXT-EXIT-01', vendor: 'unifi', model: 'UniFi G5 Bullet', pii: false },
+  { id: 11, name: 'Storefront PTZ', position: 'EXT-PTZ-01', vendor: 'hikvision', model: 'DS-2DE7232IW-AE', pii: false },
+  { id: 12, name: 'Parking Lot', position: 'EXT-LOT-01', vendor: 'unifi', model: 'UniFi G5 Bullet', pii: false },
+  { id: 13, name: 'Bravo Workstation', position: 'INT-PII-02', vendor: 'hanwha', model: 'XNV-8081Z', pii: true },
+  { id: 14, name: 'Loading Bay', position: 'EXT-BAY-01', vendor: 'hikvision', model: 'DS-2CD2T43G2-I', pii: false },
+  { id: 15, name: 'Repair Workshop', position: 'INT-WSP-01', vendor: 'unifi', model: 'UniFi G5 Pro', pii: false },
+  { id: 16, name: 'Rear Camera', position: 'EXT-REAR-01', vendor: 'hikvision', model: 'DS-2CD2T43G2-I', pii: false }
+];
+
+// ---- STATE -------------------------------------------------------------
+let state = {
+  currentSite: 's07', // Fordham Road
+  layout: 'g3x3',
+  filter: 'all',
+  cameras: [],
+  alertCamId: 5  // Jewelry Case B has an alert
+};
+
+// ---- SIDE EFFECTS / DOM REFS ------------------------------------------
+const camGrid = document.getElementById('camGrid');
+const siteTree = document.getElementById('siteTree');
+const bcPath = document.getElementById('bcPath');
+const bcName = document.getElementById('bcName');
+const bcMeta = document.getElementById('bcMeta');
+const eventStream = document.getElementById('eventStream');
+const clockEl = document.getElementById('clock');
+
+// ---- INIT -------------------------------------------------------------
+function init() {
+  renderSiteTree();
+  loadSite(state.currentSite);
+  renderEvents();
+  startClock();
+  setInterval(updateBandwidth, 2200);
+  setInterval(addRandomEvent, 7000);
+}
+
+// ---- SITE TREE --------------------------------------------------------
+function renderSiteTree() {
+  const boroughs = ['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island', 'Westchester'];
+  let html = '';
+  for (const b of boroughs) {
+    const sitesIn = SITES.filter(s => s.borough === b);
+    if (!sitesIn.length) continue;
+    const totalCams = sitesIn.reduce((a, s) => a + s.cams, 0);
+    html += `<div class="borough-group">
+      <div class="borough-header">
+        <span>${b}</span>
+        <span class="borough-meta">${sitesIn.length} sites · ${totalCams} cams</span>
+      </div>
+      <div class="site-list">
+        ${sitesIn.map(s => `
+          <div class="site ${state.currentSite === s.id ? 'active' : ''}" data-id="${s.id}" onclick="loadSite('${s.id}')">
+            <div class="site-name">
+              <span class="site-status ${s.status === 'ok' ? '' : s.status === 'warn' ? 'warn' : 'err'}"></span>
+              <span>${s.name}</span>
+            </div>
+            <span class="site-cams">${s.cams}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+  siteTree.innerHTML = html;
+}
+
+// ---- LOAD SITE --------------------------------------------------------
+function loadSite(siteId) {
+  state.currentSite = siteId;
+  const site = SITES.find(s => s.id === siteId);
+  if (!site) return;
+
+  // Generate camera list for this site - deterministic based on site id
+  const seed = parseInt(siteId.slice(1));
+  state.cameras = CAMERA_TEMPLATES.map((t, i) => ({
+    ...t,
+    fullId: `CAM-${siteId.toUpperCase()}-${String(i+1).padStart(3, '0')}`,
+    site: site.name,
+    siteId: site.id,
+    offline: (seed * 7 + i) % 31 === 0,  // ~3% offline rate
+    fps: 15 + ((seed + i) % 16),
+    bitrate: 2 + ((seed + i * 3) % 6),
+  }));
+
+  // Update breadcrumb
+  bcPath.textContent = site.borough.toUpperCase() + ' / ';
+  bcName.textContent = site.name;
+  const onlineCount = state.cameras.filter(c => !c.offline).length;
+  const totalCount = state.cameras.length;
+  const allOk = onlineCount === totalCount;
+  bcMeta.innerHTML = `
+    <span class="${allOk ? 'ok' : ''}" style="${!allOk ? 'color:var(--amber)' : ''}">● ${onlineCount}/${totalCount} cameras online</span>
+    <span>Recording: OK</span>
+    <span>UPS: ${45 + (seed * 13) % 90} min runtime</span>
+    <span>Site: ${site.id.toUpperCase()}</span>
+  `;
+
+  // Refresh active state in sidebar
+  document.querySelectorAll('.site').forEach(el => {
+    el.classList.toggle('active', el.dataset.id === siteId);
+  });
+
+  renderCameras();
+}
+
+// ---- RENDER CAMERA GRID -----------------------------------------------
+function renderCameras() {
+  camGrid.className = 'cam-grid ' + state.layout;
+  const maxCount = state.layout === 'g2x2' ? 4 : state.layout === 'g3x3' ? 9 : 16;
+
+  // Filter
+  let cams = state.cameras;
+  if (state.filter !== 'all') {
+    cams = cams.filter(c => c.vendor === state.filter);
+  }
+  cams = cams.slice(0, maxCount);
+
+  camGrid.innerHTML = cams.map(c => {
+    const hasAlert = c.id === state.alertCamId && state.currentSite === 's07';
+    const vendorClass = c.vendor === 'hikvision' ? 'hik' : c.vendor;
+    const vendorLabel = c.vendor === 'hikvision' ? 'HIK' : c.vendor === 'unifi' ? 'UNIFI' : 'HANWHA';
+    return `
+      <div class="cam ${c.pii ? 'pii' : ''} ${c.offline ? 'offline' : ''} ${hasAlert ? 'alert' : ''}" data-camid="${c.fullId}" onclick="openCamera('${c.fullId}')">
+        <div class="cam-feed"><canvas data-feed="${c.fullId}" data-vendor="${c.vendor}"></canvas></div>
+        ${c.pii ? '<div class="cam-pii-tag">PII ZONE</div>' : ''}
+        ${hasAlert ? '<div class="alert-banner">⚠ MOTION + FACE DETECTED · 14s</div>' : ''}
+        <div class="cam-overlay">
+          <div class="cam-top">
+            <div class="cam-id">
+              <span class="live-dot"></span>
+              <span>${c.fullId}</span>
+            </div>
+            <span class="vendor-badge ${vendorClass}">${vendorLabel}</span>
+          </div>
+          <div class="cam-bottom">
+            <div>
+              <div class="cam-name">${c.name}</div>
+              <div class="cam-position">${c.position}</div>
+            </div>
+            <div>
+              <div class="cam-time" id="t-${c.fullId}">00:00:00</div>
+              <div class="cam-fps">${c.fps}fps · ${c.bitrate}Mbps</div>
+            </div>
+          </div>
+        </div>
+        ${c.offline ? '<div class="cam-offline-mark"><span>● OFFLINE</span></div>' : ''}
+      </div>
+    `;
+  }).join('');
+
+  // Start canvas animations
+  document.querySelectorAll('canvas[data-feed]').forEach(canvas => {
+    if (!canvas._started) {
+      canvas._started = true;
+      startFeed(canvas, canvas.dataset.vendor);
+    }
+  });
+}
+
+// ---- SIMULATED VIDEO FEEDS --------------------------------------------
+// Each feed renders a unique "scene" using canvas, varied by vendor
+// to suggest different camera positions / image characteristics
+
+const VENDOR_PALETTES = {
+  hikvision: { base: '#1a1f1a', accent: '#2a3a30', tint: '#88ddaa' },
+  unifi: { base: '#0e1620', accent: '#1a2a3a', tint: '#7ab8e8' },
+  hanwha: { base: '#1a1410', accent: '#2a1f15', tint: '#e8b878' }
+};
+
+function startFeed(canvas, vendor) {
+  const ctx = canvas.getContext('2d');
+  const palette = VENDOR_PALETTES[vendor] || VENDOR_PALETTES.hikvision;
+  let frame = 0;
+  const seed = Math.random() * 1000;
+
+  function resize() {
+    const r = canvas.getBoundingClientRect();
+    canvas.width = r.width * 2;
+    canvas.height = r.height * 2;
+  }
+  resize();
+  const ro = new ResizeObserver(resize);
+  ro.observe(canvas);
+
+  // pre-compute static elements per camera (positions of "things")
+  const W = () => canvas.width;
+  const H = () => canvas.height;
+  const elements = [];
+  for (let i = 0; i < 5; i++) {
+    elements.push({
+      x: ((seed * (i+1)) % 100) / 100,
+      y: 0.3 + ((seed * (i+2) * 1.3) % 60) / 100,
+      w: 0.05 + ((seed * (i+1) * 0.7) % 8) / 100,
+      h: 0.15 + ((seed * (i+1) * 0.5) % 15) / 100,
+      drift: ((seed * i) % 20 - 10) / 1000
+    });
+  }
+
+  function draw() {
+    if (!canvas.isConnected) { ro.disconnect(); return; }
+    const w = W(), h = H();
+    frame++;
+
+    // base gradient
+    const g = ctx.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, palette.base);
+    g.addColorStop(0.7, palette.accent);
+    g.addColorStop(1, palette.base);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+
+    // floor line
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.72);
+    ctx.lineTo(w, h * 0.72);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.78);
+    ctx.lineTo(w, h * 0.78);
+    ctx.stroke();
+
+    // static elements (shelving, displays, etc)
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    elements.forEach(e => {
+      ctx.fillRect(e.x * w, e.y * h, e.w * w, e.h * h);
+    });
+
+    // moving silhouette - simulates a person walking
+    const t = frame * 0.005 + seed;
+    const personX = (Math.sin(t) * 0.5 + 0.5) * w;
+    const personY = h * 0.55 + Math.sin(t * 3) * h * 0.01;
+    ctx.fillStyle = `rgba(255,255,255,0.12)`;
+    // body
+    ctx.beginPath();
+    ctx.ellipse(personX, personY + h * 0.08, w * 0.018, h * 0.06, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // head
+    ctx.beginPath();
+    ctx.ellipse(personX, personY, w * 0.012, h * 0.025, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // second person (sometimes)
+    if (Math.sin(t * 0.7 + 1) > 0.3) {
+      const px2 = ((Math.cos(t * 0.8) * 0.5 + 0.5)) * w;
+      const py2 = h * 0.6;
+      ctx.fillStyle = `rgba(255,255,255,0.09)`;
+      ctx.beginPath();
+      ctx.ellipse(px2, py2 + h * 0.07, w * 0.015, h * 0.055, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(px2, py2, w * 0.011, h * 0.022, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // sensor noise / grain
+    const grain = ctx.createImageData(Math.min(w, 200), Math.min(h, 200));
+    const data = grain.data;
+    for (let i = 0; i < data.length; i += 4) {
+      const v = Math.random() * 18;
+      data[i] = v; data[i+1] = v; data[i+2] = v;
+      data[i+3] = 30;
+    }
+    // tile the grain for performance
+    ctx.putImageData(grain, 0, 0);
+    if (w > 200) ctx.putImageData(grain, 200, 0);
+    if (h > 200) ctx.putImageData(grain, 0, 200);
+    if (w > 200 && h > 200) ctx.putImageData(grain, 200, 200);
+
+    // vignette
+    const vg = ctx.createRadialGradient(w/2, h/2, w*0.3, w/2, h/2, w*0.7);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,0.5)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, w, h);
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ---- LAYOUT / FILTER --------------------------------------------------
+function setLayout(layout) {
+  state.layout = layout;
+  document.querySelectorAll('[data-layout]').forEach(b => {
+    b.classList.toggle('active', b.dataset.layout === layout);
+  });
+  renderCameras();
+}
+
+function setFilter(filter) {
+  state.filter = filter;
+  document.querySelectorAll('[data-filter]').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === filter);
+  });
+  renderCameras();
+}
+
+// ---- MODAL ------------------------------------------------------------
+function openCamera(camId) {
+  const cam = state.cameras.find(c => c.fullId === camId);
+  if (!cam) return;
+
+  document.getElementById('modalTitle').textContent = cam.name + ' · ' + cam.site;
+  const vendorLabel = cam.vendor === 'hikvision' ? 'HIKVISION' : cam.vendor.toUpperCase();
+  document.getElementById('modalSub').textContent = `${cam.fullId} · ${vendorLabel} ${cam.model}`;
+
+  document.getElementById('modalInfo').innerHTML = `
+    <div class="info-row">
+      <div class="info-label">Camera ID</div>
+      <div class="info-val mono">${cam.fullId}</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Vendor / Model</div>
+      <div class="info-val">${vendorLabel}<br><span class="mono" style="color:var(--text-secondary);font-size:11px">${cam.model}</span></div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Position</div>
+      <div class="info-val mono">${cam.position}</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Stream</div>
+      <div class="info-val mono">${cam.fps}fps · ${cam.bitrate}Mbps · H.265</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Recording</div>
+      <div class="info-val" style="color:var(--green)">● ACTIVE · 30d retention</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">PII Classification</div>
+      <div class="info-val" style="color:${cam.pii ? 'var(--pii)' : 'var(--text-secondary)'}">${cam.pii ? '⚠ PII CAPTURE ZONE' : 'Operational'}</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Site</div>
+      <div class="info-val">${cam.site}</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Last Maintenance</div>
+      <div class="info-val mono">2026-03-14</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">API Source</div>
+      <div class="info-val mono" style="font-size:10px">${cam.vendor === 'hikvision' ? 'ISAPI v2.7' : cam.vendor === 'unifi' ? 'UniFi API v0.1' : 'SUNAPI 2.0'}</div>
+    </div>
+  `;
+
+  document.getElementById('modal').classList.add('open');
+  const c = document.getElementById('modalCanvas');
+  c._started = false;
+  startFeed(c, cam.vendor);
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+// ---- EVENT STREAM -----------------------------------------------------
+const EVENT_TEMPLATES = [
+  { type: 'alert', icon: '!', text: 'Motion + face match · Fordham Rd / Jewelry Case B', meta: 'CAM-S07-005 · 14s ago' },
+  { type: 'motion', icon: 'M', text: 'After-hours motion · Brownsville / Loading Bay', meta: 'CAM-S18-014 · 2m ago' },
+  { type: 'face', icon: 'F', text: 'Watchlist match (post-incident) · Fulton St', meta: 'CAM-S15-006 · 4m ago' },
+  { type: 'system', icon: 'S', text: 'NVR storage 85% · The Hub', meta: 'NVR-S11-01 · 8m ago' },
+  { type: 'motion', icon: 'M', text: 'Door held open · Flushing / Side Exit', meta: 'CAM-S23-010 · 12m ago' },
+  { type: 'system', icon: 'S', text: 'Hikvision firmware audit due · 4 sites', meta: 'SYSTEM · 18m ago' },
+  { type: 'face', icon: 'F', text: 'Repeat visitor detected · Jamaica Center', meta: 'CAM-S22-003 · 23m ago' },
+];
+
+function renderEvents() {
+  eventStream.innerHTML = EVENT_TEMPLATES.map(e => `
+    <div class="event">
+      <div class="event-icon ${e.type}">${e.icon}</div>
+      <div class="event-body">
+        <div class="event-title">${e.text}</div>
+        <div class="event-meta">${e.meta}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addRandomEvent() {
+  const templates = [
+    { type: 'motion', icon: 'M', text: 'Motion detected · perimeter camera' },
+    { type: 'face', icon: 'F', text: 'Face captured at intake counter' },
+    { type: 'system', icon: 'S', text: 'Bandwidth normal · all sites' }
+  ];
+  const t = templates[Math.floor(Math.random() * templates.length)];
+  const site = SITES[Math.floor(Math.random() * SITES.length)];
+  EVENT_TEMPLATES.unshift({
+    ...t,
+    text: t.text + ' · ' + site.name,
+    meta: `CAM-${site.id.toUpperCase()}-${String(Math.floor(Math.random() * 16) + 1).padStart(3, '0')} · just now`
+  });
+  if (EVENT_TEMPLATES.length > 7) EVENT_TEMPLATES.pop();
+  renderEvents();
+}
+
+// ---- CLOCK / BANDWIDTH ------------------------------------------------
+function startClock() {
+  const tick = () => {
+    const d = new Date();
+    const t = d.toTimeString().slice(0, 8);
+    clockEl.textContent = t + ' EST';
+    document.querySelectorAll('[id^="t-"]').forEach(el => {
+      el.textContent = t;
+    });
+  };
+  tick();
+  setInterval(tick, 1000);
+}
+
+function updateBandwidth() {
+  const bw = 380 + Math.floor(Math.random() * 80);
+  document.getElementById('bw').textContent = bw + ' Mbps';
+  const online = 1770 + Math.floor(Math.random() * 10);
+  document.getElementById('totalOnline').textContent = online.toLocaleString();
+}
+
+// ---- KEYBOARD ---------------------------------------------------------
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Init
+init();
+</script>
+
+<script id="kpc-protect-js">
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+  document.addEventListener('dragstart', function(e) {
+    var t = e.target && e.target.tagName;
+    if (t === 'IMG' || t === 'svg' || t === 'SVG') e.preventDefault();
+  }, false);
+  document.addEventListener('keydown', function(e) {
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) {
+      e.preventDefault(); return false;
+    }
+  }, false);
+})();
+</script>
+
+<a href="https://kanepc.com" target="_top" id="kpc-demo-badge"
+   style="position:fixed;bottom:14px;right:14px;
+          background:rgba(20,20,20,0.92);color:#fff;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+          text-decoration:none;padding:9px 14px;border-radius:3px;
+          border:1px solid rgba(255,255,255,0.12);
+          box-shadow:0 6px 18px rgba(0,0,0,0.35);
+          z-index:2147483647;line-height:1;
+          -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);">
+  Demo &middot; Built by <span style="color:#E65100">Kane PC</span>
+</a>
+
+</body>
+</html>

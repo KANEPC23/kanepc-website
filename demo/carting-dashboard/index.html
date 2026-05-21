@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="googlebot" content="noindex,nofollow,noarchive">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metro Waste Services — Operations Dashboard — Kane PC Sample Build</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --orange:#E8701A;
+    --orange-dark:#B8540E;
+    --orange-light:#FFF0E6;
+    --yellow:#F5B800;
+    --dark:#1A1A1A;
+    --dark2:#242424;
+    --dark3:#2E2E2E;
+    --mid:#444;
+    --border:#3A3A3A;
+    --text:#E8E8E8;
+    --muted:#999;
+    --green:#2ECC71;
+    --red:#E74C3C;
+    --blue:#3498DB;
+    --card-bg:#222;
+  }
+  body{background:#111;color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh}
+
+  /* HEADER */
+  header{background:var(--dark2);border-bottom:3px solid var(--orange);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo-icon{width:40px;height:40px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;color:white;clip-path:polygon(10% 0%,100% 0%,90% 100%,0% 100%)}
+  .logo-text{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:white;line-height:1;letter-spacing:0.5px}
+  .logo-sub{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:1px;text-transform:uppercase}
+  .header-right{display:flex;align-items:center;gap:16px}
+  .live-badge{background:rgba(46,204,113,0.15);border:1px solid var(--green);color:var(--green);font-size:11px;font-weight:600;padding:4px 10px;border-radius:3px;letter-spacing:1px;display:flex;align-items:center;gap:6px}
+  .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  .header-time{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:600;color:var(--muted)}
+  .powered-by{font-size:11px;color:#555;border-left:1px solid #333;padding-left:16px;line-height:1.4}
+  .powered-by span{color:var(--orange);font-weight:600}
+
+  /* LAYOUT */
+  .main{padding:20px 24px;max-width:1400px;margin:0 auto}
+
+  /* KPI CARDS */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .kpi-card{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:16px 18px;position:relative;overflow:hidden}
+  .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+  .kpi-card.orange::before{background:var(--orange)}
+  .kpi-card.green::before{background:var(--green)}
+  .kpi-card.blue::before{background:var(--blue)}
+  .kpi-card.yellow::before{background:var(--yellow)}
+  .kpi-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+  .kpi-value{font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;line-height:1;color:white}
+  .kpi-value.currency::before{content:'$';font-size:24px;vertical-align:top;margin-top:6px;display:inline-block;color:var(--muted)}
+  .kpi-delta{font-size:12px;color:var(--green);margin-top:6px;display:flex;align-items:center;gap:4px}
+  .kpi-sub{font-size:12px;color:var(--muted);margin-top:6px}
+  .kpi-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:48px;opacity:0.06;color:white}
+
+  /* SECTION HEADERS */
+  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .section-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:white;letter-spacing:0.5px;display:flex;align-items:center;gap:10px}
+  .section-title::before{content:'';width:4px;height:18px;background:var(--orange);border-radius:2px;display:block}
+  .section-badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:3px;letter-spacing:0.5px}
+  .badge-active{background:rgba(232,112,26,0.2);color:var(--orange);border:1px solid rgba(232,112,26,0.3)}
+  .filter-tabs{display:flex;gap:4px}
+  .filter-tab{padding:5px 14px;font-size:12px;font-weight:600;border-radius:3px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all 0.15s;letter-spacing:0.5px}
+  .filter-tab.active{background:var(--orange);color:white;border-color:var(--orange)}
+
+  /* JOBS TABLE */
+  .jobs-section{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:20px}
+  table{width:100%;border-collapse:collapse}
+  thead tr{background:#1A1A1A;border-bottom:1px solid var(--border)}
+  th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+  tbody tr{border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.1s;cursor:pointer}
+  tbody tr:hover{background:rgba(255,255,255,0.03)}
+  tbody tr:last-child{border-bottom:none}
+  td{padding:12px 14px;font-size:13px;color:var(--text);vertical-align:middle}
+  .job-id{font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--orange);font-size:14px}
+  .job-addr{font-weight:500;color:white;font-size:13px}
+  .job-city{font-size:11px;color:var(--muted);margin-top:1px}
+  .size-badge{background:#2A2A2A;border:1px solid var(--border);color:var(--yellow);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;padding:2px 8px;border-radius:3px;white-space:nowrap}
+
+  /* STATUS BADGES */
+  .status{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;letter-spacing:0.5px;text-transform:uppercase}
+  .status::before{content:'';width:5px;height:5px;border-radius:50%}
+  .s-active{background:rgba(46,204,113,0.12);color:var(--green);border:1px solid rgba(46,204,113,0.2)}
+  .s-active::before{background:var(--green)}
+  .s-pickup{background:rgba(245,184,0,0.12);color:var(--yellow);border:1px solid rgba(245,184,0,0.2)}
+  .s-pickup::before{background:var(--yellow)}
+  .s-transit{background:rgba(52,152,219,0.12);color:var(--blue);border:1px solid rgba(52,152,219,0.2)}
+  .s-transit::before{background:var(--blue)}
+  .s-avail{background:rgba(153,153,153,0.1);color:var(--muted);border:1px solid rgba(153,153,153,0.15)}
+  .s-avail::before{background:var(--muted)}
+
+  /* BOTTOM GRID */
+  .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .panel{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+  .panel-header{background:#1A1A1A;border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+  .panel-title{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:white;letter-spacing:0.5px;display:flex;align-items:center;gap:8px}
+
+  /* DRIVER BOARD */
+  .driver-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04)}
+  .driver-row:last-child{border-bottom:none}
+  .driver-avatar{width:34px;height:34px;border-radius:50%;background:var(--dark3);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:var(--orange);border:1px solid var(--border);flex-shrink:0}
+  .driver-name{font-weight:600;font-size:13px;color:white;line-height:1}
+  .driver-detail{font-size:11px;color:var(--muted);margin-top:2px}
+  .driver-jobs{margin-left:auto;text-align:right}
+  .driver-jobs-count{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--orange);line-height:1}
+  .driver-jobs-label{font-size:10px;color:var(--muted);letter-spacing:0.5px}
+
+  /* FLEET PANEL */
+  .fleet-row{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,0.04)}
+  .fleet-row:last-child{border-bottom:none}
+  .fleet-size{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;color:var(--yellow);width:52px;flex-shrink:0}
+  .fleet-bar-wrap{flex:1;height:6px;background:#2A2A2A;border-radius:3px;overflow:hidden}
+  .fleet-bar{height:100%;border-radius:3px;background:var(--orange)}
+  .fleet-nums{text-align:right;width:80px;flex-shrink:0}
+  .fleet-out{font-size:13px;font-weight:600;color:white}
+  .fleet-total{font-size:11px;color:var(--muted)}
+
+  /* REVENUE TREND */
+  .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+  .rev-cell{background:var(--card-bg);padding:14px 16px}
+  .rev-label{font-size:11px;color:var(--muted);letter-spacing:0.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600}
+  .rev-value{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;color:white}
+  .rev-delta{font-size:11px;color:var(--green);margin-top:3px}
+
+  /* ALERT BAR */
+  .alert-bar{background:rgba(232,112,26,0.08);border:1px solid rgba(232,112,26,0.2);border-radius:6px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+  .alert-dot{width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0;animation:pulse 2s infinite}
+  .alert-text{font-size:13px;color:var(--orange);flex:1}
+  .alert-time{font-size:11px;color:var(--muted)}
+
+  /* POWERED BY FOOTER */
+  .footer{text-align:center;padding:24px;margin-top:20px;border-top:1px solid var(--border)}
+  .footer-text{font-size:11px;color:#444;letter-spacing:0.5px}
+  .footer-text span{color:var(--orange)}
+
+  @media(max-width:900px){
+    .kpi-grid{grid-template-columns:repeat(2,1fr)}
+    .bottom-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:600px){
+    .kpi-grid{grid-template-columns:1fr 1fr}
+    header{padding:0 16px}
+    .main{padding:16px}
+    .powered-by{display:none}
+  }
+</style>
+
+<style id="kpc-protect">
+  body {
+    -webkit-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text; -moz-user-select: text;
+    -ms-user-select: text; user-select: text;
+    -webkit-touch-callout: default;
+  }
+  img, svg {
+    -webkit-user-drag: none; user-drag: none;
+    -webkit-touch-callout: none;
+  }
+</style>
+
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">CI</div>
+    <div>
+      <div class="logo-text">METRO WASTE SERVICES</div>
+      <div class="logo-sub">Operations Dashboard</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div class="header-time" id="clock">--:-- --</div>
+    <div class="powered-by">Demo by <span>Kane PC</span><br>staff.kanepc.com</div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- ALERT -->
+  <div class="alert-bar">
+    <div class="alert-dot"></div>
+    <div class="alert-text">⚠ Pickup overdue — Job #CI-2041 at 88 Industrial Ave, Eastside. Scheduled 8:00 AM. Driver: M. Torres</div>
+    <div class="alert-time">9 min ago</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card orange">
+      <div class="kpi-label">Active Jobs Today</div>
+      <div class="kpi-value">24</div>
+      <div class="kpi-delta">↑ 3 from yesterday</div>
+      <div class="kpi-icon">🚛</div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-label">Dumpsters in Field</div>
+      <div class="kpi-value">187</div>
+      <div class="kpi-sub">of 850 total fleet</div>
+      <div class="kpi-icon">🗑</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">Trucks on Road</div>
+      <div class="kpi-value">11</div>
+      <div class="kpi-sub">6 delivery · 3 pickup · 2 demo</div>
+      <div class="kpi-icon">🚚</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Today's Revenue</div>
+      <div class="kpi-value currency">6,840</div>
+      <div class="kpi-delta">↑ 12% vs last Tuesday</div>
+    </div>
+  </div>
+
+  <!-- REVENUE STRIP -->
+  <div class="panel" style="margin-bottom:20px;border-radius:6px;overflow:hidden">
+    <div class="rev-grid">
+      <div class="rev-cell">
+        <div class="rev-label">Today</div>
+        <div class="rev-value">$6,840</div>
+        <div class="rev-delta">↑ 12% vs last Tue</div>
+      </div>
+      <div class="rev-cell">
+        <div class="rev-label">This Week</div>
+        <div class="rev-value">$22,300</div>
+        <div class="rev-delta">↑ 8% vs last week</div>
+      </div>
+      <div class="rev-cell">
+        <div class="rev-label">This Month</div>
+        <div class="rev-value">$78,400</div>
+        <div class="rev-delta">↑ 5% vs May '25</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOBS TABLE -->
+  <div class="section-header">
+    <div class="section-title">Active Jobs</div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterJobs('all',this)">All</button>
+      <button class="filter-tab" onclick="filterJobs('active',this)">Active</button>
+      <button class="filter-tab" onclick="filterJobs('pickup',this)">Pickup Due</button>
+      <button class="filter-tab" onclick="filterJobs('transit',this)">In Transit</button>
+    </div>
+  </div>
+
+  <div class="jobs-section">
+    <table>
+      <thead>
+        <tr>
+          <th>Job #</th>
+          <th>Address</th>
+          <th>Size</th>
+          <th>Service</th>
+          <th>Driver</th>
+          <th>Drop Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="jobs-body">
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FIELD PHOTOS + DOCUMENTS ROW -->
+  <div class="bottom-grid" style="margin-bottom:20px">
+
+    <!-- FIELD PHOTOS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">📸 Field Photos</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="section-badge badge-active">TODAY: 14 NEW</span>
+          <button onclick="triggerUpload()" style="background:var(--orange);color:white;border:none;border-radius:3px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.5px">+ UPLOAD</button>
+          <input type="file" id="file-input" accept="image/*" capture="environment" multiple style="display:none" onchange="handleUpload(event)">
+        </div>
+      </div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap">
+        <button class="filter-tab active" onclick="filterPhotos('all',this)" style="font-size:11px;padding:3px 10px">All</button>
+        <button class="filter-tab" onclick="filterPhotos('CI-2041',this)" style="font-size:11px;padding:3px 10px">CI-2041</button>
+        <button class="filter-tab" onclick="filterPhotos('CI-2051',this)" style="font-size:11px;padding:3px 10px">CI-2051</button>
+        <button class="filter-tab" onclick="filterPhotos('CI-2049',this)" style="font-size:11px;padding:3px 10px">CI-2049</button>
+      </div>
+      <div id="photo-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:2px"></div>
+      <div style="padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:11px;color:var(--muted)">All photos tagged to job · stored in Microsoft 365</span>
+        <span style="font-size:11px;color:var(--orange);cursor:pointer">View all →</span>
+      </div>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">📁 Documents</div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button onclick="goBack()" id="back-btn" style="display:none;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:3px;padding:4px 10px;font-size:11px;cursor:pointer">← Back</button>
+          <button style="background:var(--orange);color:white;border:none;border-radius:3px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.5px">+ UPLOAD</button>
+        </div>
+      </div>
+      <div id="breadcrumb" style="padding:8px 16px;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);letter-spacing:0.5px">ROOT</div>
+      <div id="doc-list" style="padding:0"></div>
+      <div style="padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:11px;color:var(--muted)">Synced via SharePoint · Microsoft 365</span>
+        <span style="font-size:11px;color:var(--orange);cursor:pointer">Open in SharePoint →</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM GRID -->
+  <div class="bottom-grid">
+
+    <!-- DRIVER BOARD -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">🚛 Driver Board</div>
+        <span class="section-badge badge-active">11 ON ROAD</span>
+      </div>
+      <div class="driver-row">
+        <div class="driver-avatar">MT</div>
+        <div>
+          <div class="driver-name">M. Torres</div>
+          <div class="driver-detail">Truck #7 · Eastside/South Bronx</div>
+        </div>
+        <div class="driver-jobs">
+          <div class="driver-jobs-count">4</div>
+          <div class="driver-jobs-label">JOBS</div>
+        </div>
+        <div style="margin-left:8px"><span class="status s-active">ON ROAD</span></div>
+      </div>
+      <div class="driver-row">
+        <div class="driver-avatar">JR</div>
+        <div>
+          <div class="driver-name">J. Rivera</div>
+          <div class="driver-detail">Truck #3 · White Plains/Tarrytown</div>
+        </div>
+        <div class="driver-jobs">
+          <div class="driver-jobs-count">3</div>
+          <div class="driver-jobs-label">JOBS</div>
+        </div>
+        <div style="margin-left:8px"><span class="status s-active">ON ROAD</span></div>
+      </div>
+      <div class="driver-row">
+        <div class="driver-avatar">DK</div>
+        <div>
+          <div class="driver-name">D. Kim</div>
+          <div class="driver-detail">Truck #11 · Bronx/Manhattan</div>
+        </div>
+        <div class="driver-jobs">
+          <div class="driver-jobs-count">3</div>
+          <div class="driver-jobs-label">JOBS</div>
+        </div>
+        <div style="margin-left:8px"><span class="status s-transit">IN TRANSIT</span></div>
+      </div>
+      <div class="driver-row">
+        <div class="driver-avatar">AP</div>
+        <div>
+          <div class="driver-name">A. Perez</div>
+          <div class="driver-detail">Truck #5 · New Rochelle/Pelham</div>
+        </div>
+        <div class="driver-jobs">
+          <div class="driver-jobs-count">2</div>
+          <div class="driver-jobs-label">JOBS</div>
+        </div>
+        <div style="margin-left:8px"><span class="status s-pickup">PICKUP DUE</span></div>
+      </div>
+      <div class="driver-row">
+        <div class="driver-avatar">SB</div>
+        <div>
+          <div class="driver-name">S. Brooks</div>
+          <div class="driver-detail">Truck #9 · Demo Crew · Eastside</div>
+        </div>
+        <div class="driver-jobs">
+          <div class="driver-jobs-count">1</div>
+          <div class="driver-jobs-label">JOB</div>
+        </div>
+        <div style="margin-left:8px"><span class="status s-active">ON SITE</span></div>
+      </div>
+    </div>
+
+    <!-- FLEET STATUS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">🗑 Fleet Utilization</div>
+        <span class="section-badge badge-active">850 TOTAL</span>
+      </div>
+      <div style="padding:0">
+        <div class="fleet-row">
+          <div class="fleet-size">40 yd</div>
+          <div class="fleet-bar-wrap"><div class="fleet-bar" style="width:28%"></div></div>
+          <div class="fleet-nums">
+            <div class="fleet-out">14 out</div>
+            <div class="fleet-total">of 50</div>
+          </div>
+        </div>
+        <div class="fleet-row">
+          <div class="fleet-size">30 yd</div>
+          <div class="fleet-bar-wrap"><div class="fleet-bar" style="width:42%"></div></div>
+          <div class="fleet-nums">
+            <div class="fleet-out">63 out</div>
+            <div class="fleet-total">of 150</div>
+          </div>
+        </div>
+        <div class="fleet-row">
+          <div class="fleet-size">20 yd</div>
+          <div class="fleet-bar-wrap"><div class="fleet-bar" style="width:55%"></div></div>
+          <div class="fleet-nums">
+            <div class="fleet-out">82 out</div>
+            <div class="fleet-total">of 150</div>
+          </div>
+        </div>
+        <div class="fleet-row">
+          <div class="fleet-size">15 yd</div>
+          <div class="fleet-bar-wrap"><div class="fleet-bar" style="width:22%"></div></div>
+          <div class="fleet-nums">
+            <div class="fleet-out">26 out</div>
+            <div class="fleet-total">of 120</div>
+          </div>
+        </div>
+        <div class="fleet-row">
+          <div class="fleet-size">10 yd</div>
+          <div class="fleet-bar-wrap"><div class="fleet-bar" style="width:18%"></div></div>
+          <div class="fleet-nums">
+            <div class="fleet-out">36 out</div>
+            <div class="fleet-total">of 200</div>
+          </div>
+        </div>
+        <div class="fleet-row">
+          <div class="fleet-size">½ yd</div>
+          <div class="fleet-bar-wrap"><div class="fleet-bar" style="width:66%"></div></div>
+          <div class="fleet-nums">
+            <div class="fleet-out">106 out</div>
+            <div class="fleet-total">of 180</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;color:var(--muted)">Total deployed</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--orange)">187 / 850 <span style="font-size:13px;color:var(--muted);font-weight:400">(22%)</span></span>
+      </div>
+    </div>
+
+  </div><!-- /bottom-grid -->
+
+  <div class="footer">
+    <div class="footer-text">Metro Waste Services Operations Dashboard · Demo by <span>Kane PC</span> · staff.kanepc.com · 555-010-0100</div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+const jobs = [
+  {id:'CI-2041',addr:'88 Industrial Ave',city:'Eastside, NY 10701',size:'20 yd',service:'Dumpster Rental',driver:'M. Torres',drop:'05/12/2026',status:'pickup',statusLabel:'Pickup Due'},
+  {id:'CI-2048',addr:'1200 Waters Place',city:'Bronx, NY 10461',size:'30 yd',service:'Dumpster Rental',driver:'D. Kim',drop:'05/16/2026',status:'active',statusLabel:'Active'},
+  {id:'CI-2049',addr:'14 Commerce Ave',city:'White Plains, NY 10000',size:'10 yd',service:'Dumpster Rental',driver:'J. Rivera',drop:'05/17/2026',status:'active',statusLabel:'Active'},
+  {id:'CI-2050',addr:'450 Saw Mill River Rd',city:'Ardsley, NY 10502',size:'20 yd',service:'Dumpster Rental',driver:'J. Rivera',drop:'05/17/2026',status:'transit',statusLabel:'In Transit'},
+  {id:'CI-2051',addr:'3450 Boston Post Rd',city:'Bronx, NY 10469',size:'40 yd',service:'Demo + Dumpster',driver:'S. Brooks',drop:'05/18/2026',status:'active',statusLabel:'Active'},
+  {id:'CI-2052',addr:'77 Main St',city:'New Rochelle, NY 10801',size:'½ yd',service:'Commercial Pickup',driver:'M. Torres',drop:'05/19/2026',status:'active',statusLabel:'Active'},
+  {id:'CI-2053',addr:'22 Ferris Ave',city:'White Plains, NY 10603',size:'15 yd',service:'Dumpster Rental',driver:'A. Perez',drop:'05/19/2026',status:'pickup',statusLabel:'Pickup Due'},
+  {id:'CI-2054',addr:'891 Eastside Ave',city:'Eastside, NY 10704',size:'30 yd',service:'Dumpster Rental',driver:'M. Torres',drop:'05/15/2026',status:'active',statusLabel:'Active'},
+  {id:'CI-2055',addr:'550 Grand Concourse',city:'Bronx, NY 10451',size:'½ yd',service:'Commercial Pickup',driver:'D. Kim',drop:'05/19/2026',status:'transit',statusLabel:'In Transit'},
+  {id:'CI-2056',addr:'199 Main St',city:'Ossining, NY 10562',size:'20 yd',service:'Dumpster Rental',driver:'A. Perez',drop:'05/19/2026',status:'active',statusLabel:'Active'},
+  {id:'CI-2057',addr:'4100 Boston Rd',city:'Bronx, NY 10475',size:'30 yd',service:'Trucking',driver:'D. Kim',drop:'05/19/2026',status:'active',statusLabel:'Active'},
+  {id:'CI-2058',addr:'33 Purchase St',city:'Rye, NY 10580',size:'10 yd',service:'Dumpster Rental',driver:'J. Rivera',drop:'05/19/2026',status:'active',statusLabel:'Active'},
+];
+
+const statusClass={active:'s-active',pickup:'s-pickup',transit:'s-transit'};
+
+function renderJobs(filter){
+  const body=document.getElementById('jobs-body');
+  const filtered=filter==='all'?jobs:jobs.filter(j=>j.status===filter);
+  body.innerHTML=filtered.map(j=>`
+    <tr>
+      <td><div class="job-id">${j.id}</div></td>
+      <td><div class="job-addr">${j.addr}</div><div class="job-city">${j.city}</div></td>
+      <td><span class="size-badge">${j.size}</span></td>
+      <td style="font-size:12px;color:var(--muted)">${j.service}</td>
+      <td style="font-size:13px">${j.driver}</td>
+      <td style="font-size:12px;color:var(--muted)">${j.drop}</td>
+      <td><span class="status ${statusClass[j.status]}">${j.statusLabel}</span></td>
+    </tr>
+  `).join('');
+}
+
+let currentFilter='all';
+function filterJobs(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('.filter-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderJobs(f);
+}
+
+renderJobs('all');
+
+// ── FIELD PHOTOS ──────────────────────────────────────────────
+const photos = [
+  {job:'CI-2041',label:'Before drop',time:'7:42 AM',driver:'M. Torres',color:'#2a2a1a'},
+  {job:'CI-2051',label:'Demo progress',time:'8:15 AM',driver:'S. Brooks',color:'#1a2a2a'},
+  {job:'CI-2049',label:'Site condition',time:'8:33 AM',driver:'J. Rivera',color:'#1a1a2a'},
+  {job:'CI-2041',label:'Overdue — full',time:'9:02 AM',driver:'M. Torres',color:'#2a1a1a'},
+  {job:'CI-2051',label:'Debris sorted',time:'9:18 AM',driver:'S. Brooks',color:'#1e221a'},
+  {job:'CI-2048',label:'Drop confirmed',time:'9:45 AM',driver:'D. Kim',color:'#1a2022'},
+  {job:'CI-2052',label:'Pickup done',time:'10:04 AM',driver:'M. Torres',color:'#221a22'},
+  {job:'CI-2049',label:'Customer sign-off',time:'10:22 AM',driver:'J. Rivera',color:'#1a2218'},
+  {job:'CI-2055',label:'Load complete',time:'10:50 AM',driver:'D. Kim',color:'#221e1a'},
+];
+let userPhotos = [];
+let currentPhotoFilter = 'all';
+
+function photoHTML(p, isUser) {
+  const borderStyle = isUser ? 'border:2px solid var(--orange);' : '';
+  return `<div style="position:relative;aspect-ratio:1;background:${p.color || '#1e2a1e'};${borderStyle}cursor:pointer;overflow:hidden;border-radius:2px" title="${p.label} · ${p.job}">
+    ${isUser && p.src ? `<img src="${p.src}" style="width:100%;height:100%;object-fit:cover">` : `
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+      <div style="font-size:22px;opacity:0.3">🖼</div>
+    </div>`}
+    <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.85));padding:8px 6px 4px">
+      <div style="font-size:10px;font-weight:700;color:white;line-height:1">${p.label}</div>
+      <div style="font-size:9px;color:rgba(255,255,255,0.6);margin-top:1px">${p.job} · ${p.time}</div>
+    </div>
+    ${isUser ? `<div style="position:absolute;top:4px;right:4px;background:var(--orange);border-radius:2px;font-size:8px;font-weight:700;color:white;padding:1px 4px">NEW</div>` : ''}
+  </div>`;
+}
+
+function renderPhotos(filter) {
+  const grid = document.getElementById('photo-grid');
+  const all = [...userPhotos, ...photos];
+  const filtered = filter === 'all' ? all : all.filter(p => p.job === filter);
+  grid.innerHTML = filtered.map((p,i) => photoHTML(p, i < userPhotos.length)).join('');
+}
+
+function filterPhotos(f, btn) {
+  currentPhotoFilter = f;
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPhotos(f);
+}
+
+function triggerUpload() { document.getElementById('file-input').click(); }
+
+function handleUpload(e) {
+  const files = Array.from(e.target.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      userPhotos.unshift({
+        job: jobs[Math.floor(Math.random()*3)].id,
+        label: file.name.replace(/\.[^.]+$/,'').slice(0,18),
+        time: new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}),
+        driver: 'You',
+        src: ev.target.result
+      });
+      renderPhotos(currentPhotoFilter);
+    };
+    reader.readAsDataURL(file);
+  });
+  e.target.value = '';
+}
+
+renderPhotos('all');
+
+// ── DOCUMENTS ────────────────────────────────────────────────
+const docTree = {
+  root: [
+    {type:'folder', name:'Active Jobs', icon:'📂', children:'active-jobs'},
+    {type:'folder', name:'Contracts & Permits', icon:'📂', children:'contracts'},
+    {type:'folder', name:'Equipment & Fleet', icon:'📂', children:'fleet'},
+    {type:'folder', name:'HR & Employees', icon:'📂', children:'hr'},
+    {type:'file', name:'Metro Waste Services — Insurance Certificate 2026.pdf', icon:'📄', size:'1.2 MB', date:'04/01/2026'},
+    {type:'file', name:'OSHA Certifications — All Staff.pdf', icon:'📄', size:'3.4 MB', date:'01/15/2026'},
+    {type:'file', name:'Emergency Demolition License — Eastside + NYC.pdf', icon:'📄', size:'890 KB', date:'03/10/2026'},
+  ],
+  'active-jobs': [
+    {type:'folder', name:'CI-2041 — 88 Industrial Ave', icon:'📂', children:'job-2041'},
+    {type:'folder', name:'CI-2051 — Demo Project Bronx', icon:'📂', children:'job-2051'},
+    {type:'folder', name:'CI-2048 — Waters Place', icon:'📂', children:'job-2048'},
+    {type:'file', name:'Active Jobs Summary — May 2026.xlsx', icon:'📊', size:'245 KB', date:'05/19/2026'},
+  ],
+  'job-2041': [
+    {type:'file', name:'Work Order CI-2041.pdf', icon:'📄', size:'340 KB', date:'05/12/2026'},
+    {type:'file', name:'Customer Agreement — Signed.pdf', icon:'📄', size:'510 KB', date:'05/12/2026'},
+    {type:'file', name:'Site Photos — Before.zip', icon:'🗜', size:'8.2 MB', date:'05/12/2026'},
+    {type:'file', name:'Pickup Request — Overdue.pdf', icon:'⚠️', size:'120 KB', date:'05/19/2026'},
+  ],
+  'job-2051': [
+    {type:'file', name:'Demo Permit — Bronx DOB.pdf', icon:'📄', size:'670 KB', date:'05/15/2026'},
+    {type:'file', name:'Asbestos Survey Report.pdf', icon:'📄', size:'1.8 MB', date:'05/14/2026'},
+    {type:'file', name:'Work Order CI-2051.pdf', icon:'📄', size:'290 KB', date:'05/18/2026'},
+  ],
+  'job-2048': [
+    {type:'file', name:'Work Order CI-2048.pdf', icon:'📄', size:'310 KB', date:'05/16/2026'},
+    {type:'file', name:'Customer Agreement — Signed.pdf', icon:'📄', size:'480 KB', date:'05/16/2026'},
+  ],
+  contracts: [
+    {type:'file', name:'Master Service Agreement — Template.pdf', icon:'📄', size:'1.1 MB', date:'01/01/2026'},
+    {type:'file', name:'NYC Emergency Demo Contract 2026.pdf', icon:'📄', size:'2.2 MB', date:'02/14/2026'},
+    {type:'file', name:'Westchester Commercial Waste License.pdf', icon:'📄', size:'780 KB', date:'03/01/2026'},
+    {type:'file', name:'City of Eastside — Contractor Registration.pdf', icon:'📄', size:'420 KB', date:'01/10/2026'},
+  ],
+  fleet: [
+    {type:'file', name:'Vehicle Registration — All Trucks.pdf', icon:'📄', size:'3.1 MB', date:'01/01/2026'},
+    {type:'file', name:'Dumpster Inventory Master List.xlsx', icon:'📊', size:'590 KB', date:'05/01/2026'},
+    {type:'file', name:'Maintenance Schedule Q2 2026.xlsx', icon:'📊', size:'210 KB', date:'04/01/2026'},
+    {type:'file', name:'DOT Inspection Reports 2026.pdf', icon:'📄', size:'1.4 MB', date:'03/15/2026'},
+  ],
+  hr: [
+    {type:'file', name:'Employee Directory — May 2026.xlsx', icon:'📊', size:'180 KB', date:'05/01/2026'},
+    {type:'file', name:'OSHA Training Log 2026.pdf', icon:'📄', size:'640 KB', date:'04/15/2026'},
+    {type:'file', name:'Driver Certifications — Current.pdf', icon:'📄', size:'2.8 MB', date:'02/20/2026'},
+  ],
+};
+
+let navStack = ['root'];
+const folderNames = {root:'ROOT','active-jobs':'Active Jobs','job-2041':'CI-2041','job-2051':'CI-2051','job-2048':'CI-2048',contracts:'Contracts & Permits',fleet:'Equipment & Fleet',hr:'HR & Employees'};
+
+function renderDocs() {
+  const current = navStack[navStack.length - 1];
+  const items = docTree[current] || [];
+  document.getElementById('breadcrumb').textContent = navStack.map(k => folderNames[k] || k).join(' › ');
+  document.getElementById('back-btn').style.display = navStack.length > 1 ? 'inline-block' : 'none';
+  const list = document.getElementById('doc-list');
+  list.innerHTML = items.map(item => `
+    <div onclick="${item.type==='folder' ? `openFolder('${item.children}')` : ''}" style="display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,0.04);cursor:${item.type==='folder'?'pointer':'default'};transition:background 0.1s" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
+      <span style="font-size:18px;flex-shrink:0">${item.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;color:${item.type==='folder'?'white':'var(--text)'};font-weight:${item.type==='folder'?'600':'400'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</div>
+        ${item.type==='file'?`<div style="font-size:10px;color:var(--muted);margin-top:1px">${item.size} · ${item.date}</div>`:''}
+      </div>
+      ${item.type==='folder'?`<span style="color:var(--muted);font-size:14px">›</span>`:`<span style="font-size:11px;color:var(--orange);cursor:pointer;padding:3px 8px;border:1px solid rgba(232,112,26,0.3);border-radius:3px">Open</span>`}
+    </div>
+  `).join('');
+}
+
+function openFolder(key) {
+  navStack.push(key);
+  renderDocs();
+}
+
+function goBack() {
+  if (navStack.length > 1) navStack.pop();
+  renderDocs();
+}
+
+renderDocs();
+
+function tick(){
+  const now=new Date();
+  document.getElementById('clock').textContent=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+}
+tick();setInterval(tick,1000);
+</script>
+
+<script id="kpc-protect-js">
+(function() {
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+  document.addEventListener('dragstart', function(e) {
+    var t = e.target && e.target.tagName;
+    if (t === 'IMG' || t === 'svg' || t === 'SVG') e.preventDefault();
+  }, false);
+  document.addEventListener('keydown', function(e) {
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) {
+      e.preventDefault(); return false;
+    }
+  }, false);
+})();
+</script>
+
+<a href="https://kanepc.com" target="_top" id="kpc-demo-badge"
+   style="position:fixed;bottom:14px;right:14px;
+          background:rgba(20,20,20,0.92);color:#fff;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+          text-decoration:none;padding:9px 14px;border-radius:3px;
+          border:1px solid rgba(255,255,255,0.12);
+          box-shadow:0 6px 18px rgba(0,0,0,0.35);
+          z-index:2147483647;line-height:1;
+          -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);">
+  Demo &middot; Built by <span style="color:#E65100">Kane PC</span>
+</a>
+
+</body>
+</html>
