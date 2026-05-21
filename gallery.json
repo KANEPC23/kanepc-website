@@ -1,0 +1,116 @@
+{
+  "items": [
+    {
+      "category": "webapps",
+      "title": "Diamond Coach",
+      "subtitle": "Coaching PWA · Kane PC Original",
+      "image": "/images/dc-roster.jpg",
+      "alt": "Diamond Coach roster view — softball/baseball coaching PWA built by Kane PC",
+      "liveDemoUrl": "https://dc.kanepc.com",
+      "screens": [
+        { "image": "/images/dc-roster.jpg",                "alt": "Roster — players, jersey numbers, positions, hitting ratings" },
+        { "image": "/images/dc-rotation-grid-ai-tips.jpg", "alt": "Color-coded rotation grid with AI rule-violation analysis" },
+        { "image": "/images/dc-field-rotation-rules.jpg",  "alt": "Field rotation league rules and constraints" },
+        { "image": "/images/dc-batting-order.jpg",         "alt": "Batting order with drag controls and AI optimize" },
+        { "image": "/images/dc-practice-planner.jpg",      "alt": "Practice planner with focus areas and duration slider" },
+        { "image": "/images/dc-import-share.jpg",          "alt": "QR import and share for rosters and lineups" }
+      ]
+    },
+    {
+      "category": "cameras",
+      "title": "Multi-site surveillance console",
+      "subtitle": "Cameras · Live + alerts",
+      "image": "/images/security-camera-dashboard-demo.jpg",
+      "alt": "Surveillance console showing multi-site camera grid with active alerts",
+      "liveDemoUrl": "/demo/security-camera/"
+    },
+    {
+      "category": "webapps",
+      "title": "HVAC service operations",
+      "subtitle": "Margins · Commissions · Jobs",
+      "image": "/images/hvac-dashboard-demo.jpg",
+      "alt": "HVAC contractor dashboard with margin tracking and commission breakdown",
+      "liveDemoUrl": "/demo/hvac-dashboard/"
+    },
+    {
+      "category": "webapps",
+      "title": "Attorney–client portal",
+      "subtitle": "Legal · Matters · Billing",
+      "image": "/images/legal-dashboard-demo.jpg",
+      "alt": "Law firm matter management and client billing portal",
+      "liveDemoUrl": "/demo/legal-dashboard/"
+    },
+    {
+      "category": "pos",
+      "title": "Restaurant operations",
+      "subtitle": "POS sync · Multi-location",
+      "image": "/images/pizza-dashboard-demo.jpg",
+      "alt": "Multi-location restaurant operations dashboard with POS sync and live sales",
+      "liveDemoUrl": "/demo/pizza-dashboard/"
+    },
+    {
+      "category": "webapps",
+      "title": "Estate manager portal",
+      "subtitle": "Property · Vendors · Maintenance",
+      "image": "/images/real-estate-demo.jpg",
+      "alt": "Estate manager portal for property, vendor, and maintenance tracking",
+      "liveDemoUrl": "/demo/real-estate/"
+    },
+    {
+      "category": "webapps",
+      "title": "Electrical field operations",
+      "subtitle": "Jobs · Technicians · Invoices",
+      "image": "/images/electrical-dashboard-demo.jpg",
+      "alt": "Electrical contractor field operations dashboard",
+      "liveDemoUrl": "/demo/electrical-dashboard/"
+    },
+    {
+      "category": "webapps",
+      "title": "Vet & livestock records",
+      "subtitle": "Animals · Treatments · Breeding",
+      "image": "/images/vet-farm-demo.jpg",
+      "alt": "Veterinary and livestock records app with animal detail view",
+      "liveDemoUrl": "/demo/vet-farm/"
+    },
+    {
+      "category": "webapps",
+      "title": "GC project & receivables portal",
+      "subtitle": "Construction · Invoices · Schedule",
+      "image": "/images/contracting-portal-demo.jpg",
+      "alt": "General contractor project management and receivables portal",
+      "liveDemoUrl": "/demo/contracting-portal/"
+    },
+    {
+      "category": "webapps",
+      "title": "Carting & fleet operations",
+      "subtitle": "Waste · Routes · Containers",
+      "image": "/images/carting-dashboard-demo.jpg",
+      "alt": "Waste hauling and carting fleet operations dashboard",
+      "liveDemoUrl": "/demo/carting-dashboard/"
+    },
+    {
+      "category": "pos",
+      "title": "Online ordering — pizzeria",
+      "subtitle": "POS · Web-to-kitchen",
+      "image": "/images/pizza-ordering-demo.jpg",
+      "alt": "Pizzeria online ordering site with menu and cart",
+      "liveDemoUrl": "/demo/pizza-ordering/"
+    },
+    {
+      "category": "webapps",
+      "title": "Electrical contractor — website",
+      "subtitle": "Marketing · Lead capture",
+      "image": "/images/electrical-demo.jpg",
+      "alt": "Master electrician public marketing website with quote form",
+      "liveDemoUrl": "/demo/electrical/"
+    },
+    {
+      "category": "webapps",
+      "title": "Commercial scaffolding — website",
+      "subtitle": "Marketing · Commercial",
+      "image": "/images/scaffolding-website-demo.jpg",
+      "alt": "Commercial scaffolding company public marketing website",
+      "liveDemoUrl": "/demo/scaffolding/"
+    }
+  ]
+}
