@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#FBF8F1" />
+<meta name="theme-color" content="#F2F7F0" />
 <title>Kane PC — Managed IT, Security, Automation &amp; Custom Development</title>
 <meta name="description" content="Kane PC delivers managed IT, camera systems, Control4 automation, and custom website/app development for businesses across the New York tri-state area. By-appointment office in White Plains, NY." />
 
@@ -22,9 +22,9 @@
 <style>
   :root {
     /* Light theme — warm cream foundation */
-    --bg:        #FBF8F1;
-    --bg-alt:    #F4EFE2;
-    --bg-green:  #EBF2EC;
+    --bg:        #DCEDE0;
+    --bg-alt:    #CFE3D3;
+    --bg-green:  #BAD8C0;
     --surface:   #FFFFFF;
     --surface-2: #F9F4E8;
 
@@ -178,7 +178,7 @@
   nav.topnav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 50;
     padding: 16px 0;
-    background: rgba(251, 248, 241, 0.85);
+    background: rgba(242, 247, 240, 0.92);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--line);
@@ -1399,7 +1399,16 @@
     opacity: 0; transform: translateY(24px);
     transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .reveal.in { opacity: 1; transform: translateY(0); }
+  /* ===== IMAGE PROTECTION (v6.1) =====
+     Deters casual save/drag of gallery images and logo.
+     INTENTIONALLY does not touch text selection — visitors must be able
+     to long-press the phone/email/address to copy/dial.
+     Not a security barrier — anyone with dev tools can still save anything. */
+  img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
+  }
 </style>
 </head>
 <body>
@@ -2333,6 +2342,17 @@
       errorEl.focus();
     }
   });
+
+  // ===== IMAGE PROTECTION (v6.1) =====
+  // Deters casual save/drag of images only — text remains fully selectable.
+  (function() {
+    document.addEventListener('contextmenu', function(e) {
+      if (e.target && e.target.tagName === 'IMG') e.preventDefault();
+    }, false);
+    document.addEventListener('dragstart', function(e) {
+      if (e.target && e.target.tagName === 'IMG') e.preventDefault();
+    }, false);
+  })();
 </script>
 
 </body>
