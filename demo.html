@@ -480,6 +480,17 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
 
 .switch,.locations,.contact,#work{position:relative}
 .switch .wrap,.locations .wrap,.contact .wrap,#work .wrap{position:relative;z-index:1}
+
+/* ===== light section variant (shares the band palette) ===== */
+.light{background:var(--cream);color:#2E3527}
+.light h2{color:#39442E}
+.light .hl{color:#49563C}
+.light .hl-o{color:#BF5A26}
+.light .eyebrow{color:#969C8E}
+.light .eyebrow::before{background:var(--orange-deep)}
+.light p{color:#49563C}
+.light .ind span{border-color:#D0D3C6;color:#49563C;background:transparent}
+.light .ind span:hover{border-color:#BF5A26;color:#39442E}
 </style>
 </head>
 <body>
@@ -499,8 +510,8 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
       </span>
     </a>
     <nav>
-      <a href="#switch">Why switch</a><a href="#services">Services</a><a href="#work">Work</a>
-      <a href="#approach">Approach</a><a href="#locations">Office</a><a href="#contact">Contact</a>
+      <a href="#switch">Why switch</a><a href="#approach">Approach</a><a href="#services">Services</a>
+      <a href="#work">Work</a><a href="#locations">Office</a><a href="#contact">Contact</a>
     </nav>
     <a class="tel" href="tel:+19146073313">914.607.3313</a>
     <a class="btn" href="#contact">Schedule a consultation</a>
@@ -688,13 +699,35 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
   </div>
 </section>
 
+<section class="band" id="approach">
+  <div class="wrap">
+    <div class="reveal" style="max-width:62ch">
+      <p class="eyebrow">Why clients consolidate here</p>
+      <h2>Most MSPs stop at the network. We <span class="hl">keep going</span>.</h2>
+    </div>
+    <div class="cols reveal">
+      <div class="col">
+        <span class="kicker">We run it</span>
+        <h3>The systems you already have</h3>
+        <p>Monitoring, patching, security, backups, licensing, hardware refresh, and the helpdesk queue — handled before you notice it needed handling.</p>
+      </div>
+      <div class="col">
+        <span class="kicker">We build it</span>
+        <h3>The software you wish you had</h3>
+        <p>When the off-the-shelf tool doesn't fit, we write the one that does: a client portal, a dispatch board, an intake form that talks to the rest of your stack.</p>
+      </div>
+    </div>
+    <p class="close reveal">Almost no local MSP can claim both halves. Here is everything that sits inside them.</p>
+  </div>
+</section>
+
 <!-- ============ THE STACK: radial capability map ============ -->
 <section id="services">
   <div class="wrap">
     <div class="reveal" style="max-width:64ch">
       <p class="eyebrow">The whole stack</p>
       <h2>Not a computer shop. The <span class="hl-o">whole technology function</span>.</h2>
-      <p style="color:#ADB79B;margin-top:1.1rem">Most businesses run five vendors: an IT guy, a security product, an AV installer, a cabling contractor, and a web agency. We are all five — which means nobody gets to point at the other guy.</p>
+      <p style="color:#ADB79B;margin-top:1.1rem">Five practices, one company, one number. An IT provider, a security product, an AV installer, a cabling contractor, and a web agency — all of it here, which means nobody gets to point at the other guy.</p>
     </div>
 
     <div class="orbit reveal">
@@ -886,34 +919,12 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
   </div>
 </section>
 
-<section class="band" id="approach">
-  <div class="wrap">
-    <div class="reveal" style="max-width:62ch">
-      <p class="eyebrow">Why clients consolidate here</p>
-      <h2>Most MSPs stop at the network. We <span class="hl">keep going</span>.</h2>
-    </div>
-    <div class="cols reveal">
-      <div class="col">
-        <span class="kicker">We run it</span>
-        <h3>The systems you already have</h3>
-        <p>Monitoring, patching, security, backups, licensing, hardware refresh, and the helpdesk queue — handled before you notice it needed handling.</p>
-      </div>
-      <div class="col">
-        <span class="kicker">We build it</span>
-        <h3>The software you wish you had</h3>
-        <p>When the off-the-shelf tool doesn't fit, we write the one that does: a client portal, a dispatch board, an intake form that talks to the rest of your stack.</p>
-      </div>
-    </div>
-    <p class="close reveal">Almost no local MSP can do both. That's why clients stop juggling a managed-services vendor, a web shop, and a security integrator — and consolidate here instead.</p>
-  </div>
-</section>
-
-<section id="industries">
+<section id="industries" class="light">
   <div class="wrap">
     <div class="reveal" style="max-width:62ch">
       <p class="eyebrow">Who we serve</p>
       <h2>A wheelhouse of <span class="hl">familiar industries</span>.</h2>
-      <p style="color:#ADB79B;margin-top:1.1rem">Twenty-five years in, we know how each kind of business actually runs — what breaks, what's regulated, and what costs money when it goes down.</p>
+      <p style="margin-top:1.1rem">Twenty-five years in, we know how each kind of business actually runs — what breaks, what's regulated, and what costs money when it goes down.</p>
     </div>
     <div class="ind reveal">
       <span>Medical &amp; Dental</span><span>Veterinary</span><span>Law Firms</span><span>Accounting</span>
