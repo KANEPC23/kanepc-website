@@ -18,6 +18,7 @@
   --orange:#E07A3C; --orange-deep:#C4632A;
   --sage:#969C8E; --cream:#FEFBF6;
   --pad:clamp(1.25rem,5vw,4.5rem);
+  --sec-img-opacity:.16;   /* backdrop photo strength when --sec-img is set */
 }
 *{box-sizing:border-box}
 body{
@@ -448,6 +449,37 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
 
 @media(max-width:900px){.sw-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.dots b{animation:none;opacity:1}.live-dot{animation:none}}
+
+/* ===== section background artwork =====
+   Two layers, independent:
+   (a) .bgart  — inline SVG technical drawing, always on, zero dependencies
+   (b) .bgphoto — optional real photograph. To use one, set --sec-img on the
+       section tag, e.g.  style="--sec-img:url('images/rack-01.jpg')"
+       The scrim below keeps text at AA contrast over any photo.
+   ================================================ */
+.bgart{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bgart svg{position:absolute;width:100%;height:100%;min-width:900px;left:50%;top:0;transform:translateX(-50%)}
+.bgart .tr{fill:none;stroke:var(--green);stroke-width:1;opacity:.30}
+.bgart .tr-o{fill:none;stroke:var(--orange);stroke-width:1;opacity:.34}
+.bgart .via{fill:var(--green);opacity:.34}
+.bgart .via-o{fill:var(--orange);opacity:.40}
+.bgart .node{fill:none;stroke:var(--green);stroke-width:1;opacity:.28}
+.bgart .rule{stroke:rgba(178,186,166,.30);stroke-width:1;fill:none}
+.bgart.fade-r{-webkit-mask-image:linear-gradient(100deg,transparent 8%,#000 55%,#000 88%,transparent 100%);
+              mask-image:linear-gradient(100deg,transparent 8%,#000 55%,#000 88%,transparent 100%)}
+.bgart.fade-l{-webkit-mask-image:linear-gradient(260deg,transparent 8%,#000 55%,#000 90%,transparent 100%);
+              mask-image:linear-gradient(260deg,transparent 8%,#000 55%,#000 90%,transparent 100%)}
+.bgart.fade-c{-webkit-mask-image:radial-gradient(90% 80% at 50% 40%,#000 25%,transparent 80%);
+              mask-image:radial-gradient(90% 80% at 50% 40%,#000 25%,transparent 80%)}
+
+.bgphoto{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:var(--sec-img,none);background-size:cover;background-position:center;
+  opacity:var(--sec-img-opacity,.16);filter:grayscale(.55) contrast(1.05)}
+.bgphoto::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--bg-2) 8%,rgba(13,17,12,.72) 52%,rgba(13,17,12,.5) 100%)}
+
+.switch,.locations,.contact,#work{position:relative}
+.switch .wrap,.locations .wrap,.contact .wrap,#work .wrap{position:relative;z-index:1}
 </style>
 </head>
 <body>
@@ -572,6 +604,31 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
 
 <!-- ============ THE SWITCH — pain-point / competitive section ============ -->
 <section class="switch" id="switch">
+    <div class="bgart fade-r" aria-hidden="true">
+      <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid slice">
+        <g class="tr">
+          <path d="M780 40 L780 120 L900 120 L900 250 L1040 250"/>
+          <path d="M860 40 L860 90 L980 90 L980 200 L1120 200"/>
+          <path d="M700 620 L700 520 L840 520 L840 400 L1000 400"/>
+          <path d="M620 580 L760 580 L760 460 L920 460 L920 330 L1090 330"/>
+          <path d="M1040 60 L1040 150 L1150 150"/>
+          <path d="M660 300 L780 300 L780 210 L900 210"/>
+        </g>
+        <g class="tr-o">
+          <path d="M820 620 L820 560 L960 560 L960 470 L1160 470"/>
+          <path d="M740 160 L740 60 L1000 60"/>
+        </g>
+        <g class="via">
+          <circle cx="900" cy="120" r="3.5"/><circle cx="980" cy="90" r="3.5"/>
+          <circle cx="840" cy="520" r="3.5"/><circle cx="920" cy="330" r="3.5"/>
+          <circle cx="1040" cy="150" r="3.5"/><circle cx="780" cy="210" r="3.5"/>
+          <circle cx="1040" cy="250" r="3.5"/><circle cx="1000" cy="400" r="3.5"/>
+        </g>
+        <g class="via-o">
+          <circle cx="960" cy="560" r="4"/><circle cx="740" cy="60" r="4"/>
+        </g>
+      </svg>
+    </div>
   <div class="wrap">
     <div class="reveal" style="max-width:66ch">
       <p class="eyebrow">Thinking about switching</p>
@@ -622,7 +679,7 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
             <span class="tkt-id">Your call</span>
             <span class="tkt-state good"><i class="live-dot"></i>Answered · 0:04</span>
           </div>
-          <p class="tkt-say">&ldquo;Kane PC, this is Bill.&rdquo;</p>
+          <p class="tkt-say">&ldquo;Kane PC, this is <span id="ansName">Rich</span>. What's going on?&rdquo;</p>
           <p class="tkt-note">Same day. Same people. They already know which closet the switch is in.</p>
         </div>
 
@@ -868,6 +925,31 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
 </section>
 
 <section class="locations" id="locations">
+    <div class="bgart fade-r" aria-hidden="true">
+      <svg viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice">
+        <g class="rule">
+          <rect x="880" y="60" width="230" height="34" rx="2"/>
+          <rect x="880" y="110" width="230" height="34" rx="2"/>
+          <rect x="880" y="160" width="230" height="34" rx="2"/>
+          <rect x="880" y="210" width="230" height="34" rx="2"/>
+        </g>
+        <g class="via" opacity=".22">
+          <rect x="892" y="72" width="10" height="11" rx="1"/><rect x="908" y="72" width="10" height="11" rx="1"/>
+          <rect x="924" y="72" width="10" height="11" rx="1"/><rect x="940" y="72" width="10" height="11" rx="1"/>
+          <rect x="956" y="72" width="10" height="11" rx="1"/><rect x="972" y="72" width="10" height="11" rx="1"/>
+          <rect x="892" y="122" width="10" height="11" rx="1"/><rect x="908" y="122" width="10" height="11" rx="1"/>
+          <rect x="924" y="122" width="10" height="11" rx="1"/><rect x="940" y="122" width="10" height="11" rx="1"/>
+        </g>
+        <g class="tr">
+          <path d="M1110 77 C1180 77 1180 177 1110 177"/>
+          <path d="M1110 127 C1195 127 1195 227 1110 227"/>
+          <path d="M880 94 C800 130 800 300 700 340"/>
+          <path d="M880 144 C790 190 790 360 660 400"/>
+        </g>
+        <g class="tr-o"><path d="M880 194 C820 260 820 420 720 470"/></g>
+        <g class="via-o"><circle cx="1110" cy="227" r="4"/></g>
+      </svg>
+    </div>
   <div class="wrap">
     <div class="reveal" style="max-width:64ch">
       <p class="eyebrow">Where to find us</p>
@@ -892,6 +974,22 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
 </section>
 
 <section class="contact" id="contact">
+    <div class="bgart fade-l" aria-hidden="true">
+      <svg viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid slice">
+        <g class="node">
+          <path d="M170 280 L320 180 M170 280 L320 380 M320 180 L470 120 M320 180 L470 250
+                   M320 380 L470 330 M320 380 L470 450 M470 250 L620 200 M470 330 L620 300"/>
+          <circle cx="170" cy="280" r="26"/>
+          <circle cx="320" cy="180" r="15"/><circle cx="320" cy="380" r="15"/>
+          <circle cx="470" cy="120" r="10"/><circle cx="470" cy="250" r="10"/>
+          <circle cx="470" cy="330" r="10"/><circle cx="470" cy="450" r="10"/>
+          <circle cx="620" cy="200" r="7"/><circle cx="620" cy="300" r="7"/>
+        </g>
+        <g class="tr-o"><path d="M170 280 L60 280 M60 240 L60 320"/></g>
+        <g class="via-o"><circle cx="60" cy="280" r="4.5"/></g>
+        <g class="via"><circle cx="170" cy="280" r="4"/></g>
+      </svg>
+    </div>
   <div class="wrap">
     <div class="reveal">
       <p class="eyebrow">Get in touch</p>
@@ -1004,6 +1102,15 @@ else{
     setTimeout(()=>{ el.textContent=msgs[i]; el.style.opacity=1; },260);
   },4200);
   el.style.transition='opacity .26s';
+})();
+
+/* answered-call name — rotates through real people so the promise
+   isn't pinned to one person. Edit the array or delete this block. */
+(function(){
+  const el = document.getElementById('ansName');
+  if(!el) return;
+  const names = ['Rich','Bill','Eric'];
+  el.textContent = names[Math.floor(Math.random()*names.length)];
 })();
 
 /* radial capability map */
