@@ -491,6 +491,107 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
 .light p{color:#49563C}
 .light .ind span{border-color:#D0D3C6;color:#49563C;background:transparent}
 .light .ind span:hover{border-color:#BF5A26;color:#39442E}
+/* ============================================================
+   PHOTOGRAPHIC SECTION BACKGROUNDS
+   Each photograph sits beneath an 80–88% brand-color veil so it
+   adds atmosphere without competing with the original interface.
+   ============================================================ */
+:where(.hero,.switch,.band,#services,#work,#industries,.locations,.contact){
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  background-attachment:fixed!important;
+}
+
+/* 01 — hero / AV operations */
+.hero{
+  background-image:
+    linear-gradient(90deg,rgba(13,17,12,.96) 0%,rgba(13,17,12,.85) 46%,rgba(13,17,12,.72) 100%),
+    url('assets/option-a-command-center.png')!important;
+  background-position:center!important;
+}
+.hero::before{opacity:.22}
+.hero .console{filter:drop-shadow(0 22px 42px rgba(0,0,0,.38))}
+
+/* 02 — why switch / managed workplace */
+.switch{
+  background-image:
+    linear-gradient(90deg,rgba(13,17,12,.92),rgba(13,17,12,.78)),
+    url('assets/professional-office.png')!important;
+  background-position:center!important;
+}
+
+/* 03 — approach / collaboration room */
+.band{
+  background-image:
+    linear-gradient(90deg,rgba(18,23,16,.88),rgba(18,23,16,.78)),
+    url('assets/option-b-workplace.png')!important;
+  background-position:center 44%!important;
+  color:#EAECE2!important;
+}
+.band h2{color:#F2F3EC!important;text-shadow:0 2px 22px rgba(0,0,0,.26)}
+.band .hl{color:var(--green)!important}
+.band .eyebrow{color:#C6CEB9!important}
+.band .cols{border-color:rgba(234,236,226,.38)!important;background:rgba(13,17,12,.34);backdrop-filter:blur(5px)}
+.band .col+.col{border-color:rgba(234,236,226,.28)!important}
+.band .col h3{color:#F0F2E9!important}
+.band .col p,.band .close{color:#C7CFB8!important}
+.band .kicker{color:#F08A50!important}
+
+/* 04 — services / engineering rack */
+#services{
+  background-image:
+    linear-gradient(90deg,rgba(13,17,12,.90),rgba(13,17,12,.76)),
+    url('assets/option-c-field-engineering.png')!important;
+  background-position:center!important;
+}
+
+/* 05 — project gallery / hospitality technology */
+#work{
+  background-image:
+    linear-gradient(90deg,rgba(13,17,12,.89),rgba(13,17,12,.80)),
+    url('assets/hospitality-av.png')!important;
+  background-position:center!important;
+}
+
+/* 06 — industries stays light, with a quieter office image */
+#industries.light{
+  background-image:
+    linear-gradient(90deg,rgba(241,238,225,.94),rgba(241,238,225,.86)),
+    url('assets/professional-office.png')!important;
+  background-position:center!important;
+}
+
+/* 07 — location / security and access */
+.locations{
+  background-image:
+    linear-gradient(90deg,rgba(13,17,12,.91),rgba(13,17,12,.75)),
+    url('assets/security-access.png')!important;
+  background-position:center!important;
+}
+
+/* 08 — contact / one connected system */
+.contact{
+  background-image:
+    linear-gradient(90deg,rgba(13,17,12,.92),rgba(13,17,12,.79)),
+    url('assets/option-a-command-center.png')!important;
+  background-position:center!important;
+}
+
+/* Keep interactive surfaces crisp over photography. */
+.card,.tkt,.orbit-detail,.gitem,.loc-card,.contact form{
+  background-color:rgba(22,28,20,.91)!important;
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  box-shadow:0 18px 45px rgba(0,0,0,.16);
+}
+.light .ind span{background:rgba(255,255,255,.58);backdrop-filter:blur(8px)}
+
+@media(max-width:900px){
+  :where(.hero,.switch,.band,#services,#work,#industries,.locations,.contact){background-attachment:scroll!important}
+  .hero{background-position:64% center!important}
+  .switch,#services,.locations{background-position:62% center!important}
+  .band,#work,#industries{background-position:42% center!important}
+}
 </style>
 </head>
 <body>
