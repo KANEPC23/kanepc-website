@@ -585,6 +585,8 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
   box-shadow:0 18px 45px rgba(0,0,0,.16);
 }
 .light .ind span{background:rgba(255,255,255,.58);backdrop-filter:blur(8px)}
+.bot-field{position:absolute!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;clip-path:inset(50%)!important;height:1px!important;width:1px!important;margin:-1px!important;padding:0!important;border:0!important;white-space:nowrap!important}
+.captcha{min-height:78px;display:flex;align-items:center;overflow:hidden}
 
 @media(max-width:900px){
   :where(.hero,.switch,.band,#services,#work,#industries,.locations,.contact){background-attachment:scroll!important}
@@ -1113,10 +1115,10 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
         <dt>Email</dt><dd><a href="mailto:info@kanepc.com">info@kanepc.com</a></dd>
       </dl>
     </div>
-    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="reveal">
+    <form name="contact" method="POST" action="/thank-you.html" data-netlify="true" data-netlify-recaptcha="true" netlify-honeypot="bot-field" class="reveal">
       <input type="hidden" name="form-name" value="contact">
       <input type="hidden" name="_site" value="kanepc">
-      <p hidden><label>Leave blank <input name="bot-field"></label></p>
+      <p class="bot-field" aria-hidden="true"><label>Leave this field blank <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div><label for="b-name">Name</label><input id="b-name" name="name" required></div>
       <div><label for="b-co">Company</label><input id="b-co" name="company"></div>
       <div><label for="b-email">Email</label><input id="b-email" type="email" name="email" required></div>
@@ -1125,6 +1127,7 @@ footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
         <select id="b-need" name="need"><option>Managed IT</option><option>Cybersecurity</option><option>Cameras &amp; access</option><option>Custom software</option><option>Not sure yet</option></select>
       </div>
       <div><label for="b-msg">Details</label><textarea id="b-msg" name="message"></textarea></div>
+      <div class="captcha" data-netlify-recaptcha="true"></div>
       <button class="btn" type="submit" style="justify-content:center">Send it over</button>
     </form>
   </div>
