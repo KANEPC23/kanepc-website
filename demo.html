@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kane PC — One team for every layer of your technology</title>
+<meta name="description" content="Managed IT, cybersecurity, commercial security systems, and custom software for businesses across Westchester, NYC Metro, and the tri-state area.">
+<meta name="theme-color" content="#121710">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=Fraunces:opsz,wght,WONK@9..144,400..600,0..1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#121710; --bg-2:#0D110C; --panel:#1B2118; --panel-2:#232B1F;
+  --line:rgba(178,186,166,.16); --line-2:rgba(178,186,166,.30);
+  --text:#EAECE2; --muted:#98A288;
+  --green:#9DC17A; --green-dim:#6E8C55;
+  --orange:#E07A3C; --orange-deep:#C4632A;
+  --sage:#969C8E; --cream:#FEFBF6;
+  --pad:clamp(1.25rem,5vw,4.5rem);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:'Archivo',system-ui,-apple-system,sans-serif;
+  font-size:clamp(1rem,.97rem + .18vw,1.06rem);line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{margin:0;font-family:'Archivo',system-ui,sans-serif;color:var(--cream);line-height:1.02;letter-spacing:-.03em}
+h1{font-size:clamp(2.5rem,1.1rem + 5.6vw,5rem);font-weight:700;font-variation-settings:'wdth' 92}
+h2{font-size:clamp(1.9rem,1.1rem + 3vw,3.1rem);font-weight:700;font-variation-settings:'wdth' 94}
+h3{font-size:1.15rem;font-weight:600;letter-spacing:-.015em;line-height:1.2}
+p{margin:0 0 1rem}
+a{color:inherit}
+.hl{color:var(--green)}
+.dot{color:var(--orange)}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+
+.wrap{max-width:1280px;margin:0 auto;padding-inline:var(--pad)}
+section{padding-block:clamp(3.5rem,7vw,6.5rem)}
+
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 1.2rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.eyebrow::before{content:"";width:1.8rem;height:2px;background:var(--orange);flex:none}
+
+/* logo */
+.mark .ring{fill:none;stroke:var(--green-dim);stroke-width:3.4;stroke-linecap:round}
+.mark .bar{fill:var(--orange)}
+.mark .k{font-family:'Fraunces',Georgia,serif;font-weight:500;fill:var(--cream)}
+.lockup{display:flex;align-items:center;gap:.85rem;text-decoration:none}
+.lockup .word{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:1.85rem;color:var(--cream);line-height:1;white-space:nowrap;letter-spacing:-.01em}
+.lockup .word b{font-weight:500;color:var(--orange)}
+.lockup .tag{display:block;font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-top:.4rem}
+
+/* nav */
+header{position:sticky;top:0;z-index:60;background:rgba(13,17,12,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:2rem;padding-block:.85rem}
+.nav nav{margin-left:auto;display:flex;gap:1.7rem}
+.nav nav a{text-decoration:none;font-size:.9rem;font-weight:500;color:var(--text);opacity:.85;padding-block:.3rem;border-bottom:1.5px solid transparent;transition:.18s}
+.nav nav a:hover{opacity:1;border-bottom-color:var(--green)}
+.nav .tel{font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--green);text-decoration:none;padding-left:1.7rem;border-left:1px solid var(--line)}
+.btn{display:inline-flex;align-items:center;gap:.55rem;padding:.78rem 1.4rem;background:var(--orange);color:#fff;text-decoration:none;font-weight:600;font-size:.92rem;border:1px solid var(--orange);border-radius:3px;cursor:pointer;transition:.18s}
+.btn:hover{background:var(--orange-deep);border-color:var(--orange-deep);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--green);border-color:var(--line-2)}
+.btn.ghost:hover{background:rgba(157,193,122,.08);border-color:var(--green);transform:translateY(-1px)}
+.btn svg{transition:transform .18s}.btn:hover svg{transform:translateX(3px)}
+.menu-btn{display:none;background:none;border:1px solid var(--line-2);border-radius:3px;padding:.5rem .7rem;cursor:pointer}
+
+/* hero */
+.hero{position:relative;background:
+  radial-gradient(760px 380px at 84% 6%, rgba(224,122,60,.13), transparent 62%),
+  radial-gradient(900px 420px at 62% 24%, rgba(157,193,122,.09), transparent 62%),
+  linear-gradient(180deg,#0D110C,#121710 55%);
+  border-bottom:1px solid var(--line);overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:0;opacity:.4;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:64px 64px;
+  -webkit-mask-image:radial-gradient(700px 380px at 25% 40%,#000,transparent 75%);
+  mask-image:radial-gradient(700px 380px at 25% 40%,#000,transparent 75%);
+}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2rem,4vw,3.5rem);align-items:center;padding-block:clamp(3rem,6vw,5.5rem)}
+.hero .lede{font-size:clamp(1.02rem,.98rem + .4vw,1.22rem);color:#BDC6AE;max-width:44ch;margin:1.5rem 0 2.2rem}
+.cta-row{display:flex;flex-wrap:wrap;gap:.85rem}
+
+/* SIGNATURE: live console */
+.console{display:grid;gap:.85rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:.7rem .95rem;border-bottom:1px solid var(--line)}
+.card-hd .t{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.card-hd .s{font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--green);display:flex;align-items:center;gap:.4rem}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(157,193,122,.6);animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(157,193,122,.55)}70%{box-shadow:0 0 0 7px rgba(157,193,122,0)}100%{box-shadow:0 0 0 0 rgba(157,193,122,0)}}
+.card-bd{padding:.95rem}
+
+.health{display:flex;align-items:center;gap:1.3rem}
+.gauge{position:relative;width:104px;height:104px;flex:none}
+.gauge svg{transform:rotate(-90deg)}
+.gauge .track{fill:none;stroke:rgba(178,186,166,.14);stroke-width:8}
+.gauge .val{fill:none;stroke:var(--green);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1)}
+.gauge .cen{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.gauge .cen b{display:block;font-size:1.35rem;font-weight:700;color:var(--cream);letter-spacing:-.02em}
+.gauge .cen span{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.rows{flex:1;display:grid;gap:.5rem;min-width:0}
+.row{display:flex;align-items:center;gap:.6rem;font-size:.86rem}
+.row .nm{color:#C7CFB8}
+.row .st{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--green)}
+.chk{width:14px;height:14px;flex:none;stroke:var(--green);fill:none;stroke-width:2}
+
+.spark{width:100%;height:44px;display:block}
+.spark path{fill:none;stroke:var(--orange);stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+.spark .fill{fill:rgba(224,122,60,.12);stroke:none}
+
+.tick{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--muted);display:flex;gap:.5rem;align-items:center;padding:.55rem .95rem;border-top:1px solid var(--line)}
+.tick b{color:var(--green);font-weight:500}
+
+table.q{width:100%;border-collapse:collapse;font-size:.82rem}
+table.q th{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:400;padding:0 0 .55rem}
+table.q td{padding:.42rem 0;border-top:1px solid var(--line);color:#C7CFB8}
+table.q td:last-child,table.q th:last-child{text-align:right}
+.pill{font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.08em;padding:.14rem .45rem;border-radius:3px;text-transform:uppercase}
+.pill.ok{background:rgba(157,193,122,.14);color:var(--green)}
+.pill.wk{background:rgba(224,122,60,.15);color:var(--orange)}
+
+/* proof */
+.proof{border-bottom:1px solid var(--line);background:var(--bg-2)}
+.proof .grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.proof .cell{padding:1.5rem 1.3rem;border-left:1px solid var(--line)}
+.proof .cell:first-child{border-left:0;padding-left:0}
+.proof .n{font-size:2rem;font-weight:700;color:var(--cream);letter-spacing:-.03em;display:block;line-height:1}
+.proof .l{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.5rem;display:block}
+
+/* services */
+.svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:2.8rem}
+.svc article{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:1.7rem 1.5rem;display:flex;flex-direction:column;transition:.2s}
+.svc article:hover{border-color:var(--line-2);background:var(--panel-2);transform:translateY(-2px)}
+.svc .ico{width:32px;height:32px;stroke:var(--green);fill:none;stroke-width:1.5;margin-bottom:1.2rem}
+.svc h3{margin-bottom:.6rem}
+.svc p{font-size:.92rem;color:#ADB79B;margin-bottom:1.1rem}
+.svc ul{list-style:none;padding:0;margin:0 0 1.3rem;font-size:.84rem;color:#9BA688}
+.svc li{padding-left:.95rem;position:relative;margin-bottom:.32rem}
+.svc li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:1px;background:var(--orange)}
+.svc .more{margin-top:auto;font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);text-decoration:none}
+
+/* ===== radial capability map ===== */
+.orbit{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(1.5rem,4vw,3.5rem);align-items:center;margin-top:2.6rem}
+.orbit-viz svg{width:100%;height:auto;max-width:460px;margin:0 auto;display:block;overflow:visible}
+.halo{fill:none;stroke:var(--line);stroke-width:1}
+.seg{cursor:pointer}
+.seg .arc{fill:rgba(178,186,166,.045);stroke:var(--line-2);stroke-width:1;transition:fill .25s,stroke .25s}
+.seg text{fill:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:9.4px;letter-spacing:.1em;text-transform:uppercase;pointer-events:none;transition:fill .25s}
+.seg .gico{stroke:var(--muted);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;transition:stroke .25s}
+.seg:hover .arc{fill:rgba(157,193,122,.09);stroke:rgba(157,193,122,.45)}
+.seg:hover text{fill:#CFD8BF}
+.seg:hover .gico{stroke:var(--green)}
+.seg.on .arc{fill:rgba(157,193,122,.15);stroke:var(--orange);stroke-width:1.8}
+.seg.on text{fill:var(--cream)}
+.seg.on .gico{stroke:var(--green)}
+.seg:focus{outline:none}
+.seg:focus-visible .arc{stroke:var(--orange);stroke-width:2}
+.hub circle{fill:var(--panel);stroke:var(--line-2);stroke-width:1}
+.hub .ring{fill:none;stroke:var(--green-dim);stroke-width:3.4;stroke-linecap:round}
+.hub .bar{fill:var(--orange)}
+.hub .k{font-family:'Fraunces',Georgia,serif;font-weight:500;fill:var(--cream)}
+.hub .hub-t{font-family:'Fraunces',Georgia,serif;font-size:15px;fill:var(--cream)}
+.hub .hub-s{font-family:'IBM Plex Mono',monospace;font-size:8.6px;letter-spacing:.18em;text-transform:uppercase;fill:var(--muted)}
+
+.orbit-detail{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:1.9rem 1.8rem;min-height:340px}
+.pane{display:none}
+.pane.on{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pane h3{font-size:1.35rem;margin-bottom:.7rem}
+.pane p{font-size:.94rem;color:#ADB79B;margin-bottom:1.3rem}
+.pane ul{list-style:none;padding:0;margin:0;font-size:.9rem;color:#C2CBAF}
+.pane li{padding-left:1.1rem;position:relative;margin-bottom:.5rem}
+.pane li::before{content:"";position:absolute;left:0;top:.68em;width:6px;height:1px;background:var(--orange)}
+
+.platforms{margin-top:2.6rem;border-top:1px solid var(--line);padding-top:1.6rem}
+.plabel{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:1rem}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem}
+.chips span{font-size:.83rem;padding:.4rem .85rem;border:1px solid var(--line-2);border-radius:100px;color:#B4BEA2}
+.chips span:last-child{border-style:dashed;color:var(--muted)}
+
+/* work / shipped software */
+.work{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:1rem;margin-top:2.8rem}
+.proj{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:1.6rem 1.5rem 1.4rem;display:flex;flex-direction:column;transition:.2s}
+.proj:hover{border-color:var(--line-2);background:var(--panel-2);transform:translateY(-2px)}
+.proj .top{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:1rem}
+.proj h3{font-size:1.08rem}
+.proj .cat{font-family:'IBM Plex Mono',monospace;font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:-.55rem 0 .8rem}
+.proj p{font-size:.9rem;color:#ADB79B;margin-bottom:1.1rem}
+.proj .stack{display:flex;flex-wrap:wrap;gap:.35rem;margin:0 0 1.2rem}
+.proj .stack span{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:.16rem .42rem}
+.proj .go{margin-top:auto;font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);text-decoration:none;display:inline-flex;align-items:center;gap:.4rem}
+.proj .go:hover{color:var(--green)}
+.proj .go svg{transition:transform .18s}
+.proj .go:hover svg{transform:translateX(3px)}
+.proj .go.off{color:var(--muted);pointer-events:none}
+.stat{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:3px;white-space:nowrap}
+.stat.live{background:rgba(157,193,122,.14);color:var(--green)}
+.stat.soon{background:rgba(224,122,60,.15);color:var(--orange)}
+.stat.int{background:rgba(178,186,166,.10);color:var(--muted)}
+.work-note{margin-top:1.6rem;font-size:.86rem;color:var(--muted);max-width:62ch}
+
+/* split band */
+.band{background:var(--cream);color:#2E3527}
+.band h2{color:#39442E}
+.band .hl{color:#49563C}
+.band .eyebrow{color:#969C8E}
+.band .cols{display:grid;grid-template-columns:1fr 1fr;border:1px solid #D0D3C6;margin-top:2.6rem}
+.band .col{padding:2.1rem 1.9rem}
+.band .col+.col{border-left:1px solid #D0D3C6}
+.band .col h3{color:#39442E;font-size:1.3rem;margin-bottom:.8rem}
+.band .col p{color:#49563C;font-size:.95rem;margin:0}
+.band .kicker{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:#BF5A26;display:block;margin-bottom:.9rem}
+.band .close{margin-top:2.4rem;font-size:1.1rem;color:#49563C;max-width:58ch}
+
+/* industries */
+.ind{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:2.2rem}
+.ind span{font-size:.86rem;padding:.48rem .95rem;border:1px solid var(--line-2);border-radius:100px;color:#BDC6AE}
+
+/* contact */
+.contact{background:var(--bg-2);border-top:1px solid var(--line)}
+.contact .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:start}
+form{display:grid;gap:.85rem}
+label{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:.4rem}
+input,textarea,select{width:100%;padding:.78rem .9rem;background:var(--panel);border:1px solid var(--line-2);color:var(--text);font:inherit;font-size:.94rem;border-radius:3px}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--green);outline-offset:1px;border-color:transparent}
+textarea{min-height:118px;resize:vertical}
+.contact dl{margin:1.8rem 0 0;font-size:.94rem}
+.contact dt{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:1.2rem}
+.contact dd{margin:.35rem 0 0;color:#D3DAC5}
+.contact dd a{color:var(--green)}
+
+footer{background:#0A0D09;color:#8C977C;padding-block:2.4rem;font-size:.86rem;border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:1.4rem;justify-content:space-between;align-items:center}
+footer a{color:var(--green)}
+footer .sib{font-family:'IBM Plex Mono',monospace;font-size:.72rem}
+
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1!important;transform:none!important;transition:none}
+  .pulse{animation:none}
+  .gauge .val{transition:none}
+}
+@media(max-width:980px){
+  .orbit{grid-template-columns:1fr;gap:1.8rem}
+  .orbit-viz svg{max-width:360px}
+  .orbit-detail{min-height:0}
+  .hero .wrap{grid-template-columns:1fr}
+  .proof .grid{grid-template-columns:1fr 1fr}
+  .proof .cell:nth-child(3){border-left:0;padding-left:0}
+  .band .cols{grid-template-columns:1fr}
+  .band .col+.col{border-left:0;border-top:1px solid #D0D3C6}
+  .contact .wrap{grid-template-columns:1fr}
+}
+@media(max-width:780px){
+  .nav nav,.nav .tel{display:none}
+  .lockup .tag{display:none}
+  .lockup .word{font-size:1.5rem}
+  .lockup .mark{width:42px;height:42px}
+  .menu-btn{display:block;margin-left:auto}
+  .nav .btn{padding:.6rem 1rem;font-size:.85rem}
+  .health{flex-direction:column;align-items:stretch}
+  .gauge{margin:0 auto}
+}
+
+/* ===== orange contrast accents ===== */
+.hl-o{color:var(--orange)}
+.proof .n{color:var(--orange)}
+.card,.proj,.svc article,.tier{position:relative}
+.card::after,.orbit-detail::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--orange);
+  transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.16,1,.3,1);
+}
+.card:hover::after,.orbit-detail::after{transform:scaleX(1)}
+
+/* ===== gallery ===== */
+.gfilters{display:flex;gap:.55rem;flex-wrap:wrap;margin:2.4rem 0 1.8rem}
+.gfilter{
+  padding:.55rem 1.15rem;font:inherit;font-size:.82rem;font-weight:600;letter-spacing:.02em;
+  border:1.5px solid var(--line-2);background:transparent;color:#B4BEA2;border-radius:999px;
+  cursor:pointer;transition:.2s;
+}
+.gfilter:hover{border-color:var(--orange);color:var(--orange)}
+.gfilter.on{background:var(--orange);border-color:var(--orange);color:#fff}
+.ggrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:900px){.ggrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.ggrid{grid-template-columns:1fr}}
+.gitem{
+  position:relative;aspect-ratio:4/3;background:var(--panel);border:1px solid var(--line);
+  border-radius:6px;overflow:hidden;cursor:pointer;padding:0;margin:0;width:100%;
+  text-align:left;font:inherit;color:inherit;display:block;appearance:none;-webkit-appearance:none;
+  transition:.35s cubic-bezier(.16,1,.3,1);
+}
+.gitem.hidden{display:none}
+.gitem:hover{border-color:var(--orange);transform:translateY(-4px);box-shadow:0 14px 28px rgba(0,0,0,.45)}
+.gmedia{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:linear-gradient(150deg,#1E2519,#12170F)}
+.gmedia img{width:100%;height:100%;object-fit:cover}
+.gmedia svg{width:76px;height:76px;opacity:.22;color:var(--green);transition:.4s}
+.gitem:hover .gmedia svg{opacity:.4;transform:scale(1.07)}
+.gover{position:absolute;inset:0;padding:1.15rem;display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.3) 52%,transparent 82%);
+  pointer-events:none;color:#fff}
+.gcat{font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--orange);margin-bottom:.35rem;font-weight:500}
+.gtitle{font-family:'Fraunces',Georgia,serif;font-size:1.15rem;font-weight:500;line-height:1.2;color:#fff}
+.gempty{grid-column:1/-1;padding:3.5rem 1rem;text-align:center;color:var(--muted);
+  font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:1.05rem;display:none}
+.gempty.on{display:block}
+
+/* ===== lightbox ===== */
+.lb{position:fixed;inset:0;z-index:200;background:rgba(9,12,8,.97);display:none;
+  align-items:center;justify-content:center;padding:2.5rem 1.25rem;backdrop-filter:blur(8px)}
+.lb.on{display:flex}
+.lb-content{max-width:1000px;width:100%;position:relative}
+.lb-wrap{max-height:70vh;min-height:280px;background:#000;border:1px solid var(--line-2);
+  border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.lb-wrap img{max-width:100%;max-height:70vh;width:auto;height:auto;object-fit:contain;display:block}
+.lb-wrap svg{width:100px;height:100px;opacity:.3;color:var(--green)}
+.lb-thumbs{display:none;gap:.5rem;padding-top:.85rem;flex-wrap:wrap;justify-content:center}
+.lb-thumbs.on{display:flex}
+.lb-thumb{width:54px;height:54px;border-radius:3px;border:2px solid rgba(255,255,255,.15);
+  background:#000;padding:0;cursor:pointer;overflow:hidden;transition:.18s}
+.lb-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.lb-thumb:hover{border-color:rgba(255,255,255,.4)}
+.lb-thumb.on{border-color:var(--orange);transform:translateY(-2px)}
+.lb-cap{padding-top:1.15rem;display:flex;justify-content:space-between;align-items:flex-start;gap:1.25rem;color:#fff}
+.lb-cat{font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--orange);margin-bottom:.35rem;font-weight:500}
+.lb-title{font-family:'Fraunces',Georgia,serif;font-size:1.35rem;font-weight:500}
+.lb-count{margin-top:.45rem;font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.5)}
+.lb-actions{display:flex;align-items:center;gap:.7rem;flex-shrink:0}
+.lb-demo{background:var(--orange);color:#fff;text-decoration:none;font-size:.8rem;font-weight:600;
+  padding:.68rem 1.05rem;border-radius:3px;transition:.18s;white-space:nowrap}
+.lb-demo:hover{background:var(--orange-deep);transform:translateY(-1px)}
+.lb-demo[hidden]{display:none!important}
+.lb-close{background:transparent;border:1px solid rgba(255,255,255,.22);color:#fff;width:42px;height:42px;
+  border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.05rem;
+  transition:.2s;flex-shrink:0;font-family:inherit}
+.lb-close:hover{border-color:var(--orange);color:var(--orange)}
+.lb-nav{position:absolute;top:38%;transform:translateY(-50%);background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.22);width:46px;height:46px;border-radius:50%;color:#fff;
+  font-size:1.35rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;z-index:10}
+.lb-nav:hover{border-color:var(--orange);color:var(--orange)}
+.lb-prev{left:-58px}.lb-next{right:-58px}
+@media(max-width:1100px){.lb-prev{left:8px}.lb-next{right:8px}}
+@media(max-width:700px){.lb-cap{flex-direction:column}.lb-actions{justify-content:flex-end}}
+
+/* ===== office / locations ===== */
+.locations{background:var(--bg-2);border-top:1px solid var(--line)}
+.loc-card{margin-top:2.4rem;background:var(--panel);border:1px solid var(--line);border-radius:6px;
+  padding:2.2rem 2rem;display:grid;grid-template-columns:1.3fr 1fr;gap:2.5rem;position:relative;overflow:hidden}
+.loc-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--orange)}
+.loc-marker{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--orange);display:block;margin-bottom:.7rem}
+.loc-name{font-family:'Fraunces',Georgia,serif;font-size:1.9rem;color:var(--cream);margin-bottom:.8rem;letter-spacing:-.02em}
+.loc-addr{font-size:.95rem;color:#B4BEA2;line-height:1.75;margin:0}
+.loc-side{display:flex;flex-direction:column;gap:1.3rem;align-items:flex-start}
+.appt-tag{display:inline-flex;align-items:center;gap:.55rem;padding:.5rem 1rem;
+  background:rgba(224,122,60,.14);border:1px solid var(--orange);color:var(--orange);
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;border-radius:999px}
+.appt-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--orange);animation:blip 2s ease-in-out infinite}
+@keyframes blip{0%,100%{opacity:1}50%{opacity:.35}}
+.loc-hours{margin:0;font-size:.92rem}
+.loc-hours dt{font-family:'IBM Plex Mono',monospace;font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.9rem}
+.loc-hours dt:first-child{margin-top:0}
+.loc-hours dd{margin:.3rem 0 0;color:#D3DAC5}
+@media(max-width:820px){.loc-card{grid-template-columns:1fr;gap:1.8rem}}
+
+/* ===== footer client tools ===== */
+.wrap-f{max-width:1280px;margin:0 auto;padding-inline:var(--pad)}
+.ftools{display:flex;align-items:center;gap:1.75rem;flex-wrap:wrap;
+  padding-bottom:1.75rem;margin-bottom:1.75rem;border-bottom:1px solid var(--line)}
+.ftools-label{display:flex;align-items:center;gap:.7rem;font-family:'IBM Plex Mono',monospace;font-size:.65rem;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);font-weight:500;flex-shrink:0}
+.ftools-label::before{content:"";width:22px;height:1px;background:var(--orange)}
+.ftools-text{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:1rem;color:rgba(255,255,255,.82);
+  flex:1;min-width:220px;margin:0;line-height:1.45}
+.ftools-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.68rem 1.3rem;
+  border:1.5px solid var(--orange);color:var(--orange);font-family:'Archivo',sans-serif;font-size:.8rem;font-weight:600;
+  border-radius:999px;transition:.25s;flex-shrink:0;text-decoration:none}
+.ftools-cta:hover{background:var(--orange);color:#fff;transform:translateY(-1px)}
+.ftools-cta svg{transition:transform .2s}
+.ftools-cta:hover svg{transform:translateX(3px)}
+.fbase{display:flex;flex-wrap:wrap;gap:1.4rem;justify-content:space-between;align-items:center}
+@media(max-width:720px){.ftools{flex-direction:column;align-items:flex-start;gap:1rem}.ftools-cta{width:100%;justify-content:center}}
+@media(prefers-reduced-motion:reduce){.appt-tag::before{animation:none}}
+
+/* ===== the switch ===== */
+.switch{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sw-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(2rem,4vw,3.5rem);align-items:start;margin-top:2.6rem}
+.asks{list-style:none;padding:0;margin:0 0 2rem}
+.asks li{
+  position:relative;padding:.85rem 0 .85rem 2.4rem;border-bottom:1px solid var(--line);
+  font-family:'Fraunces',Georgia,serif;font-size:clamp(1.05rem,.98rem + .5vw,1.32rem);
+  line-height:1.3;color:#D7DECB;letter-spacing:-.01em;
+}
+.asks li:first-child{padding-top:0}
+.asks li::before{
+  content:"?";position:absolute;left:0;top:.9em;transform:translateY(-50%);
+  font-family:'IBM Plex Mono',monospace;font-size:.95rem;color:var(--orange);
+  width:1.5rem;height:1.5rem;border:1px solid rgba(224,122,60,.45);border-radius:50%;
+  display:grid;place-items:center;line-height:1;
+}
+.asks li:first-child::before{top:.62em}
+.sw-pivot{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:1.15rem;
+  color:var(--green);line-height:1.4;margin:0 0 1.7rem;max-width:44ch}
+.sw-promise{list-style:none;padding:0;margin:0 0 2rem;font-size:.94rem;color:#B4BEA2}
+.sw-promise li{position:relative;padding-left:1.7rem;margin-bottom:.6rem}
+.sw-promise li::before{
+  content:"";position:absolute;left:0;top:.42em;width:11px;height:6px;
+  border-left:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(-45deg);
+}
+
+.sw-show{display:grid;gap:1rem}
+.tkt{border-radius:6px;border:1px solid var(--line);padding:1.35rem 1.4rem;position:relative;overflow:hidden}
+.tkt-bad{background:#191D16;border-color:rgba(224,122,60,.28)}
+.tkt-bad::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--orange)}
+.tkt-good{background:var(--panel);border-color:rgba(157,193,122,.35)}
+.tkt-good::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green)}
+.tkt-hd{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.85rem}
+.tkt-id{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.tkt-state{font-family:'IBM Plex Mono',monospace;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.2rem .55rem;border-radius:3px;display:inline-flex;align-items:center;gap:.4rem;white-space:nowrap}
+.tkt-state.bad{background:rgba(224,122,60,.16);color:var(--orange)}
+.tkt-state.good{background:rgba(157,193,122,.16);color:var(--green)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 0 0 rgba(157,193,122,.6);animation:pulse 2.4s ease-out infinite}
+.tkt-subj{font-size:.98rem;color:#D7DECB;margin:0 0 1rem;font-weight:500}
+.tkt-log{list-style:none;padding:0;margin:0;counter-reset:none}
+.tkt-log li{display:flex;gap:.85rem;font-size:.83rem;color:#8E9880;padding:.42rem 0;border-top:1px solid var(--line)}
+.tkt-log li span{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);flex:none;width:5.4rem;padding-top:.1rem}
+.tkt-log li.waiting{color:var(--orange)}
+.tkt-log li.waiting span{color:var(--orange)}
+.dots{font-style:normal;letter-spacing:.1em}
+.dots b{font-weight:400;opacity:0;animation:ell 1.4s infinite}
+.dots b:nth-child(2){animation-delay:.22s}
+.dots b:nth-child(3){animation-delay:.44s}
+@keyframes ell{0%,20%{opacity:0}40%,100%{opacity:1}}
+.tkt-say{font-family:'Fraunces',Georgia,serif;font-size:1.45rem;color:var(--cream);margin:0 0 .7rem;letter-spacing:-.015em}
+.tkt-note{font-size:.88rem;color:#9BA688;margin:0}
+
+@media(max-width:900px){.sw-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.dots b{animation:none;opacity:1}.live-dot{animation:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="lockup" href="#top" aria-label="Kane PC home">
+      <svg class="mark" width="54" height="54" viewBox="0 0 100 100" aria-hidden="true">
+        <path class="ring" d="M 57.9 14.8 A 38 38 0 0 1 75.4 80.2"/>
+        <path class="ring" d="M 64.2 87.2 A 38 38 0 1 1 42.1 14.8"/>
+        <rect class="bar" x="48.4" y="5" width="3.2" height="15" rx="1"/>
+        <text class="k" x="50" y="72" font-size="54" text-anchor="middle">K</text>
+      </svg>
+      <span>
+        <span class="word">Kane<b>PC</b></span>
+        <span class="tag">IT Solutions. Simplified.</span>
+      </span>
+    </a>
+    <nav>
+      <a href="#switch">Why switch</a><a href="#services">Services</a><a href="#work">Work</a>
+      <a href="#approach">Approach</a><a href="#locations">Office</a><a href="#contact">Contact</a>
+    </nav>
+    <a class="tel" href="tel:+19146073313">914.607.3313</a>
+    <a class="btn" href="#contact">Schedule a consultation</a>
+    <button class="menu-btn" aria-label="Menu">
+      <svg width="18" height="12" viewBox="0 0 18 12" stroke="#EAECE2" stroke-width="1.6"><path d="M0 1h18M0 6h18M0 11h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Westchester · NYC Metro · Tri-State</p>
+      <h1>One team for<br><span class="hl">every layer</span> of<br>your technology<span class="dot">.</span></h1>
+      <p class="lede">Managed IT. Cybersecurity. Physical security. Custom software. All of it watched, patched, and answered for by the same people — and the same phone number.</p>
+      <div class="cta-row">
+        <a class="btn" href="#contact">Book a site visit
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8.5 1.2 12.6 5l-4.1 3.8"/></svg>
+        </a>
+        <a class="btn ghost" href="#services">Explore services</a>
+      </div>
+    </div>
+
+    <!-- SIGNATURE: the console we watch on your behalf -->
+    <div class="console" aria-label="Illustrative network operations console">
+      <div class="card">
+        <div class="card-hd">
+          <span class="t">Network health</span>
+          <span class="s"><i class="pulse"></i> All systems optimal</span>
+        </div>
+        <div class="card-bd">
+          <div class="health">
+            <div class="gauge">
+              <svg width="104" height="104" viewBox="0 0 104 104">
+                <circle class="track" cx="52" cy="52" r="44"/>
+                <circle class="val" id="gauge" cx="52" cy="52" r="44" stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
+              </svg>
+              <div class="cen"><b id="pct">0%</b><span>Healthy</span></div>
+            </div>
+            <div class="rows">
+              <div class="row"><svg class="chk" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/><path d="m6.5 10 2.5 2.5 4.5-5"/></svg><span class="nm">Network</span><span class="st">Online</span></div>
+              <div class="row"><svg class="chk" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/><path d="m6.5 10 2.5 2.5 4.5-5"/></svg><span class="nm">Internet</span><span class="st">Online</span></div>
+              <div class="row"><svg class="chk" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/><path d="m6.5 10 2.5 2.5 4.5-5"/></svg><span class="nm">Wi-Fi</span><span class="st">Online</span></div>
+              <div class="row"><svg class="chk" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/><path d="m6.5 10 2.5 2.5 4.5-5"/></svg><span class="nm">Servers</span><span class="st">Online</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="tick"><span id="ticker">Patch cycle complete — 41 endpoints</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd">
+          <span class="t">Endpoint protection</span>
+          <span class="s">1,000+ agents reporting</span>
+        </div>
+        <div class="card-bd">
+          <svg class="spark" viewBox="0 0 300 44" preserveAspectRatio="none" aria-hidden="true">
+            <path class="fill" id="sparkFill"></path>
+            <path id="sparkLine"></path>
+          </svg>
+          <div style="display:flex;justify-content:space-between;margin-top:.4rem" class="mono">
+            <span style="font-size:.64rem;color:var(--muted)">THREATS BLOCKED · 30D</span>
+            <span style="font-size:.64rem;color:var(--green)">0 REACHED A USER</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd">
+          <span class="t">Build queue</span>
+          <span class="s" style="color:var(--muted)">Client software</span>
+        </div>
+        <div class="card-bd">
+          <table class="q">
+            <thead><tr><th>Project</th><th>Stage</th><th>Ship</th></tr></thead>
+            <tbody>
+              <tr><td>Client portal</td><td><span class="pill ok">In progress</span></td><td class="mono" style="font-size:.72rem">Aug 14</td></tr>
+              <tr><td>Dispatch board</td><td><span class="pill wk">In review</span></td><td class="mono" style="font-size:.72rem">Aug 28</td></tr>
+              <tr><td>Intake &amp; scheduling</td><td><span class="pill ok">Shipped</span></td><td class="mono" style="font-size:.72rem">Jul 09</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="proof" style="padding-block:0">
+  <div class="wrap">
+    <div class="grid">
+      <div class="cell"><span class="n">25+</span><span class="l">Years in business</span></div>
+      <div class="cell"><span class="n">100+</span><span class="l">Client organizations</span></div>
+      <div class="cell"><span class="n">1,000+</span><span class="l">Endpoints managed</span></div>
+      <div class="cell"><span class="n">24/7</span><span class="l">Monitoring &amp; response</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ THE SWITCH — pain-point / competitive section ============ -->
+<section class="switch" id="switch">
+  <div class="wrap">
+    <div class="reveal" style="max-width:66ch">
+      <p class="eyebrow">Thinking about switching</p>
+      <h2>When something breaks, do you get a <span class="hl-o">person</span> — or a <span class="hl">portal</span>?</h2>
+    </div>
+
+    <div class="sw-grid">
+      <div class="sw-ask reveal">
+        <ul class="asks">
+          <li>Does your IT company make you file a ticket before anyone will help?</li>
+          <li>Do they tell you to email — and then nothing?</li>
+          <li>Are you waiting hours, sometimes days, for a call back?</li>
+          <li>Do you feel like an account number instead of a client?</li>
+        </ul>
+
+        <p class="sw-pivot">You shouldn't have to explain your own network to a stranger every time something goes wrong.</p>
+
+        <ul class="sw-promise">
+          <li>You get a direct line to people who already know your setup</li>
+          <li>We open the ticket. You just tell us what's broken</li>
+          <li>24/7 emergency support for managed clients</li>
+          <li>Boutique on purpose — you are not a row in someone's queue</li>
+        </ul>
+
+        <a class="btn" href="#contact">Tell us about your last outage
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8.5 1.2 12.6 5l-4.1 3.8"/></svg>
+        </a>
+      </div>
+
+      <div class="sw-show reveal">
+
+        <div class="tkt tkt-bad">
+          <div class="tkt-hd">
+            <span class="tkt-id">Ticket #48213</span>
+            <span class="tkt-state bad">Open · 3 days</span>
+          </div>
+          <p class="tkt-subj">Wi-Fi down in the front office</p>
+          <ol class="tkt-log">
+            <li><span>Mon 9:12a</span> Auto-reply: we have received your request.</li>
+            <li><span>Mon 4:40p</span> Assigned to Tier 1 queue.</li>
+            <li><span>Tue 11:05a</span> Escalated. Thank you for your patience.</li>
+            <li class="waiting"><span>Wed 2:18p</span> Awaiting response<i class="dots"><b>.</b><b>.</b><b>.</b></i></li>
+          </ol>
+        </div>
+
+        <div class="tkt tkt-good">
+          <div class="tkt-hd">
+            <span class="tkt-id">Your call</span>
+            <span class="tkt-state good"><i class="live-dot"></i>Answered · 0:04</span>
+          </div>
+          <p class="tkt-say">&ldquo;Kane PC, this is Bill.&rdquo;</p>
+          <p class="tkt-note">Same day. Same people. They already know which closet the switch is in.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE STACK: radial capability map ============ -->
+<section id="services">
+  <div class="wrap">
+    <div class="reveal" style="max-width:64ch">
+      <p class="eyebrow">The whole stack</p>
+      <h2>Not a computer shop. The <span class="hl-o">whole technology function</span>.</h2>
+      <p style="color:#ADB79B;margin-top:1.1rem">Most businesses run five vendors: an IT guy, a security product, an AV installer, a cabling contractor, and a web agency. We are all five — which means nobody gets to point at the other guy.</p>
+    </div>
+
+    <div class="orbit reveal">
+      <div class="orbit-viz">
+        <svg viewBox="0 0 400 400" role="group" aria-label="Kane PC capability map — select a practice">
+          <circle class="halo" cx="200" cy="200" r="182"/>
+          <circle class="halo" cx="200" cy="200" r="96"/>
+
+          <g class="seg on" data-pane="p-it" tabindex="0" role="button" aria-pressed="true" aria-label="Managed IT and cloud">
+            <path class="arc" d="M 103.6 45.7 A 182 182 0 0 1 296.4 45.7 L 250.9 118.6 A 96 96 0 0 0 149.1 118.6 Z"/>
+            <g class="gico" transform="translate(200,41) scale(.88) translate(-12,-12)">
+              <path d="M7 18a4.2 4.2 0 0 1 .5-8.4 5.6 5.6 0 0 1 10.8 1.4A3.6 3.6 0 0 1 17.6 18z"/>
+            </g>
+            <text x="200" y="73" text-anchor="middle">
+              <tspan x="200" dy="0">Managed IT</tspan><tspan x="200" dy="12">&amp; Cloud</tspan>
+            </text>
+          </g>
+
+          <g class="seg" data-pane="p-sec" tabindex="0" role="button" aria-pressed="false" aria-label="Cybersecurity">
+            <path class="arc" d="M 317.0 60.6 A 182 182 0 0 1 376.6 244.0 L 293.1 223.2 A 96 96 0 0 0 261.7 126.5 Z"/>
+            <g class="gico" transform="translate(351.2,150.9) scale(.88) translate(-12,-12)">
+              <path d="M12 2 4 5.5v6c0 5 3.4 9 8 10.5 4.6-1.5 8-5.5 8-10.5v-6z"/><path d="m9 12 2 2 4-4"/>
+            </g>
+            <text x="320.8" y="160.8" text-anchor="middle">
+              <tspan x="320.8" dy="0">Cyber</tspan><tspan x="320.8" dy="12">security</tspan>
+            </text>
+          </g>
+
+          <g class="seg" data-pane="p-off" tabindex="0" role="button" aria-pressed="false" aria-label="Smart office and cabling">
+            <path class="arc" d="M 368.7 268.2 A 182 182 0 0 1 212.7 381.6 L 206.7 295.8 A 96 96 0 0 0 289.0 236.0 Z"/>
+            <g class="gico" transform="translate(293.5,328.6) scale(.88) translate(-12,-12)">
+              <rect x="3" y="7" width="12" height="14" rx="1"/><path d="M6.5 11h1.5M11 11h1.5M6.5 15h1.5M11 15h1.5"/>
+              <path d="M17.5 9.5a4.5 4.5 0 0 1 3 3M17.5 13a1.6 1.6 0 0 1 1.4 1.4"/>
+            </g>
+            <text x="274.6" y="302.7" text-anchor="middle">
+              <tspan x="274.6" dy="0">Smart Office</tspan><tspan x="274.6" dy="12">&amp; Cabling</tspan>
+            </text>
+          </g>
+
+          <g class="seg" data-pane="p-c4" tabindex="0" role="button" aria-pressed="false" aria-label="Control4 automation">
+            <path class="arc" d="M 187.3 381.6 A 182 182 0 0 1 31.3 268.2 L 111.0 236.0 A 96 96 0 0 0 193.3 295.8 Z"/>
+            <g class="gico" transform="translate(106.5,328.6) scale(.88) translate(-12,-12)">
+              <path d="M4 10.5 12 4l8 6.5"/><path d="M6 12v7a1.5 1.5 0 0 0 1.5 1.5h9A1.5 1.5 0 0 0 18 19v-7"/>
+              <circle cx="12" cy="15.5" r="2"/>
+            </g>
+            <text x="125.4" y="302.7" text-anchor="middle">
+              <tspan x="125.4" dy="0">Control4</tspan><tspan x="125.4" dy="12">Automation</tspan>
+            </text>
+          </g>
+
+          <g class="seg" data-pane="p-dev" tabindex="0" role="button" aria-pressed="false" aria-label="Software and web">
+            <path class="arc" d="M 23.4 244.0 A 182 182 0 0 1 83.0 60.6 L 138.3 126.5 A 96 96 0 0 0 106.9 223.2 Z"/>
+            <g class="gico" transform="translate(48.8,150.9) scale(.88) translate(-12,-12)">
+              <path d="m8 6-6 6 6 6M16 6l6 6-6 6M14 4l-4 16"/>
+            </g>
+            <text x="79.2" y="160.8" text-anchor="middle">
+              <tspan x="79.2" dy="0">Software</tspan><tspan x="79.2" dy="12">&amp; Web</tspan>
+            </text>
+          </g>
+
+          <g class="hub">
+            <circle cx="200" cy="200" r="88"/>
+            <g transform="translate(200,178) scale(.82) translate(-50,-50)">
+              <path class="ring" d="M 57.9 14.8 A 38 38 0 0 1 75.4 80.2"/>
+              <path class="ring" d="M 64.2 87.2 A 38 38 0 1 1 42.1 14.8"/>
+              <rect class="bar" x="48.4" y="5" width="3.2" height="15" rx="1"/>
+              <text class="k" x="50" y="72" font-size="54" text-anchor="middle">K</text>
+            </g>
+            <text class="hub-t" x="200" y="248" text-anchor="middle">One team</text>
+            <text class="hub-s" x="200" y="264" text-anchor="middle">One number</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="orbit-detail" aria-live="polite">
+
+        <div class="pane on" id="p-it">
+          <h3>Managed IT &amp; Cloud</h3>
+          <p>We run the platforms your business actually lives in — and the ones you're about to move to. Not just the boxes on the network.</p>
+          <ul>
+            <li>Microsoft 365 &amp; Entra ID administration</li>
+            <li>Google Workspace administration &amp; migration</li>
+            <li>Azure, cloud hosting, and identity</li>
+            <li>QuickBooks Online, Salesforce, monday.com and the rest of your SaaS</li>
+            <li>Line-of-business and industry-specific applications</li>
+            <li>Backup, disaster recovery, and tested restores</li>
+            <li>Licensing, procurement, and vendor wrangling</li>
+            <li>24/7 monitoring and a helpdesk that answers</li>
+          </ul>
+        </div>
+
+        <div class="pane" id="p-sec">
+          <h3>Cybersecurity</h3>
+          <p>Standards set ahead of the requirement, not after the breach. Included on every seat we manage — no opt-out, no line item to decline.</p>
+          <ul>
+            <li>Managed endpoint detection &amp; response</li>
+            <li>Email security beyond what Microsoft 365 catches natively</li>
+            <li>Identity protection &amp; conditional access</li>
+            <li>Phishing simulation and awareness training</li>
+            <li>Patch and vulnerability management</li>
+            <li>Cyber-insurance questionnaire support</li>
+            <li>Incident response and recovery</li>
+          </ul>
+          <!-- VENDOR-NAMED VARIANT — if you decide to name the stack publicly, add these
+               three lines to the list above: CrowdStrike Falcon EDR (multi-CID),
+               Check Point Avanan email security, NinjaOne RMM. -->
+        </div>
+
+        <div class="pane" id="p-off">
+          <h3>Smart Office &amp; Cabling</h3>
+          <p>The physical layer everything else depends on. If the cable is wrong, no amount of software fixes it.</p>
+          <ul>
+            <li>Microsoft Teams Rooms — design, install, configuration</li>
+            <li>Conference room AV, displays, and control</li>
+            <li>Structured cabling — Cat6 / Cat6A, terminated and tested</li>
+            <li>Wi-Fi design, site surveys, and access point deployment</li>
+            <li>Commercial cameras and door access control</li>
+            <li>Racks, patch panels, and installs you'd be happy to show a client</li>
+            <li>Network segmentation for cameras, POS, and IoT</li>
+          </ul>
+        </div>
+
+        <div class="pane" id="p-c4">
+          <h3>Control4 Automation</h3>
+          <p>Certified Control4 design, installation, and programming for commercial spaces — lighting, audio, video, climate, shades. One app, one remote, one phone call when something needs adjusting.</p>
+          <ul>
+            <li>Commercial automation design &amp; programming</li>
+            <li>Multi-room audio &amp; video distribution</li>
+            <li>Lighting &amp; motorized shade integration</li>
+            <li>Conference and boardroom control</li>
+            <li>Restaurant and retail zone audio / TV control</li>
+            <li>Ongoing programming changes and support</li>
+          </ul>
+        </div>
+
+        <div class="pane" id="p-dev">
+          <h3>Software &amp; Web</h3>
+          <p>Custom software that lets a small business compete above its weight — the tool the big competitor has and you were told you couldn't afford.</p>
+          <ul>
+            <li>Client and staff portals</li>
+            <li>Trade and service tools — dispatch, scheduling, field invoicing</li>
+            <li>Marketing sites and e-commerce</li>
+            <li>iOS, Android, and progressive web apps</li>
+            <li>API integrations that connect the systems you already pay for</li>
+            <li>Ongoing product support — we maintain what we ship</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="platforms reveal">
+      <span class="plabel">Platforms we administer day to day</span>
+      <div class="chips">
+        <span>Microsoft 365</span><span>Entra ID</span><span>Azure</span><span>Google Workspace</span>
+        <span>SharePoint</span><span>Teams</span><span>QuickBooks Online</span><span>Salesforce</span>
+        <span>monday.com</span><span>Dropbox</span><span>Slack</span><span>Adobe Creative Cloud</span>
+        <span>+ your line-of-business app</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECENT WORK ============
+     Tiles render from /gallery.json — the same manifest the v6.2 site uses.
+     Item shape: { category, title, subtitle, image?, alt?, liveDemoUrl?, screens? }
+     category must be one of: cameras | control4 | msp | pos | webapps
+     ====================================== -->
+<section id="work">
+  <div class="wrap">
+    <div class="reveal" style="max-width:64ch">
+      <p class="eyebrow">Recent work</p>
+      <h2>A look at <span class="hl-o">what we've built</span>.</h2>
+      <p style="color:#ADB79B;margin-top:1.1rem">A selection of recent projects across MSP infrastructure, smart systems, surveillance, point-of-sale, and custom software. Client identities are omitted by design — most of our clients prefer it that way. Click any tile to enlarge.</p>
+    </div>
+
+    <div class="gfilters reveal" role="toolbar" aria-label="Filter projects by category">
+      <button class="gfilter on" data-filter="all" aria-pressed="true">All work</button>
+      <button class="gfilter" data-filter="msp" aria-pressed="false">MSP</button>
+      <button class="gfilter" data-filter="cameras" aria-pressed="false">Cameras</button>
+      <button class="gfilter" data-filter="control4" aria-pressed="false">Control4 &amp; AV</button>
+      <button class="gfilter" data-filter="pos" aria-pressed="false">POS Systems</button>
+      <button class="gfilter" data-filter="webapps" aria-pressed="false">Web &amp; Apps</button>
+    </div>
+
+    <div class="ggrid reveal" id="ggrid" aria-busy="true">
+      <div class="gempty" id="gempty">No projects in this category yet.</div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="approach">
+  <div class="wrap">
+    <div class="reveal" style="max-width:62ch">
+      <p class="eyebrow">Why clients consolidate here</p>
+      <h2>Most MSPs stop at the network. We <span class="hl">keep going</span>.</h2>
+    </div>
+    <div class="cols reveal">
+      <div class="col">
+        <span class="kicker">We run it</span>
+        <h3>The systems you already have</h3>
+        <p>Monitoring, patching, security, backups, licensing, hardware refresh, and the helpdesk queue — handled before you notice it needed handling.</p>
+      </div>
+      <div class="col">
+        <span class="kicker">We build it</span>
+        <h3>The software you wish you had</h3>
+        <p>When the off-the-shelf tool doesn't fit, we write the one that does: a client portal, a dispatch board, an intake form that talks to the rest of your stack.</p>
+      </div>
+    </div>
+    <p class="close reveal">Almost no local MSP can do both. That's why clients stop juggling a managed-services vendor, a web shop, and a security integrator — and consolidate here instead.</p>
+  </div>
+</section>
+
+<section id="industries">
+  <div class="wrap">
+    <div class="reveal" style="max-width:62ch">
+      <p class="eyebrow">Who we serve</p>
+      <h2>A wheelhouse of <span class="hl">familiar industries</span>.</h2>
+      <p style="color:#ADB79B;margin-top:1.1rem">Twenty-five years in, we know how each kind of business actually runs — what breaks, what's regulated, and what costs money when it goes down.</p>
+    </div>
+    <div class="ind reveal">
+      <span>Medical &amp; Dental</span><span>Veterinary</span><span>Law Firms</span><span>Accounting</span>
+      <span>Contractors &amp; Construction</span><span>Electricians &amp; Plumbers</span><span>HVAC &amp; Mechanical</span>
+      <span>Restaurants</span><span>Not-For-Profits</span><span>Car Dealerships</span>
+      <span>Retail with POS</span><span>Property Management</span>
+    </div>
+  </div>
+</section>
+
+<section class="locations" id="locations">
+  <div class="wrap">
+    <div class="reveal" style="max-width:64ch">
+      <p class="eyebrow">Where to find us</p>
+      <h2>Our office, <span class="hl-o">by appointment only</span>.</h2>
+      <p style="color:#ADB79B;margin-top:1.1rem">We do most of our work on site at your place of business. The White Plains office is open for scheduled meetings, drop-offs, and service appointments — call or send the form below to arrange a visit.</p>
+    </div>
+    <div class="loc-card reveal">
+      <div>
+        <span class="loc-marker">Headquarters</span>
+        <h3 class="loc-name">White Plains, NY</h3>
+        <p class="loc-addr">200 Mamaroneck Avenue, Suite LL4<br>White Plains, NY 10601<br>Serving Westchester, Greenwich, and the greater NYC metro</p>
+      </div>
+      <div class="loc-side">
+        <span class="appt-tag">By appointment only</span>
+        <dl class="loc-hours">
+          <dt>Hours</dt><dd>Mon–Fri · 9am–6pm</dd>
+          <dt>After hours</dt><dd>24/7 emergency support for managed clients</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Get in touch</p>
+      <h2>Let's talk about what's <span class="hl-o">breaking</span>.</h2>
+      <p style="color:#ADB79B;margin-top:1.1rem;max-width:44ch">Tell us what's going on. We'll come back with a straight answer about whether we're the right fit.</p>
+      <dl>
+        <dt>Office</dt><dd>200 Mamaroneck Ave, LL4<br>White Plains, NY 10601 · by appointment</dd>
+        <dt>Phone</dt><dd><a href="tel:+19146073313">914.607.3313</a></dd>
+        <dt>Email</dt><dd><a href="mailto:info@kanepc.com">info@kanepc.com</a></dd>
+      </dl>
+    </div>
+    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="reveal">
+      <input type="hidden" name="form-name" value="contact">
+      <input type="hidden" name="_site" value="kanepc">
+      <p hidden><label>Leave blank <input name="bot-field"></label></p>
+      <div><label for="b-name">Name</label><input id="b-name" name="name" required></div>
+      <div><label for="b-co">Company</label><input id="b-co" name="company"></div>
+      <div><label for="b-email">Email</label><input id="b-email" type="email" name="email" required></div>
+      <div><label for="b-phone">Phone</label><input id="b-phone" type="tel" name="phone"></div>
+      <div><label for="b-need">What do you need</label>
+        <select id="b-need" name="need"><option>Managed IT</option><option>Cybersecurity</option><option>Cameras &amp; access</option><option>Custom software</option><option>Not sure yet</option></select>
+      </div>
+      <div><label for="b-msg">Details</label><textarea id="b-msg" name="message"></textarea></div>
+      <button class="btn" type="submit" style="justify-content:center">Send it over</button>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap-f">
+
+    <div class="ftools">
+      <span class="ftools-label">Client tools</span>
+      <p class="ftools-text">Register a new domain or manage an existing one through our reseller portal, operated by MY Computer Solutions, Inc.</p>
+      <a class="ftools-cta" href="https://www.secureserver.net/?prog_id=464657" target="_blank" rel="noopener noreferrer">
+        Visit domain portal
+        <svg width="12" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M0 5h12M8.5 1.2 12.6 5l-4.1 3.8"/></svg>
+      </a>
+    </div>
+
+    <div class="fbase">
+      <div><strong style="color:var(--cream)">Kane PC, Inc.</strong><br>200 Mamaroneck Ave LL4 · White Plains, NY 10601 · by appointment</div>
+      <div class="sib">Home A/V &amp; security? → <a href="https://kaneavs.com">Kane AV</a></div>
+      <div>© <span id="yr">2026</span> Kane PC, Inc.</div>
+    </div>
+
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbTitle">
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous project">&#8249;</button>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Next project">&#8250;</button>
+  <div class="lb-content">
+    <div class="lb-wrap" id="lbWrap"></div>
+    <div class="lb-thumbs" id="lbThumbs" aria-label="Screens"></div>
+    <div class="lb-cap">
+      <div style="flex:1">
+        <div class="lb-cat" id="lbCat"></div>
+        <div class="lb-title" id="lbTitle"></div>
+        <div class="lb-count" id="lbCount" aria-live="polite"></div>
+      </div>
+      <div class="lb-actions">
+        <a class="lb-demo" id="lbDemo" href="#" hidden>Open live demo &rarr;</a>
+        <button class="lb-close" id="lbClose" aria-label="Close">&#10005;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* gauge */
+const C = 2 * Math.PI * 44;
+const gauge = document.getElementById('gauge'), pct = document.getElementById('pct');
+function setGauge(v){ gauge.style.strokeDashoffset = C - (C * v / 100); }
+if(reduce){ setGauge(100); pct.textContent='100%'; }
+else{
+  setTimeout(()=>{
+    setGauge(100);
+    let n=0; const iv=setInterval(()=>{ n+=2; if(n>=100){n=100;clearInterval(iv);} pct.textContent=n+'%'; },28);
+  },450);
+}
+
+/* sparkline */
+(function(){
+  const pts=[3,5,4,8,6,11,7,9,14,10,13,9,16,12,18,14,11,17,13,19,15,12,16,20,14,17,13,18,15,16];
+  const w=300,h=44,max=Math.max(...pts),step=w/(pts.length-1);
+  const d=pts.map((p,i)=>`${i?'L':'M'}${(i*step).toFixed(1)} ${(h-4-(p/max)*(h-10)).toFixed(1)}`).join(' ');
+  document.getElementById('sparkLine').setAttribute('d',d);
+  document.getElementById('sparkFill').setAttribute('d',`${d} L${w} ${h} L0 ${h} Z`);
+})();
+
+/* ticker */
+(function(){
+  if(reduce) return;
+  const msgs=[
+    'Patch cycle complete — 41 endpoints',
+    'Offsite backup verified — 3 sites',
+    'Phishing attempt quarantined — 0 delivered',
+    'Firmware updated — 12 access points',
+    'Portal build deployed — staging'
+  ];
+  let i=0; const el=document.getElementById('ticker');
+  setInterval(()=>{ i=(i+1)%msgs.length; el.style.opacity=0;
+    setTimeout(()=>{ el.textContent=msgs[i]; el.style.opacity=1; },260);
+  },4200);
+  el.style.transition='opacity .26s';
+})();
+
+/* radial capability map */
+(function(){
+  const segs=[...document.querySelectorAll('.seg')];
+  if(!segs.length) return;
+  function select(seg){
+    segs.forEach(s=>{
+      const on = s===seg;
+      s.classList.toggle('on',on);
+      s.setAttribute('aria-pressed',on);
+      const pane=document.getElementById(s.dataset.pane);
+      if(pane) pane.classList.toggle('on',on);
+    });
+  }
+  segs.forEach(s=>{
+    s.addEventListener('click',()=>select(s));
+    s.addEventListener('mouseenter',()=>select(s));
+    s.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();select(s);}
+      if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();const n=segs[(segs.indexOf(s)+1)%segs.length];n.focus();select(n);}
+      if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();const n=segs[(segs.indexOf(s)-1+segs.length)%segs.length];n.focus();select(n);}
+    });
+  });
+})();
+
+/* ===== GALLERY — renders from /gallery.json (same manifest as v6.2) ===== */
+(function(){
+  const grid = document.getElementById('ggrid');
+  const empty = document.getElementById('gempty');
+  const filters = document.querySelectorAll('.gfilter');
+  if(!grid) return;
+
+  const ICONS = {
+    cameras:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M22 8l-6 4 6 4V8z"/><circle cx="8" cy="12" r="2"/></svg>',
+    control4:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10"/><path d="M9 22V12h6v10"/></svg>',
+    msp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="2" width="20" height="8" rx="1"/><rect x="2" y="14" width="20" height="8" rx="1"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>',
+    pos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M7 6V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/><path d="M7 11h10"/><path d="M7 15h6"/></svg>',
+    webapps:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>'
+  };
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function makeTile(item){
+    const cat = item.category || 'msp';
+    const title = esc(item.title || 'Untitled project');
+    const sub = esc(item.subtitle || '');
+    const media = item.image
+      ? `<img src="${esc(item.image)}" alt="${esc(item.alt || item.title || '')}" loading="lazy">`
+      : (item.icon || ICONS[cat] || ICONS.msp);
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'gitem';
+    b.dataset.category = cat;
+    b.dataset.title = item.title || '';
+    b.dataset.subtitle = item.subtitle || '';
+    b.dataset.image = item.image || '';
+    b.dataset.alt = item.alt || item.title || '';
+    b.dataset.demo = item.liveDemoUrl || '';
+    b.dataset.screens = Array.isArray(item.screens) && item.screens.length ? JSON.stringify(item.screens) : '';
+    b.setAttribute('aria-label', `View project: ${title}${sub ? ' \u2014 ' + sub : ''}`);
+    b.innerHTML = `<div class="gmedia">${media}</div>
+      <div class="gover"><div class="gcat">${sub}</div><div class="gtitle">${title}</div></div>`;
+    b.addEventListener('click', () => openLb(b));
+    return b;
+  }
+
+  function applyFilter(f){
+    let n = 0;
+    document.querySelectorAll('.gitem').forEach(t => {
+      const show = f === 'all' || t.dataset.category === f;
+      t.classList.toggle('hidden', !show);
+      if(show) n++;
+    });
+    empty.classList.toggle('on', n === 0);
+  }
+
+  filters.forEach(btn => btn.addEventListener('click', () => {
+    filters.forEach(b => { b.classList.remove('on'); b.setAttribute('aria-pressed','false'); });
+    btn.classList.add('on'); btn.setAttribute('aria-pressed','true');
+    applyFilter(btn.dataset.filter);
+  }));
+
+  fetch('gallery.json', { cache:'no-cache' })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(data => {
+      const items = Array.isArray(data && data.items) ? data.items : [];
+      const frag = document.createDocumentFragment();
+      items.forEach(it => frag.appendChild(makeTile(it)));
+      grid.insertBefore(frag, empty);
+      grid.removeAttribute('aria-busy');
+      const active = document.querySelector('.gfilter.on');
+      applyFilter(active ? active.dataset.filter : 'all');
+    })
+    .catch(err => {
+      console.warn('gallery.json failed to load:', err);
+      grid.removeAttribute('aria-busy');
+      empty.textContent = 'Gallery is temporarily unavailable.';
+      empty.classList.add('on');
+    });
+
+  /* ===== LIGHTBOX ===== */
+  const lb = document.getElementById('lb'), lbWrap = document.getElementById('lbWrap'),
+        lbThumbs = document.getElementById('lbThumbs'), lbCat = document.getElementById('lbCat'),
+        lbTitle = document.getElementById('lbTitle'), lbCount = document.getElementById('lbCount'),
+        lbDemo = document.getElementById('lbDemo'), lbClose = document.getElementById('lbClose'),
+        lbPrev = document.getElementById('lbPrev'), lbNext = document.getElementById('lbNext');
+  let tiles = [], idx = 0, screens = [], sIdx = 0, lastFocus = null;
+
+  function readScreens(t){
+    try { const p = JSON.parse(t.dataset.screens || '[]'); return Array.isArray(p) ? p : []; }
+    catch(e){ return []; }
+  }
+
+  function openLb(tile){
+    tiles = Array.from(document.querySelectorAll('.gitem:not(.hidden)'));
+    idx = tiles.indexOf(tile);
+    if(idx < 0) return;
+    screens = readScreens(tile); sIdx = 0;
+    lastFocus = document.activeElement;
+    render();
+    lb.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => lbClose.focus(), 40);
+  }
+
+  function render(){
+    const t = tiles[idx];
+    if(!t) return;
+    let src = t.dataset.image, alt = t.dataset.alt || t.dataset.title || '';
+    if(screens.length){
+      const s = screens[sIdx] || screens[0];
+      src = s.image || ''; alt = s.alt || alt;
+    }
+    lbWrap.innerHTML = '';
+    if(src){
+      const img = document.createElement('img');
+      img.src = src; img.alt = alt;
+      lbWrap.appendChild(img);
+    } else {
+      const m = t.querySelector('.gmedia');
+      if(m) lbWrap.innerHTML = m.innerHTML;
+    }
+    lbCat.textContent = t.dataset.subtitle || '';
+    lbTitle.textContent = t.dataset.title || '';
+    lbCount.textContent = screens.length > 1
+      ? `${idx+1} / ${tiles.length}  ·  Screen ${sIdx+1} of ${screens.length}`
+      : `${idx+1} / ${tiles.length}`;
+
+    const url = t.dataset.demo || '';
+    if(url){
+      lbDemo.href = url; lbDemo.hidden = false;
+      if(/^https?:\/\//i.test(url)){ lbDemo.target = '_blank'; lbDemo.rel = 'noopener noreferrer'; }
+      else { lbDemo.removeAttribute('target'); lbDemo.removeAttribute('rel'); }
+    } else { lbDemo.hidden = true; }
+
+    lbThumbs.innerHTML = '';
+    if(screens.length > 1){
+      screens.forEach((s, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'lb-thumb' + (i === sIdx ? ' on' : '');
+        b.setAttribute('aria-label', `Show screen ${i+1} of ${screens.length}`);
+        b.setAttribute('aria-current', i === sIdx ? 'true' : 'false');
+        const im = document.createElement('img');
+        im.src = s.image; im.alt = ''; im.loading = 'lazy';
+        b.appendChild(im);
+        b.addEventListener('click', () => { sIdx = i; render(); });
+        lbThumbs.appendChild(b);
+      });
+      lbThumbs.classList.add('on');
+    } else { lbThumbs.classList.remove('on'); }
+  }
+
+  function closeLb(){
+    lb.classList.remove('on');
+    document.body.style.overflow = '';
+    if(lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  function nav(d){
+    idx = (idx + d + tiles.length) % tiles.length;
+    screens = readScreens(tiles[idx]); sIdx = 0;
+    render();
+  }
+
+  lbClose.addEventListener('click', closeLb);
+  lbPrev.addEventListener('click', () => nav(-1));
+  lbNext.addEventListener('click', () => nav(1));
+  lb.addEventListener('click', e => { if(e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => {
+    if(!lb.classList.contains('on')) return;
+    if(e.key === 'Escape'){ closeLb(); return; }
+    if(e.key === 'ArrowLeft'){ nav(-1); return; }
+    if(e.key === 'ArrowRight'){ nav(1); return; }
+    if(e.key === 'Tab'){
+      const f = [lbPrev, lbNext, lbDemo, lbClose].filter(el => el && !el.hidden);
+      const first = f[0], last = f[f.length-1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+      else if(!f.includes(document.activeElement)){ e.preventDefault(); first.focus(); }
+    }
+  });
+})();
+
+/* reveal */
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const t=document.querySelector(a.getAttribute('href'));
+  if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+}));
+</script>
+</body>
+</html>
