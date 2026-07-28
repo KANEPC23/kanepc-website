@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lamport Auditorium — Build Your System | Kane PC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#181B18;
+  --ink-2:#232823;
+  --green:#1B5E20;
+  --green-lt:#3C8541;
+  --orange:#E65100;
+  --amber:#F0A202;
+  --parchment:#F7F4EC;
+  --stone:#DED8C8;
+  --stone-2:#EBE6DA;
+  --glass-blue:#3E6FA3;
+  --red:#B3261E;
+  --disp:'Archivo',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--body);
+  background:var(--parchment);
+  color:var(--ink);
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+/* ---------- masthead ---------- */
+.kp-head{background:var(--ink);color:var(--parchment);padding:22px 28px 24px}
+.kp-head-in{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between}
+.kp-logo{font-family:var(--disp);font-weight:700;font-size:20px;letter-spacing:.22em;color:#fff;margin:0 0 3px}
+.kp-logo span{color:var(--orange)}
+.kp-tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:#9AA39A;text-transform:uppercase}
+.kp-title{font-family:var(--disp);font-weight:600;font-size:clamp(21px,3vw,30px);letter-spacing:.03em;margin:0;text-align:right;line-height:1.15}
+.kp-sub{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--amber);text-transform:uppercase;text-align:right;margin-top:5px}
+
+/* deco rule — fan/star motif from the ceiling vault */
+.kp-rule{height:6px;background:
+  repeating-linear-gradient(90deg,var(--green) 0 26px,var(--orange) 26px 32px,var(--amber) 32px 36px,var(--green) 36px 62px)}
+
+/* ---------- layout ---------- */
+.kp-wrap{max-width:1280px;margin:0 auto;padding:26px 28px 70px;display:grid;grid-template-columns:minmax(0,1fr) 336px;gap:30px;align-items:start}
+@media(max-width:1000px){.kp-wrap{grid-template-columns:1fr;padding-bottom:190px}}
+
+.kp-note{
+  border-left:4px solid var(--orange);background:#fff;
+  padding:13px 17px;font-size:13.5px;margin:0 0 24px;color:#3B403B;
+}
+.kp-note b{color:var(--ink)}
+
+/* ---------- tier presets ---------- */
+.kp-sec-hd{display:flex;align-items:baseline;gap:11px;margin:30px 0 13px;padding-bottom:7px;border-bottom:1px solid var(--stone)}
+.kp-sec-hd:first-of-type{margin-top:0}
+.kp-tag-chip{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.13em;background:var(--green);color:#fff;padding:3px 7px;border-radius:2px}
+.kp-sec-hd h2{font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.15em;text-transform:uppercase;margin:0}
+.kp-sec-hd .hint{margin-left:auto;font-size:12px;color:#6E756E}
+
+.kp-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:6px}
+@media(max-width:620px){.kp-tiers{grid-template-columns:1fr}}
+.kp-tier{
+  background:#fff;border:1.5px solid var(--stone);border-radius:3px;
+  padding:15px 15px 14px;text-align:left;cursor:pointer;font:inherit;color:inherit;
+  transition:border-color .16s,box-shadow .16s,transform .16s;position:relative;
+}
+.kp-tier:hover{border-color:var(--green-lt);transform:translateY(-2px)}
+.kp-tier[aria-pressed="true"]{border-color:var(--green);box-shadow:0 0 0 3px rgba(27,94,32,.13)}
+.kp-tier[aria-pressed="true"]::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--green);
+}
+.kp-tier-n{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px}
+.kp-tier-p{font-family:var(--mono);font-size:19px;font-weight:500;color:var(--green);margin-bottom:6px}
+.kp-tier-d{font-size:12.5px;color:#5C635C;line-height:1.45}
+.kp-rec{
+  position:absolute;top:-9px;right:11px;background:var(--orange);color:#fff;
+  font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.11em;padding:2px 7px;border-radius:2px;
+}
+
+/* ---------- daylight preview (signature) ---------- */
+.kp-day{background:var(--ink);border-radius:4px;overflow:hidden;margin:26px 0 6px}
+.kp-day-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:13px 17px 11px}
+.kp-day-top .eyebrow{color:var(--amber)}
+.kp-day-toggle{display:flex;gap:0;border:1px solid #3A403A;border-radius:3px;overflow:hidden}
+.kp-day-toggle button{
+  font:inherit;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  background:transparent;color:#9AA39A;border:0;padding:6px 13px;cursor:pointer;transition:background .15s,color .15s;
+}
+.kp-day-toggle button[aria-pressed="true"]{background:var(--amber);color:var(--ink);font-weight:600}
+
+.kp-stage{padding:0 17px 15px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:17px;align-items:center}
+@media(max-width:700px){.kp-stage{grid-template-columns:1fr}}
+
+/* the simulated screen */
+.kp-screen{position:relative;aspect-ratio:16/9;border:1px solid #3A403A;border-radius:2px;overflow:hidden;background:#0B0C0B}
+.kp-screen-img{
+  position:absolute;inset:0;padding:7% 8%;
+  background:linear-gradient(160deg,#0E2A12 0%,#123517 55%,#0B2410 100%);
+  display:flex;flex-direction:column;justify-content:center;gap:5%;
+}
+.kp-slide-t{font-family:var(--disp);font-weight:600;color:#fff;font-size:clamp(11px,2.5vw,20px);letter-spacing:.05em;line-height:1.15}
+.kp-slide-r{height:3px;width:36%;background:var(--amber)}
+.kp-slide-b{font-family:var(--body);color:#CFE0CF;font-size:clamp(8px,1.5vw,12px);max-width:78%;line-height:1.4}
+/* the amber daylight wash — this is what changes */
+.kp-wash{position:absolute;inset:0;background:#F3B24A;mix-blend-mode:screen;transition:opacity .45s ease;pointer-events:none}
+.kp-glare{
+  position:absolute;inset:0;pointer-events:none;transition:opacity .45s ease;
+  background:linear-gradient(105deg,rgba(255,225,170,.55) 0%,rgba(255,225,170,0) 42%),
+             linear-gradient(255deg,rgba(255,225,170,.42) 0%,rgba(255,225,170,0) 38%);
+}
+.kp-screen-cap{
+  position:absolute;left:0;right:0;bottom:0;background:rgba(11,12,11,.82);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;color:#B9C2B9;padding:5px 9px;text-transform:uppercase;
+}
+
+.kp-readout{display:flex;flex-direction:column;gap:11px}
+.kp-metric{border-left:3px solid var(--amber);padding-left:11px}
+.kp-metric-v{font-family:var(--mono);font-size:26px;font-weight:500;color:#fff;line-height:1}
+.kp-metric-v small{font-size:12px;color:#9AA39A;font-weight:400;margin-left:3px}
+.kp-metric-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;color:#9AA39A;text-transform:uppercase;margin-top:4px}
+.kp-verdict{font-size:12.5px;color:#D6DDD6;line-height:1.45;border-top:1px solid #2E332E;padding-top:11px}
+.kp-verdict b{color:var(--amber)}
+
+/* ---------- option groups ---------- */
+.kp-opts{display:flex;flex-direction:column;gap:2px}
+.kp-opt{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;
+  background:#fff;border:1px solid var(--stone-2);padding:12px 15px;
+}
+.kp-opt + .kp-opt{border-top:0}
+.kp-opt-l{min-width:0}
+.kp-opt-n{font-weight:600;font-size:14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.kp-opt-d{font-size:12.5px;color:#5C635C;margin-top:2px;line-height:1.42}
+.kp-req{font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.1em;background:var(--stone);color:#4A504A;padding:2px 6px;border-radius:2px;text-transform:uppercase}
+.kp-req.alert{background:#F6DAD8;color:var(--red)}
+
+/* segmented control */
+.kp-seg{display:flex;border:1px solid var(--stone);border-radius:3px;overflow:hidden;background:#fff}
+.kp-seg button{
+  font:inherit;font-family:var(--mono);font-size:11.5px;background:#fff;border:0;
+  padding:8px 13px;cursor:pointer;color:#5C635C;white-space:nowrap;transition:background .14s,color .14s;
+}
+.kp-seg button + button{border-left:1px solid var(--stone)}
+.kp-seg button:hover{background:var(--stone-2)}
+.kp-seg button[aria-pressed="true"]{background:var(--green);color:#fff;font-weight:600}
+
+/* quantity stepper */
+.kp-qty{display:flex;align-items:center;border:1px solid var(--stone);border-radius:3px;overflow:hidden;background:#fff;flex:none}
+.kp-qty button{font:inherit;font-family:var(--mono);font-size:16px;line-height:1;background:#fff;border:0;width:32px;height:35px;cursor:pointer;color:#4A504A;transition:background .14s}
+.kp-qty button:hover:not(:disabled){background:var(--stone-2)}
+.kp-qty button:disabled{opacity:.28;cursor:not-allowed}
+.kp-qty-v{font-family:var(--mono);font-size:13px;font-weight:600;min-width:52px;text-align:center;padding:9px 0;border-left:1px solid var(--stone);border-right:1px solid var(--stone)}
+
+/* switch */
+.kp-sw{position:relative;width:46px;height:25px;border-radius:13px;background:var(--stone);border:0;cursor:pointer;padding:0;transition:background .18s;flex:none}
+.kp-sw::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:transform .18s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.kp-sw[aria-pressed="true"]{background:var(--green)}
+.kp-sw[aria-pressed="true"]::after{transform:translateX(21px)}
+.kp-price-tick{font-family:var(--mono);font-size:11px;color:#7A817A;text-align:right;min-width:74px}
+
+/* ---------- summary rail ---------- */
+.kp-rail{position:sticky;top:20px}
+@media(max-width:1000px){
+  .kp-rail{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:40;box-shadow:0 -6px 24px rgba(0,0,0,.22)}
+  .kp-rail-scroll{max-height:44vh;overflow:auto}
+}
+.kp-card{background:var(--ink);color:var(--parchment);border-radius:4px;overflow:hidden}
+.kp-total-b{padding:17px 18px 15px;border-bottom:1px solid #2E332E}
+.kp-total-b .eyebrow{color:#9AA39A}
+.kp-total{font-family:var(--mono);font-size:34px;font-weight:500;color:#fff;line-height:1.05;margin-top:5px}
+.kp-total-sub{font-family:var(--mono);font-size:10.5px;color:var(--amber);letter-spacing:.07em;margin-top:5px}
+
+/* budget gauge */
+.kp-gauge-b{padding:15px 18px}
+.kp-gauge{position:relative;height:9px;background:#2E332E;border-radius:5px;overflow:hidden}
+.kp-gauge-band{position:absolute;top:0;bottom:0;left:35%;right:15%;background:rgba(60,133,65,.5)}
+.kp-gauge-fill{position:absolute;top:0;bottom:0;left:0;background:var(--green-lt);border-radius:5px;transition:width .35s ease,background .35s}
+.kp-gauge-marks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:#7A817A;margin-top:6px;letter-spacing:.05em}
+.kp-budget-msg{font-size:12px;margin-top:9px;line-height:1.4;color:#C8D0C8}
+.kp-budget-msg.over{color:#F3B0A8}
+.kp-budget-msg.good{color:#9FD3A4}
+
+.kp-lines{padding:4px 18px 15px}
+.kp-line{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:6px 0;border-bottom:1px solid #262B26}
+.kp-line:last-child{border-bottom:0}
+.kp-line span:first-child{color:#B9C2B9}
+.kp-line span:last-child{font-family:var(--mono);font-size:12.5px;color:#fff}
+.kp-line.sub span:first-child{color:#7A817A;padding-left:10px;font-size:12px}
+.kp-line.grand{border-top:1px solid #3A403A;margin-top:5px;padding-top:9px}
+.kp-line.grand span{font-weight:600;color:#fff}
+.kp-line.annual span:last-child{color:var(--amber)}
+
+.kp-acts{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px}
+.kp-btn{
+  font:inherit;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;
+  padding:11px 14px;border-radius:3px;cursor:pointer;text-align:center;text-decoration:none;display:block;
+  border:1px solid #3A403A;background:transparent;color:var(--parchment);transition:background .15s,border-color .15s;
+}
+.kp-btn:hover{background:#2E332E;border-color:#4C534C}
+.kp-btn.pri{background:var(--orange);border-color:var(--orange);color:#fff}
+.kp-btn.pri:hover{background:#CF4900;border-color:#CF4900}
+
+/* ---------- footer ---------- */
+.kp-foot{background:var(--ink-2);color:#8F978F;font-size:12px;padding:22px 28px;text-align:center;line-height:1.6}
+.kp-foot b{color:var(--parchment)}
+.kp-foot-in{max-width:800px;margin:0 auto}
+
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  .kp-rail{position:static}.kp-acts,.kp-tiers,.kp-day-toggle{display:none}
+  body{background:#fff}.kp-wrap{grid-template-columns:1fr;display:block}
+  .kp-card{background:#fff;color:#000;border:1px solid #999}
+  .kp-total,.kp-line span:last-child{color:#000}
+  .kp-line span:first-child{color:#333}
+}
+</style>
+</head>
+<body>
+
+<header class="kp-head">
+  <div class="kp-head-in">
+    <div>
+      <p class="kp-logo">KANE<span>·</span>PC</p>
+      <p class="kp-tag">Managed IT · Cybersecurity · Audio Visual Systems</p>
+    </div>
+    <div>
+      <h1 class="kp-title">Lamport Auditorium</h1>
+      <p class="kp-sub">Build your system — budgetary estimate</p>
+    </div>
+  </div>
+</header>
+<div class="kp-rule"></div>
+
+<div class="kp-wrap">
+
+  <main>
+    <p class="kp-note">
+      <b>This is a budgetary tool, not a quotation.</b> Start from one of the three configurations below,
+      then change anything you like — the estimate updates as you go. Part selections establish
+      performance class and price band; final equipment goes out to competitive bid.
+    </p>
+
+    <!-- TIERS -->
+    <div class="kp-sec-hd">
+      <span class="kp-tag-chip">START</span>
+      <h2>Choose a starting point</h2>
+      <span class="hint">Then adjust anything below</span>
+    </div>
+    <div class="kp-tiers" id="tiers"></div>
+
+    <!-- DAYLIGHT SIGNATURE -->
+    <div class="kp-day">
+      <div class="kp-day-top">
+        <span class="eyebrow">Daylight preview — Lamport cannot be darkened</span>
+        <div class="kp-day-toggle" role="group" aria-label="Time of day">
+          <button type="button" data-tod="mid" aria-pressed="true">Midday</button>
+          <button type="button" data-tod="eve" aria-pressed="false">Evening</button>
+        </div>
+      </div>
+      <div class="kp-stage">
+        <div class="kp-screen">
+          <div class="kp-screen-img">
+            <div class="kp-slide-t">Commencement 2026</div>
+            <div class="kp-slide-r"></div>
+            <div class="kp-slide-b">Sample content as seen from the middle of the orchestra.</div>
+          </div>
+          <div class="kp-wash" id="wash"></div>
+          <div class="kp-glare" id="glare"></div>
+          <div class="kp-screen-cap" id="screenCap">20 ft screen · 30,000 lm</div>
+        </div>
+        <div class="kp-readout">
+          <div class="kp-metric">
+            <div class="kp-metric-v"><span id="flVal">147</span><small>fL</small></div>
+            <div class="kp-metric-l">Image brightness on screen</div>
+          </div>
+          <div class="kp-metric" style="border-color:var(--glass-blue)">
+            <div class="kp-metric-v"><span id="crVal">3.1</span><small>: 1</small></div>
+            <div class="kp-metric-l">Contrast against ambient light</div>
+          </div>
+          <p class="kp-verdict" id="verdict"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTIONS -->
+    <div id="groups"></div>
+  </main>
+
+  <!-- SUMMARY RAIL -->
+  <aside class="kp-rail">
+    <div class="kp-card">
+      <div class="kp-total-b">
+        <span class="eyebrow">Estimated project total</span>
+        <div class="kp-total" id="grandTotal">$0</div>
+        <div class="kp-total-sub" id="tierLabel">Custom configuration</div>
+      </div>
+      <div class="kp-gauge-b">
+        <div class="kp-gauge">
+          <div class="kp-gauge-band"></div>
+          <div class="kp-gauge-fill" id="gaugeFill"></div>
+        </div>
+        <div class="kp-gauge-marks"><span>$0</span><span>$175K</span><span>$250K</span><span>$500K</span></div>
+        <p class="kp-budget-msg" id="budgetMsg"></p>
+      </div>
+      <div class="kp-rail-scroll">
+        <div class="kp-lines" id="lines"></div>
+      </div>
+      <div class="kp-acts">
+        <button class="kp-btn pri" type="button" onclick="window.print()">Print / save as PDF</button>
+        <a class="kp-btn" href="Lamport-Facilities-Dashboard.html">Preview the facilities portal</a>
+        <button class="kp-btn" type="button" id="resetBtn">Reset to Growth</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer class="kp-foot">
+  <div class="kp-foot-in">
+    <b>Kane PC</b> · 200 Mamaroneck Avenue LL4, White Plains, NY 10601 · 914-607-3313 · kanepc.com<br>
+    Budgetary estimate only. Pricing is placeholder and has not been distributor-quoted.
+    Figures are subject to field verification and to the open items identified in the design brief.
+    Lighting control is covered under a separate proposal.
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+/* ============ price model ============ */
+const PRICE = {
+  proj:{ '20k':34000, '30k':58000 },
+  lens:{ '20k':10000, '30k':12000 },
+  encl:{ '20k':7500,  '30k':8500  },
+  screen:{ '20':19000, '22':23000 },
+  masking:3000,
+  matrix:{ '6x2':4500, '8x4':8500, '16x8':14000 },
+  plates:{ '6x2':900,  '8x4':1800, '16x8':3600 },
+  rack:{ '6x2':3500,  '8x4':4500, '16x8':6500 },
+  ext:2400,
+  confidence:2800,
+  dsp:{ small:5500, mid:8500, large:14000 },
+  netsw:{ small:2200, mid:2200, large:4400 },
+  mics:{ small:450, mid:2200, large:5500 },
+  wirePerCh:{ std:1400, prem:1800 },
+  wireFixed:2800,
+  wireAnt2:900,
+  desk:9500,
+  amps:16000,
+  fills:9480,
+  monitors:4500,
+  als:10900,
+  retune:9000,
+  cameraEach:4000,
+  encoder:13000,
+  proc:{ 1:3200, 2:4500, 3:6500 },
+  panels:{ 1:2400, 2:5200, 3:7800 },
+  arrayReplace:85000,
+  monitoring:9500
+};
+const LABOR_BASE = 25000, LABOR_PCT = 0.165, PW_UPLIFT = 0.55;
+
+const PRESETS = {
+  essentials:{ proj:'20k', screen:'20', masking:false, matrix:'6x2', confidence:false,
+    dsp:'small', wireless:8, micClass:'std', desk:false, amps:false, fills:false, monitors:false,
+    cameras:0, encoder:false, panels:1, arrayReplace:false, pw:false, monitoring:false },
+  growth:{ proj:'30k', screen:'20', masking:false, matrix:'8x4', confidence:false,
+    dsp:'mid', wireless:12, micClass:'std', desk:true, amps:false, fills:false, monitors:false,
+    cameras:0, encoder:false, panels:2, arrayReplace:false, pw:false, monitoring:false },
+  complete:{ proj:'30k', screen:'22', masking:true, matrix:'16x8', confidence:true,
+    dsp:'large', wireless:16, micClass:'prem', desk:true, amps:true, fills:true, monitors:true,
+    cameras:2, encoder:true, panels:3, arrayReplace:false, pw:false, monitoring:true }
+};
+
+let S = Object.assign({}, PRESETS.growth);
+let TOD = 'mid';
+
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+
+/* ============ calculation ============ */
+function wirelessCost(){
+  return S.wireless * PRICE.wirePerCh[S.micClass]
+       + PRICE.wireFixed
+       + (S.wireless > 8 ? PRICE.wireAnt2 : 0);
+}
+function cameraCost(){ return S.cameras * PRICE.cameraEach; }
+
+function calc(){
+  const video =
+    PRICE.proj[S.proj] + PRICE.lens[S.proj] + PRICE.encl[S.proj] +
+    PRICE.screen[S.screen] + (S.masking?PRICE.masking:0) +
+    PRICE.matrix[S.matrix] + PRICE.plates[S.matrix] + PRICE.rack[S.matrix] +
+    PRICE.ext + (S.confidence?PRICE.confidence:0);
+
+  const audio =
+    PRICE.dsp[S.dsp] + PRICE.netsw[S.dsp] + PRICE.mics[S.dsp] +
+    wirelessCost() + (S.desk?PRICE.desk:0) +
+    (S.amps?PRICE.amps:0) + (S.fills?PRICE.fills:0) + (S.monitors?PRICE.monitors:0) +
+    PRICE.als + PRICE.retune;
+
+  const capture = cameraCost() + (S.encoder?PRICE.encoder:0);
+  const control = PRICE.proc[S.panels] + PRICE.panels[S.panels];
+
+  const hardware = video + audio + capture + control;
+  let labor = LABOR_BASE + LABOR_PCT * hardware;
+  const pw = S.pw ? labor * PW_UPLIFT : 0;
+  const alt = S.arrayReplace ? PRICE.arrayReplace : 0;
+  const total = hardware + labor + pw + alt;
+
+  return { video, audio, capture, control, hardware, labor, pw, alt, total,
+    design:labor*.26, install:labor*.47, program:labor*.20, train:labor*.07 };
+}
+
+/* daylight model: 1.1 gain screen, 16:9 */
+function daylight(){
+  const w = parseFloat(S.screen);
+  const area = w * (w * 9/16);
+  const lm = S.proj === '30k' ? 30000 : 20000;
+  const fl = lm * 1.1 / area;
+  const amb = TOD === 'mid' ? 70 : 5;
+  const cr = (fl + amb) / amb;
+  return { fl, cr, amb, w, lm };
+}
+
+/* ============ option schema ============ */
+const QTY = {};
+const GROUPS = [
+  { tag:'VID', name:'Video', hint:'The projector drives everything in this room', items:[
+    { k:'proj', t:'Projector brightness', d:'Lamport cannot be darkened. Brightness is the single most consequential choice in this estimate.',
+      type:'seg', opts:[['20k','20,000 lm'],['30k','30,000 lm']] },
+    { k:'screen', t:'Screen width', d:'Wider reads better from the balcony. Narrower is brighter. The trade is real.',
+      type:'seg', opts:[['20','20 ft'],['22','22 ft']] },
+    { k:'masking', t:'Side masking', d:'Motorised black masking for content that is not 16:9.', type:'sw' },
+    { k:'matrix', t:'Switching capacity', d:'How many sources and destinations the room can route.',
+      type:'seg', opts:[['6x2','6 × 2'],['8x4','8 × 4'],['16x8','16 × 8']] },
+    { k:'confidence', t:'Presenter confidence monitor', d:'55-inch display at the lectern showing the current slide.', type:'sw' }
+  ]},
+  { tag:'AUD', name:'Audio', hint:'Existing loudspeaker arrays retained', items:[
+    { k:'dsp', t:'Processing platform', d:'Replaces the discontinued Biamp Audia. Larger frames add input and output capacity.',
+      type:'seg', opts:[['small','Compact'],['mid','Standard'],['large','Full frame']] },
+    { k:'wireless', t:'Wireless microphone channels', d:'Receivers are dual-channel, so channels step in pairs. Above eight channels a second antenna distribution unit is added automatically.',
+      type:'qty', min:4, max:20, step:2, suffix:' ch', badge:'Replacement required', badgeAlert:true },
+    { k:'micClass', t:'Receiver class', d:'Standard suits speech and general events. Premium adds Dante networking, encryption and tighter channel spacing for crowded RF.',
+      type:'seg', opts:[['std','Standard'],['prem','Premium']] },
+    { k:'desk', t:'Mixing console at the mix position', d:'For events that warrant an operator. Without it the room runs from presets.', type:'sw' },
+    { k:'amps', t:'Replace amplifiers', d:'New networked amplifiers in place of the existing Crown units.', type:'sw' },
+    { k:'fills', t:'Under-balcony fill loudspeakers', d:'Six units. The rear orchestra seats are the weakest in the house without them.', type:'sw' },
+    { k:'monitors', t:'Stage monitors', d:'Two units with amplification for performers.', type:'sw' },
+    { k:'als', t:'Assistive listening system', d:'35 receivers and 9 neck loops. Required by the ADA for an assembly area with amplified sound.',
+      type:'fixed', badge:'Included' }
+  ]},
+  { tag:'CAP', name:'Capture and streaming', hint:'Optional at every tier', items:[
+    { k:'cameras', t:'PTZ cameras', d:'One covers the house. Two adds a stage angle. Three or more allows cutting between wide, lectern and audience.',
+      type:'qty', min:0, max:4, step:1, suffix:'' },
+    { k:'encoder', t:'Production switcher and recorder', d:'Streaming encoder with local recording.', type:'sw' }
+  ]},
+  { tag:'CTL', name:'Control', hint:'', items:[
+    { k:'panels', t:'Touch panel locations', d:'House, mix position, and stage. One panel runs the room; more add convenience.',
+      type:'seg', opts:[[1,'1 panel'],[2,'2 panels'],[3,'3 panels']] }
+  ]},
+  { tag:'ALT', name:'Alternates and contingency', hint:'Priced separately from the base system', items:[
+    { k:'arrayReplace', t:'Loudspeaker array replacement', d:'Included only if field verification shows the existing arrays cannot be supported. This is the largest single risk in the project.', type:'sw' },
+    { k:'pw', t:'Prevailing wage on labour', d:'Applies if federally sourced funds are used. Adds roughly 55 percent to the labour lines.', type:'sw' },
+    { k:'monitoring', t:'Kane PC managed monitoring', d:'Proactive fault, laser hours, thermal and network monitoring. Billed annually, shown separately from the capital total.', type:'sw', annual:true }
+  ]}
+];
+
+/* ============ render ============ */
+function priceOf(k){
+  const c = calc();
+  const alt = Object.assign({}, S);
+  switch(k){
+    case 'masking': return PRICE.masking;
+    case 'confidence': return PRICE.confidence;
+    case 'desk': return PRICE.desk;
+    case 'amps': return PRICE.amps;
+    case 'fills': return PRICE.fills;
+    case 'monitors': return PRICE.monitors;
+    case 'cameras': return cameraCost();
+    case 'wireless': return wirelessCost();
+    case 'encoder': return PRICE.encoder;
+    case 'arrayReplace': return PRICE.arrayReplace;
+    case 'monitoring': return PRICE.monitoring;
+    case 'als': return PRICE.als;
+    default: return null;
+  }
+}
+
+function buildTiers(){
+  const el = document.getElementById('tiers');
+  const meta = [
+    ['essentials','Essentials','A complete, working, code-compliant system.'],
+    ['growth','Growth','Adds the brightness this room needs, plus a mixing position.'],
+    ['complete','Complete','Full replacement including capture, fills and amplifiers.']
+  ];
+  el.innerHTML = meta.map(([key,label,desc])=>{
+    const saved = S; S = Object.assign({}, PRESETS[key]);
+    const t = calc().total; S = saved;
+    return `<button type="button" class="kp-tier" data-preset="${key}" aria-pressed="false">
+      ${key==='growth'?'<span class="kp-rec">Recommended</span>':''}
+      <div class="kp-tier-n">${label}</div>
+      <div class="kp-tier-p">${money(t)}</div>
+      <div class="kp-tier-d">${desc}</div>
+    </button>`;
+  }).join('');
+  el.querySelectorAll('[data-preset]').forEach(b=>{
+    b.addEventListener('click',()=>{ S = Object.assign({}, PRESETS[b.dataset.preset]); render(); });
+  });
+}
+
+function buildGroups(){
+  const host = document.getElementById('groups');
+  host.innerHTML = GROUPS.map(g=>`
+    <div class="kp-sec-hd">
+      <span class="kp-tag-chip">${g.tag}</span>
+      <h2>${g.name}</h2>
+      ${g.hint?`<span class="hint">${g.hint}</span>`:''}
+    </div>
+    <div class="kp-opts">
+      ${g.items.map(it=>{
+        let ctrl='';
+        if(it.type==='seg'){
+          ctrl = `<div class="kp-seg" role="group">${it.opts.map(([v,l])=>
+            `<button type="button" data-k="${it.k}" data-v="${v}" aria-pressed="false">${l}</button>`).join('')}</div>`;
+        } else if(it.type==='qty'){
+          QTY[it.k] = {min:it.min, max:it.max, step:it.step, suffix:it.suffix||''};
+          ctrl = `<div style="display:flex;align-items:center;gap:12px">
+            <span class="kp-price-tick" data-tick="${it.k}"></span>
+            <div class="kp-qty">
+              <button type="button" data-qty="${it.k}" data-dir="-1" aria-label="Fewer ${it.t}">&minus;</button>
+              <span class="kp-qty-v" data-qtyv="${it.k}">0</span>
+              <button type="button" data-qty="${it.k}" data-dir="1" aria-label="More ${it.t}">+</button>
+            </div></div>`;
+        } else if(it.type==='sw'){
+          ctrl = `<div style="display:flex;align-items:center;gap:12px">
+            <span class="kp-price-tick" data-tick="${it.k}"></span>
+            <button type="button" class="kp-sw" data-k="${it.k}" data-toggle="1" aria-pressed="false" aria-label="${it.t}"></button></div>`;
+        } else {
+          ctrl = `<span class="kp-price-tick">${money(PRICE.als)}</span>`;
+        }
+        return `<div class="kp-opt">
+          <div class="kp-opt-l">
+            <div class="kp-opt-n">${it.t}${it.badge?`<span class="kp-req${it.badgeAlert?' alert':''}">${it.badge}</span>`:''}</div>
+            <div class="kp-opt-d">${it.d}</div>
+          </div>
+          ${ctrl}
+        </div>`;
+      }).join('')}
+    </div>
+  `).join('');
+
+  host.querySelectorAll('.kp-seg button').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const v = b.dataset.v;
+      S[b.dataset.k] = isNaN(Number(v)) ? v : Number(v);
+      render();
+    });
+  });
+  host.querySelectorAll('[data-toggle]').forEach(b=>{
+    b.addEventListener('click',()=>{ S[b.dataset.k] = !S[b.dataset.k]; render(); });
+  });
+  host.querySelectorAll('[data-qty]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const k = b.dataset.k || b.getAttribute('data-qty');
+      const m = QTY[k];
+      const next = S[k] + Number(b.dataset.dir) * m.step;
+      S[k] = Math.max(m.min, Math.min(m.max, next));
+      render();
+    });
+  });
+}
+
+function matchedPreset(){
+  for(const k in PRESETS){
+    if(Object.keys(PRESETS[k]).every(p=>PRESETS[k][p]===S[p])) return k;
+  }
+  return null;
+}
+
+function render(){
+  const c = calc(), d = daylight();
+
+  /* option states */
+  document.querySelectorAll('.kp-seg button').forEach(b=>{
+    const v = isNaN(Number(b.dataset.v)) ? b.dataset.v : Number(b.dataset.v);
+    b.setAttribute('aria-pressed', String(S[b.dataset.k]===v));
+  });
+  document.querySelectorAll('[data-toggle]').forEach(b=>{
+    b.setAttribute('aria-pressed', String(!!S[b.dataset.k]));
+  });
+  document.querySelectorAll('[data-qtyv]').forEach(el=>{
+    const k = el.dataset.qtyv, m = QTY[k];
+    el.textContent = S[k] + (m.suffix||'');
+  });
+  document.querySelectorAll('[data-qty]').forEach(b=>{
+    const k = b.getAttribute('data-qty'), m = QTY[k], dir = Number(b.dataset.dir);
+    b.disabled = dir < 0 ? S[k] <= m.min : S[k] >= m.max;
+  });
+  document.querySelectorAll('[data-tick]').forEach(el=>{
+    const k = el.dataset.tick;
+    const p = priceOf(k);
+    const v = S[k];
+    const on = typeof v === 'number' ? v > 0 : !!v;
+    el.textContent = p ? (on ? '+ ' : '') + money(p) : money(0);
+    el.style.color = on ? 'var(--green)' : '#9AA39A';
+  });
+
+  /* tier states */
+  const mp = matchedPreset();
+  document.querySelectorAll('[data-preset]').forEach(b=>
+    b.setAttribute('aria-pressed', String(b.dataset.preset===mp)));
+  document.getElementById('tierLabel').textContent =
+    mp ? mp.charAt(0).toUpperCase()+mp.slice(1)+' configuration' : 'Custom configuration';
+
+  /* daylight */
+  const wash = Math.max(0, Math.min(.62, d.amb/(d.fl+d.amb)));
+  document.getElementById('wash').style.opacity = wash.toFixed(3);
+  document.getElementById('glare').style.opacity = (TOD==='mid'?.85:.06).toFixed(2);
+  document.getElementById('flVal').textContent = Math.round(d.fl);
+  document.getElementById('crVal').textContent = d.cr.toFixed(1);
+  document.getElementById('screenCap').textContent =
+    `${d.w} ft screen · ${d.lm.toLocaleString()} lm · 1.1 gain`;
+
+  let vtxt;
+  if(TOD==='eve'){
+    vtxt = `After dark the room performs well at any of these settings. <b>Daylight is the design constraint</b>, so switch to Midday to compare.`;
+  } else if(d.cr >= 3.0){
+    vtxt = `Readable through the afternoon. <b>This is the configuration we recommend</b> for a room with uncovered art glass on both walls.`;
+  } else if(d.cr >= 2.6){
+    vtxt = `Usable, with visible flattening on the brightest afternoons. High-contrast slide templates will matter.`;
+  } else {
+    vtxt = `<b>Washed out at midday.</b> Legible for text, but photographs and video will look flat. Consider more lumens or a narrower screen.`;
+  }
+  document.getElementById('verdict').innerHTML = vtxt;
+
+  /* summary */
+  document.getElementById('grandTotal').textContent = money(c.total);
+
+  const pct = Math.min(100, c.total/500000*100);
+  const fill = document.getElementById('gaugeFill');
+  fill.style.width = pct + '%';
+  const msg = document.getElementById('budgetMsg');
+  msg.className = 'kp-budget-msg';
+  if(c.total > 250000){
+    fill.style.background = 'var(--orange)';
+    msg.classList.add('over');
+    msg.textContent = `${money(c.total-250000)} above the $250,000 ceiling.`;
+  } else if(c.total >= 175000){
+    fill.style.background = 'var(--green-lt)';
+    msg.classList.add('good');
+    msg.textContent = `Within the $175,000 to $250,000 range, with ${money(250000-c.total)} of headroom.`;
+  } else {
+    fill.style.background = 'var(--amber)';
+    msg.textContent = `${money(175000-c.total)} below the range. Room to add scope.`;
+  }
+
+  const L = [];
+  L.push(['Video', c.video]);
+  L.push(['Audio', c.audio]);
+  if(c.capture) L.push(['Capture and streaming', c.capture]);
+  L.push(['Control', c.control]);
+  L.push(['Equipment subtotal', c.hardware, 'strong']);
+  L.push(['Design and engineering', c.design, 'sub']);
+  L.push(['Installation', c.install, 'sub']);
+  L.push(['Programming and commissioning', c.program, 'sub']);
+  L.push(['Training and documentation', c.train, 'sub']);
+  if(c.pw) L.push(['Prevailing wage uplift', c.pw]);
+  if(c.alt) L.push(['Array replacement alternate', c.alt]);
+
+  let html = L.map(([n,v,cls])=>
+    `<div class="kp-line ${cls==='sub'?'sub':''}"><span>${n}</span><span>${money(v)}</span></div>`).join('');
+  html += `<div class="kp-line grand"><span>Project total</span><span>${money(c.total)}</span></div>`;
+  if(S.monitoring)
+    html += `<div class="kp-line annual"><span>Managed monitoring</span><span>${money(PRICE.monitoring)} / yr</span></div>`;
+  document.getElementById('lines').innerHTML = html;
+}
+
+/* ============ wire up ============ */
+document.querySelectorAll('[data-tod]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    TOD = b.dataset.tod;
+    document.querySelectorAll('[data-tod]').forEach(x=>
+      x.setAttribute('aria-pressed', String(x.dataset.tod===TOD)));
+    render();
+  });
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  S = Object.assign({}, PRESETS.growth); render();
+});
+
+buildTiers();
+buildGroups();
+render();
+</script>
+</body>
+</html>
