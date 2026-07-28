@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lamport Auditorium — Facilities Portal | Kane PC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#181B18; --ink-2:#232823; --ink-3:#2E332E;
+  --green:#1B5E20; --green-lt:#3C8541; --green-glow:#5DBF66;
+  --orange:#E65100; --amber:#F0A202;
+  --parchment:#F7F4EC; --stone:#DED8C8; --stone-2:#EBE6DA;
+  --blue:#3E6FA3; --red:#B3261E;
+  --disp:'Archivo',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:var(--body);background:var(--parchment);color:var(--ink);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.eyebrow{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase}
+
+/* ---- masthead ---- */
+.fh{background:var(--ink);color:var(--parchment);padding:18px 26px 0}
+.fh-in{max-width:1340px;margin:0 auto}
+.fh-top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;padding-bottom:15px}
+.fh-logo{font-family:var(--disp);font-weight:700;font-size:18px;letter-spacing:.22em;color:#fff;margin:0 0 2px}
+.fh-logo span{color:var(--orange)}
+.fh-room{font-family:var(--disp);font-weight:600;font-size:clamp(18px,2.6vw,25px);letter-spacing:.03em;margin:0;text-align:right}
+.fh-room + p{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#8F978F;text-transform:uppercase;text-align:right;margin:4px 0 0}
+.fh-demo{display:inline-block;background:var(--amber);color:var(--ink);font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;padding:3px 8px;border-radius:2px;text-transform:uppercase;margin-top:7px}
+
+/* tabs */
+.fh-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.fh-tabs::-webkit-scrollbar{display:none}
+.fh-tabs button{
+  font:inherit;font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  background:transparent;border:0;border-bottom:3px solid transparent;color:#8F978F;
+  padding:11px 15px;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s;
+}
+.fh-tabs button:hover{color:var(--parchment)}
+.fh-tabs button[aria-selected="true"]{color:#fff;border-bottom-color:var(--orange);font-weight:600}
+.f-rule{height:5px;background:repeating-linear-gradient(90deg,var(--green) 0 26px,var(--orange) 26px 32px,var(--amber) 32px 36px,var(--green) 36px 62px)}
+
+/* ---- layout ---- */
+.fw{max-width:1340px;margin:0 auto;padding:22px 26px 60px}
+.panel{display:none}
+.panel.on{display:block}
+
+.statusbar{
+  display:flex;flex-wrap:wrap;gap:10px 26px;align-items:center;
+  background:#fff;border:1px solid var(--stone-2);border-left:4px solid var(--green);
+  padding:12px 17px;margin-bottom:20px;
+}
+.statusbar .st{display:flex;align-items:center;gap:8px;font-size:13px}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+.dot.ok{background:var(--green-glow);box-shadow:0 0 0 3px rgba(93,191,102,.22)}
+.dot.warn{background:var(--amber);box-shadow:0 0 0 3px rgba(240,162,2,.2)}
+.dot.bad{background:var(--red);box-shadow:0 0 0 3px rgba(179,38,30,.18)}
+.dot.off{background:#A9B0A9}
+.statusbar .when{margin-left:auto;font-family:var(--mono);font-size:11px;color:#7A817A}
+
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g-rack{grid-template-columns:minmax(0,1fr) 330px}
+@media(max-width:1080px){.g4{grid-template-columns:repeat(2,1fr)}.g-rack{grid-template-columns:1fr}}
+@media(max-width:720px){.g4,.g3,.g2{grid-template-columns:1fr}}
+
+.card{background:#fff;border:1px solid var(--stone-2);border-radius:3px;padding:15px 17px}
+.card h3{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.13em;text-transform:uppercase;margin:0 0 12px;color:#4A504A;display:flex;align-items:center;gap:8px}
+.card h3 .n{font-family:var(--mono);font-size:11px;color:#9AA39A;margin-left:auto;font-weight:400;letter-spacing:.04em}
+
+/* metric tiles */
+.tile{background:var(--ink);color:var(--parchment);border-radius:3px;padding:15px 16px;position:relative;overflow:hidden}
+.tile .eyebrow{color:#8F978F}
+.tile .val{font-family:var(--mono);font-size:31px;font-weight:500;color:#fff;line-height:1.05;margin:7px 0 2px}
+.tile .val small{font-size:13px;color:#8F978F;margin-left:3px;font-weight:400}
+.tile .meta{font-size:12px;color:#B9C2B9}
+.bar{height:5px;background:var(--ink-3);border-radius:3px;overflow:hidden;margin-top:11px}
+.bar i{display:block;height:100%;border-radius:3px;transition:width .6s ease}
+
+/* generic rows */
+.row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--stone-2);font-size:13.5px}
+.row:last-child{border-bottom:0}
+.row .nm{font-weight:500}
+.row .sub{font-size:12px;color:#6E756E}
+.row .rt{margin-left:auto;text-align:right;font-family:var(--mono);font-size:12px;white-space:nowrap}
+
+.pill{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.09em;padding:2px 7px;border-radius:2px;text-transform:uppercase;white-space:nowrap}
+.p-ok{background:#DCEDDE;color:#1B5E20}
+.p-warn{background:#FBEBCB;color:#8A5A00}
+.p-bad{background:#F6DAD8;color:var(--red)}
+.p-neutral{background:var(--stone-2);color:#4A504A}
+.p-blue{background:#DCE7F2;color:#2A5480}
+
+/* battery meter */
+.batt{display:inline-flex;align-items:center;gap:6px}
+.batt-b{width:38px;height:13px;border:1.5px solid #9AA39A;border-radius:2px;position:relative;padding:1.5px}
+.batt-b::after{content:"";position:absolute;right:-4px;top:3px;width:2.5px;height:5px;background:#9AA39A;border-radius:0 1px 1px 0}
+.batt-f{height:100%;border-radius:1px;transition:width .5s}
+
+/* buttons */
+.btn{
+  font:inherit;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid var(--stone);background:#fff;color:#4A504A;padding:6px 11px;border-radius:2px;cursor:pointer;
+  transition:background .14s,border-color .14s,color .14s;
+}
+.btn:hover{background:var(--stone-2);border-color:#C7C0AE}
+.btn.danger{border-color:#E3B7B3;color:var(--red)}
+.btn.danger:hover{background:#FBEDEC}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.on{background:var(--green);border-color:var(--green);color:#fff;font-weight:600}
+
+/* rack elevation — signature */
+.rack-wrap{background:var(--ink);border-radius:3px;padding:15px 16px}
+.rack-wrap h3{color:#8F978F}
+.rack-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:11px;font-family:var(--mono);font-size:10px;color:#8F978F}
+.rack-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.ru{cursor:pointer}
+.ru rect{transition:opacity .15s}
+.ru:hover rect{opacity:.82}
+
+/* inventory table */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;text-align:left;
+  background:var(--ink);color:#fff;padding:9px 11px;font-weight:600;
+}
+.tbl td{padding:10px 11px;border-bottom:1px solid var(--stone-2);vertical-align:middle}
+.tbl tr:nth-child(even) td{background:#FBF9F4}
+.tbl .mono{font-family:var(--mono);font-size:12px}
+
+/* QR */
+.qr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:13px}
+.qr-card{background:#fff;border:1px solid var(--stone-2);border-radius:3px;padding:12px;text-align:center}
+.qr-box{width:104px;height:104px;margin:0 auto 9px;display:flex;align-items:center;justify-content:center;background:#fff}
+.qr-box canvas,.qr-box img{width:104px!important;height:104px!important;display:block}
+.qr-ph{width:104px;height:104px;background:
+  repeating-conic-gradient(var(--ink) 0 25%, #fff 0 50%) 0 0/13px 13px;border:3px solid var(--ink)}
+.qr-nm{font-size:12px;font-weight:500;line-height:1.3}
+.qr-sub{font-family:var(--mono);font-size:9.5px;color:#7A817A;margin-top:3px}
+
+/* lighting presets */
+.presets{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:11px}
+.preset{
+  background:#fff;border:1.5px solid var(--stone);border-radius:3px;padding:13px;cursor:pointer;text-align:left;font:inherit;color:inherit;
+  transition:border-color .15s,box-shadow .15s;
+}
+.preset:hover{border-color:var(--green-lt)}
+.preset[aria-pressed="true"]{border-color:var(--green);box-shadow:0 0 0 3px rgba(27,94,32,.12);background:#F4F9F4}
+.preset-n{font-weight:600;font-size:13.5px;margin-bottom:3px}
+.preset-d{font-size:11.5px;color:#6E756E;line-height:1.35}
+.preset-live{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--green);text-transform:uppercase;margin-top:7px;display:none}
+.preset[aria-pressed="true"] .preset-live{display:block}
+
+/* zone sliders (read-only display) */
+.zone{display:flex;align-items:center;gap:11px;padding:8px 0;font-size:13px;border-bottom:1px solid var(--stone-2)}
+.zone:last-child{border-bottom:0}
+.zone .zn{width:132px;flex:none}
+.zone .ztrack{flex:1;height:6px;background:var(--stone-2);border-radius:3px;overflow:hidden}
+.zone .zfill{height:100%;background:linear-gradient(90deg,var(--amber),var(--orange));transition:width .5s}
+.zone .zv{font-family:var(--mono);font-size:11.5px;width:42px;text-align:right;color:#4A504A}
+
+/* alerts */
+.alert{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;border-radius:3px;margin-bottom:9px;font-size:13.5px;line-height:1.45}
+.alert.warn{background:#FDF6E6;border-left:3px solid var(--amber)}
+.alert.bad{background:#FBEDEC;border-left:3px solid var(--red)}
+.alert.info{background:#EFF4F9;border-left:3px solid var(--blue)}
+.alert .atxt strong{display:block;margin-bottom:1px}
+.alert .atxt span{color:#5C635C;font-size:12.5px}
+.alert .btn{margin-left:auto;flex:none}
+
+.sparkline{width:100%;height:34px;display:block}
+.foot{background:var(--ink-2);color:#8F978F;font-size:12px;padding:20px 26px;text-align:center;line-height:1.6}
+.foot b{color:var(--parchment)}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="fh">
+  <div class="fh-in">
+    <div class="fh-top">
+      <div>
+        <p class="fh-logo">KANE<span>·</span>PC</p>
+        <p class="eyebrow" style="color:#8F978F;margin:0">Facilities Portal</p>
+        <span class="fh-demo">Demonstration — simulated data</span>
+      </div>
+      <div>
+        <h1 class="fh-room">Lamport Auditorium</h1>
+        <p>Zysman Hall · Wilf Campus · 1,012 seats</p>
+      </div>
+    </div>
+    <nav class="fh-tabs" role="tablist" id="tabs">
+      <button role="tab" data-p="overview" aria-selected="true">Overview</button>
+      <button role="tab" data-p="devices" aria-selected="false">Devices</button>
+      <button role="tab" data-p="audio" aria-selected="false">Audio &amp; RF</button>
+      <button role="tab" data-p="lighting" aria-selected="false">Lighting</button>
+      <button role="tab" data-p="inventory" aria-selected="false">Inventory &amp; Rack</button>
+      <button role="tab" data-p="service" aria-selected="false">Service</button>
+    </nav>
+  </div>
+</header>
+<div class="f-rule"></div>
+
+<div class="fw">
+
+<!-- ================= OVERVIEW ================= -->
+<section class="panel on" id="p-overview">
+  <div class="statusbar">
+    <span class="st"><i class="dot ok"></i> 14 devices online</span>
+    <span class="st"><i class="dot warn"></i> 2 need attention</span>
+    <span class="st"><i class="dot off"></i> 1 powered down</span>
+    <span class="st">Next event: <strong>Convocation rehearsal, Thu 09:00</strong></span>
+    <span class="when" id="lastSeen">Updated just now</span>
+  </div>
+
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="tile">
+      <span class="eyebrow">Laser light source</span>
+      <div class="val" id="laserPct">91<small>%</small></div>
+      <div class="meta">Approx. 18,200 h remaining</div>
+      <div class="bar"><i id="laserBar" style="width:91%;background:var(--green-glow)"></i></div>
+    </div>
+    <div class="tile">
+      <span class="eyebrow">Projector runtime</span>
+      <div class="val" id="projHrs">1,847<small>h</small></div>
+      <div class="meta">+11 h this week</div>
+      <svg class="sparkline" viewBox="0 0 120 34" preserveAspectRatio="none" aria-hidden="true">
+        <polyline fill="none" stroke="#3C8541" stroke-width="2" points="0,30 15,29 30,26 45,24 60,21 75,17 90,13 105,9 120,5"/>
+      </svg>
+    </div>
+    <div class="tile">
+      <span class="eyebrow">Intake temperature</span>
+      <div class="val" id="projTemp">38<small>°C</small></div>
+      <div class="meta" id="tempMeta">Normal · limit 45 °C</div>
+      <div class="bar"><i id="tempBar" style="width:62%;background:var(--green-glow)"></i></div>
+    </div>
+    <div class="tile">
+      <span class="eyebrow">UPS battery</span>
+      <div class="val" id="upsPct">78<small>%</small></div>
+      <div class="meta">Est. 22 min runtime · battery installed 2024</div>
+      <div class="bar"><i id="upsBar" style="width:78%;background:var(--amber)"></i></div>
+    </div>
+  </div>
+
+  <div class="grid g-rack">
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <h3>Needs attention <span class="n">2 open</span></h3>
+        <div class="alert warn">
+          <i class="dot warn" style="margin-top:6px"></i>
+          <div class="atxt">
+            <strong>UPS battery at 78 percent of rated capacity</strong>
+            <span>Installed March 2024. Replacement recommended before the spring event season.</span>
+          </div>
+          <button class="btn" data-ack>Acknowledge</button>
+        </div>
+        <div class="alert warn">
+          <i class="dot warn" style="margin-top:6px"></i>
+          <div class="atxt">
+            <strong>Wireless channel 7 battery below 20 percent</strong>
+            <span>Handheld HH-04, last used at the Tuesday lecture. Charge before Thursday rehearsal.</span>
+          </div>
+          <button class="btn" data-ack>Acknowledge</button>
+        </div>
+        <div class="alert info">
+          <i class="dot" style="background:var(--blue);margin-top:6px"></i>
+          <div class="atxt">
+            <strong>Firmware available for Q-SYS Core</strong>
+            <span>Version 9.12.1. Kane PC will schedule this during the next maintenance window.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Room controls</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:9px">
+          <button class="btn" data-sim="Projector powering off">Power down projector</button>
+          <button class="btn" data-sim="Screen lowering">Lower screen</button>
+          <button class="btn" data-sim="Audio muted">Mute all audio</button>
+          <button class="btn" data-sim="Room set to Presentation">Recall “Presentation”</button>
+          <button class="btn danger" data-reboot="Q-SYS Core 110f">Reboot audio processor</button>
+        </div>
+        <p style="font-size:12.5px;color:#6E756E;margin:12px 0 0">
+          Controls act on the room immediately. Reboots ask for confirmation and are logged against your account.
+        </p>
+      </div>
+    </div>
+
+    <!-- RACK ELEVATION — signature element -->
+    <div class="rack-wrap">
+      <h3 style="font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.13em;text-transform:uppercase;margin:0 0 12px">
+        Rack A — Booth
+      </h3>
+      <svg viewBox="0 0 300 470" style="width:100%;height:auto" role="img" aria-label="Rack elevation diagram">
+        <rect x="6" y="6" width="288" height="458" fill="#101210" stroke="#3A403A" stroke-width="2" rx="3"/>
+        <g font-family="IBM Plex Mono, monospace" font-size="8" fill="#5C635C">
+          <text x="16" y="26">42U</text><text x="16" y="458">1U</text>
+        </g>
+        <g id="rackUnits"></g>
+      </svg>
+      <div class="rack-legend">
+        <span><i style="background:#3C8541"></i>Online</span>
+        <span><i style="background:#F0A202"></i>Attention</span>
+        <span><i style="background:#4A504A"></i>Powered down</span>
+        <span><i style="background:#1E211E"></i>Empty</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEVICES ================= -->
+<section class="panel" id="p-devices">
+  <div class="card">
+    <h3>Connected devices <span class="n">15 total</span></h3>
+    <div style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr><th>Device</th><th>Model</th><th>Firmware</th><th>Warranty ends</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="devRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= AUDIO & RF ================= -->
+<section class="panel" id="p-audio">
+  <div class="grid g2" style="margin-bottom:14px">
+    <div class="card">
+      <h3>Wireless microphone batteries <span class="n">12 channels</span></h3>
+      <div id="micRows"></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <h3>RF environment</h3>
+        <div class="row"><span class="nm">Active channels</span><span class="rt">12 of 12</span></div>
+        <div class="row"><span class="nm">Dropouts, last 30 days</span><span class="rt">0</span></div>
+        <div class="row"><span class="nm">Last coordination scan</span><span class="rt">14 May 2026</span></div>
+        <div class="row"><span class="nm">Antenna distribution</span><span class="rt"><span class="pill p-ok">Nominal</span></span></div>
+      </div>
+      <div class="card">
+        <h3>Loudspeaker system</h3>
+        <div class="row"><div><span class="nm">Proscenium arrays</span><div class="sub">Steerable column, left and right</div></div><span class="rt"><span class="pill p-ok">Online</span></span></div>
+        <div class="row"><div><span class="nm">Under-balcony fills</span><div class="sub">Six units</div></div><span class="rt"><span class="pill p-ok">Online</span></span></div>
+        <div class="row"><div><span class="nm">Amplifier load</span><div class="sub">Peak 41 percent, last 7 days</div></div><span class="rt">41%</span></div>
+        <div class="row"><div><span class="nm">Assistive listening</span><div class="sub">35 receivers · 9 neck loops</div></div><span class="rt"><span class="pill p-ok">Transmitting</span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LIGHTING ================= -->
+<section class="panel" id="p-lighting">
+  <div class="card" style="margin-bottom:14px">
+    <h3>Lighting presets <span class="n">Recall applies to the room immediately</span></h3>
+    <div class="presets" id="presetGrid"></div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Zone levels</h3>
+      <div id="zoneRows"></div>
+    </div>
+    <div class="card">
+      <h3>Lighting system</h3>
+      <div class="row"><div><span class="nm">Control processor</span><div class="sub">ETC Unison Paradigm</div></div><span class="rt"><span class="pill p-ok">Online</span></span></div>
+      <div class="row"><div><span class="nm">DMX universes</span><div class="sub">2 active</div></div><span class="rt">512 / 1024</span></div>
+      <div class="row"><div><span class="nm">Historic pendant fixtures</span><div class="sub">8 chandeliers, LED retrofit</div></div><span class="rt"><span class="pill p-ok">All reporting</span></span></div>
+      <div class="row"><div><span class="nm">Emergency transfer</span><div class="sub">UL924 · last tested 2 Jun 2026</div></div><span class="rt"><span class="pill p-ok">Pass</span></span></div>
+      <div class="row"><div><span class="nm">Front-of-house fixtures</span><div class="sub">8 LED ellipsoidals</div></div><span class="rt"><span class="pill p-warn">1 lamp fault</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INVENTORY & RACK ================= -->
+<section class="panel" id="p-inventory">
+  <div class="card" style="margin-bottom:14px">
+    <h3>Equipment inventory <span class="n">Serial numbers and locations</span></h3>
+    <div style="margin-bottom:11px">
+      <input id="invSearch" placeholder="Search by device, model or serial" style="width:100%;max-width:340px;font:inherit;font-size:13px;padding:8px 11px;border:1px solid var(--stone);border-radius:3px">
+    </div>
+    <div style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr><th>Asset</th><th>Model</th><th>Serial</th><th>Location</th><th>Installed</th><th>Warranty</th></tr></thead>
+        <tbody id="invRows"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Manuals and documentation <span class="n">Scan to open on a phone</span></h3>
+    <p style="font-size:13px;color:#5C635C;margin:0 0 14px">
+      Every rack device carries a printed label with these codes. Scanning one opens the manual,
+      the wiring detail for that device, and the shortcut to raise a ticket against it.
+    </p>
+    <div class="qr-grid" id="qrGrid"></div>
+  </div>
+</section>
+
+<!-- ================= SERVICE ================= -->
+<section class="panel" id="p-service">
+  <div class="grid g2" style="margin-bottom:14px">
+    <div class="card">
+      <h3>Maintenance schedule</h3>
+      <div id="maintRows"></div>
+    </div>
+    <div class="card">
+      <h3>Warranty and coverage</h3>
+      <div id="warrRows"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Support history <span class="n">Last 12 months</span></h3>
+    <div style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr><th>Ticket</th><th>Opened</th><th>Summary</th><th>Resolved in</th><th>Status</th></tr></thead>
+        <tbody id="ticketRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer class="foot">
+  <b>Kane PC</b> · 200 Mamaroneck Avenue LL4, White Plains, NY 10601 · 914-607-3313 · kanepc.com<br>
+  Demonstration portal with simulated data. Built to show what continuous monitoring of Lamport Auditorium would look like.
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+"use strict";
+
+/* ---------------- data ---------------- */
+const DEVICES = [
+  {n:'Projector', m:'Epson Pro L30000UNL', fw:'2.14', w:'12 Mar 2031', s:'ok',  reboot:true},
+  {n:'Audio processor', m:'Q-SYS Core 110f', fw:'9.11.0', w:'12 Mar 2029', s:'info', reboot:true, note:'Update available'},
+  {n:'Control processor', m:'Q-SYS / Crestron CP4', fw:'2.8012', w:'12 Mar 2029', s:'ok', reboot:true},
+  {n:'Network switch', m:'Netgear M4250-26G4F', fw:'13.0.4.29', w:'Lifetime', s:'ok', reboot:true},
+  {n:'UPS', m:'APC SMT3000RM2U', fw:'UPS 09.3', w:'04 Nov 2027', s:'warn', reboot:false, note:'Battery 78%'},
+  {n:'Wireless receiver A', m:'Shure SLXD4D', fw:'1.4.9', w:'12 Mar 2029', s:'ok', reboot:true},
+  {n:'Wireless receiver B', m:'Shure SLXD4D', fw:'1.4.9', w:'12 Mar 2029', s:'ok', reboot:true},
+  {n:'Wireless receiver C', m:'Shure SLXD4D', fw:'1.4.9', w:'12 Mar 2029', s:'ok', reboot:true},
+  {n:'Antenna distribution', m:'Shure UA844+SWB', fw:'—', w:'12 Mar 2029', s:'ok', reboot:false},
+  {n:'Amplifier 1', m:'Powersoft Quattrocanali', fw:'3.2.1', w:'12 Mar 2031', s:'ok', reboot:true},
+  {n:'Amplifier 2', m:'Powersoft Quattrocanali', fw:'3.2.1', w:'12 Mar 2031', s:'ok', reboot:true},
+  {n:'Camera — house', m:'Panasonic AW-UE50', fw:'1.62', w:'12 Mar 2029', s:'ok', reboot:true},
+  {n:'Camera — stage', m:'Panasonic AW-UE50', fw:'1.62', w:'12 Mar 2029', s:'off', reboot:true, note:'Powered down'},
+  {n:'Lighting processor', m:'ETC Unison Paradigm', fw:'6.1.2', w:'20 Aug 2030', s:'ok', reboot:false},
+  {n:'Assistive listening', m:'Listen LT-800', fw:'2.0', w:'12 Mar 2028', s:'ok', reboot:false}
+];
+
+const MICS = [
+  {ch:1,  n:'HH-01 Lectern', p:96}, {ch:2,  n:'HH-02 Roving', p:88},
+  {ch:3,  n:'HH-03 Roving', p:74},  {ch:4,  n:'HH-04 Spare',  p:17},
+  {ch:5,  n:'HH-05 Stage',  p:91},  {ch:6,  n:'HH-06 Stage',  p:63},
+  {ch:7,  n:'BP-01 Lav',    p:82},  {ch:8,  n:'BP-02 Lav',    p:55},
+  {ch:9,  n:'BP-03 Headworn',p:97}, {ch:10, n:'BP-04 Headworn',p:44},
+  {ch:11, n:'BP-05 Spare',  p:100}, {ch:12, n:'BP-06 Spare',  p:100}
+];
+
+const PRESETS = [
+  {n:'Presentation', d:'House down at the screen end, lectern lit, screen lowered', on:true},
+  {n:'Full house',   d:'All zones to 100 percent for load-in and cleaning'},
+  {n:'Ceremony',     d:'Warm house wash, stage front light, chandeliers at 70'},
+  {n:'Lecture',      d:'Even house at 60, lectern special, no stage wash'},
+  {n:'Concert',      d:'House to 10, full stage wash, chandeliers off'},
+  {n:'Egress',       d:'Aisle and exit lighting only'}
+];
+
+const ZONES = [
+  {n:'House — front',    v:15}, {n:'House — mid',   v:35},
+  {n:'House — rear',     v:45}, {n:'Balcony',       v:40},
+  {n:'Chandeliers',      v:25}, {n:'Stage front',   v:85},
+  {n:'Stage wash',       v:60}, {n:'Aisle and exit',v:100}
+];
+
+const INVENTORY = DEVICES.map((d,i)=>({
+  n:d.n, m:d.m,
+  sn:'KP-LMP-' + String(1001+i),
+  loc: i<11 ? 'Rack A — Booth' : (d.n.indexOf('Camera')===0 ? 'House / Stage' : 'Rack B — Stage left'),
+  inst:'12 Mar 2026', w:d.w
+}));
+
+const MANUALS = [
+  {n:'Epson Pro L30000UNL', sub:'Projector', url:'https://epson.com/support'},
+  {n:'Q-SYS Core 110f', sub:'Audio processor', url:'https://qsys.com/resources'},
+  {n:'Shure SLXD4D', sub:'Wireless receiver', url:'https://shure.com/support'},
+  {n:'Netgear M4250', sub:'Network switch', url:'https://netgear.com/support'},
+  {n:'APC SMT3000RM2U', sub:'UPS', url:'https://apc.com/support'},
+  {n:'ETC Unison Paradigm', sub:'Lighting control', url:'https://etcconnect.com/support'}
+];
+
+const MAINT = [
+  {n:'Replace UPS battery module', due:'Due in 3 weeks', s:'warn'},
+  {n:'Wireless RF coordination scan', due:'Due 14 Nov 2026', s:'ok'},
+  {n:'Projector optical path inspection', due:'Due 12 Mar 2027', s:'ok'},
+  {n:'Loudspeaker array verification', due:'Due 12 Mar 2027', s:'ok'},
+  {n:'UL924 emergency lighting test', due:'Completed 2 Jun 2026', s:'done'},
+  {n:'Firmware review, all devices', due:'Due 1 Sep 2026', s:'ok'}
+];
+
+const TICKETS = [
+  {id:'KP-4821', d:'14 Jun 2026', s:'No audio from lectern microphone before morning lecture', t:'22 min', st:'Resolved'},
+  {id:'KP-4655', d:'02 May 2026', s:'Projector would not wake from standby', t:'1 h 10 m', st:'Resolved'},
+  {id:'KP-4390', d:'18 Mar 2026', s:'Requested additional lighting preset for choir concerts', t:'3 d', st:'Resolved'},
+  {id:'KP-4102', d:'09 Feb 2026', s:'Balcony camera offline after power event', t:'48 min', st:'Resolved'},
+  {id:'KP-3988', d:'21 Jan 2026', s:'Assistive listening receiver inventory reconciliation', t:'2 d', st:'Resolved'}
+];
+
+const RACK = [
+  {u:42,h:2,n:'Patch — audio',s:'ok'}, {u:40,h:1,n:'Patch — network',s:'ok'},
+  {u:39,h:1,n:'Netgear M4250',s:'ok'}, {u:38,h:1,n:'',s:'empty'},
+  {u:37,h:1,n:'Q-SYS Core 110f',s:'ok'}, {u:36,h:1,n:'Control processor',s:'ok'},
+  {u:35,h:1,n:'',s:'empty'},
+  {u:34,h:1,n:'Shure SLXD4D — A',s:'ok'}, {u:33,h:1,n:'Shure SLXD4D — B',s:'ok'},
+  {u:32,h:1,n:'Shure SLXD4D — C',s:'ok'}, {u:31,h:1,n:'Shure UA844+SWB',s:'ok'},
+  {u:30,h:1,n:'',s:'empty'},
+  {u:29,h:1,n:'Listen LT-800 ALS',s:'ok'},
+  {u:28,h:1,n:'',s:'empty'},
+  {u:26,h:2,n:'Powersoft Amp 1',s:'ok'}, {u:24,h:2,n:'Powersoft Amp 2',s:'ok'},
+  {u:23,h:1,n:'',s:'empty'},
+  {u:22,h:1,n:'Camera controller',s:'off'},
+  {u:21,h:1,n:'',s:'empty'},
+  {u:19,h:2,n:'Streaming encoder',s:'ok'},
+  {u:18,h:1,n:'',s:'empty'},
+  {u:16,h:2,n:'APC SMT3000RM2U',s:'warn'},
+  {u:14,h:2,n:'',s:'empty'},
+  {u:13,h:1,n:'SurgeX conditioner',s:'ok'}
+];
+
+/* ---------------- helpers ---------------- */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const pillFor = s => s==='ok' ? '<span class="pill p-ok">Online</span>'
+  : s==='warn' ? '<span class="pill p-warn">Attention</span>'
+  : s==='off'  ? '<span class="pill p-neutral">Powered down</span>'
+  : '<span class="pill p-blue">Update ready</span>';
+const battColor = p => p>50 ? 'var(--green-lt)' : p>20 ? 'var(--amber)' : 'var(--red)';
+
+/* ---------------- tabs ---------------- */
+$$('#tabs button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    $$('#tabs button').forEach(x=>x.setAttribute('aria-selected', String(x===b)));
+    $$('.panel').forEach(p=>p.classList.toggle('on', p.id === 'p'+'-'+b.dataset.p));
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------------- rack elevation ---------------- */
+(function rack(){
+  const g = $('#rackUnits');
+  const top=14, uH=10.4, x=34, w=234;
+  const col = {ok:'#3C8541', warn:'#F0A202', off:'#4A504A', empty:'#1E211E'};
+  let out='';
+  RACK.forEach(d=>{
+    const y = top + (42 - d.u) * uH;
+    const h = d.h * uH - 1.6;
+    out += `<g class="ru"><title>${d.n||'Empty'} — ${d.u}U</title>`;
+    out += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${col[d.s]}" rx="1.5"/>`;
+    if(d.n){
+      out += `<text x="${x+7}" y="${y+h/2+3.2}" font-family="IBM Plex Mono, monospace" font-size="7.4"
+              fill="${d.s==='empty'?'#5C635C':(d.s==='warn'?'#3A2A00':'#0C1A0D')}">${d.n}</text>`;
+    }
+    out += `</g>`;
+  });
+  for(let u=42;u>=13;u--){
+    const y = top + (42-u)*uH;
+    out += `<circle cx="22" cy="${y+uH/2}" r="1.3" fill="#3A403A"/>`;
+    out += `<circle cx="278" cy="${y+uH/2}" r="1.3" fill="#3A403A"/>`;
+  }
+  g.innerHTML = out;
+})();
+
+/* ---------------- devices ---------------- */
+$('#devRows').innerHTML = DEVICES.map((d,i)=>`
+  <tr>
+    <td><strong>${d.n}</strong>${d.note?`<div style="font-size:11.5px;color:#6E756E">${d.note}</div>`:''}</td>
+    <td class="mono">${d.m}</td>
+    <td class="mono">${d.fw}</td>
+    <td class="mono">${d.w}</td>
+    <td>${pillFor(d.s)}</td>
+    <td>${d.reboot?`<button class="btn danger" data-reboot="${d.n}">Reboot</button>`:'<span style="color:#9AA39A;font-size:12px">—</span>'}</td>
+  </tr>`).join('');
+
+/* ---------------- mics ---------------- */
+function renderMics(){
+  $('#micRows').innerHTML = MICS.map(m=>`
+    <div class="row">
+      <div><span class="nm">${m.n}</span><div class="sub">Channel ${m.ch}</div></div>
+      <span class="rt">
+        <span class="batt">
+          <span class="batt-b"><span class="batt-f" style="width:${m.p}%;background:${battColor(m.p)}"></span></span>
+          <span style="min-width:34px;display:inline-block">${m.p}%</span>
+        </span>
+      </span>
+    </div>`).join('');
+}
+renderMics();
+
+/* ---------------- lighting ---------------- */
+$('#presetGrid').innerHTML = PRESETS.map((p,i)=>`
+  <button class="preset" data-preset="${i}" aria-pressed="${p.on?'true':'false'}">
+    <div class="preset-n">${p.n}</div>
+    <div class="preset-d">${p.d}</div>
+    <div class="preset-live">● Active now</div>
+  </button>`).join('');
+
+const ZONE_SETS = [
+  [15,35,45,40,25,85,60,100],[100,100,100,100,100,100,100,100],
+  [55,60,60,55,70,80,50,100],[60,60,60,55,40,70,0,100],
+  [10,10,10,10,0,95,90,100],[0,0,0,0,0,0,0,100]
+];
+function renderZones(idx){
+  const vals = ZONE_SETS[idx] || ZONE_SETS[0];
+  $('#zoneRows').innerHTML = ZONES.map((z,i)=>`
+    <div class="zone">
+      <span class="zn">${z.n}</span>
+      <span class="ztrack"><span class="zfill" style="width:${vals[i]}%"></span></span>
+      <span class="zv">${vals[i]}%</span>
+    </div>`).join('');
+}
+renderZones(0);
+$$('#presetGrid .preset').forEach(b=>{
+  b.addEventListener('click',()=>{
+    $$('#presetGrid .preset').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    renderZones(Number(b.dataset.preset));
+    toast(`Recalled “${PRESETS[b.dataset.preset].n}”`);
+  });
+});
+
+/* ---------------- inventory ---------------- */
+function renderInv(q=''){
+  const t = q.toLowerCase();
+  $('#invRows').innerHTML = INVENTORY
+    .filter(r => !t || (r.n+r.m+r.sn).toLowerCase().includes(t))
+    .map(r=>`<tr>
+      <td><strong>${r.n}</strong></td><td class="mono">${r.m}</td>
+      <td class="mono">${r.sn}</td><td>${r.loc}</td>
+      <td class="mono">${r.inst}</td><td class="mono">${r.w}</td>
+    </tr>`).join('') || `<tr><td colspan="6" style="color:#6E756E">No assets match that search. Try a model name or a KP- serial.</td></tr>`;
+}
+renderInv();
+$('#invSearch').addEventListener('input', e => renderInv(e.target.value));
+
+/* ---------------- QR codes ---------------- */
+$('#qrGrid').innerHTML = MANUALS.map((m,i)=>`
+  <div class="qr-card">
+    <div class="qr-box" id="qr${i}"></div>
+    <div class="qr-nm">${m.n}</div>
+    <div class="qr-sub">${m.sub}</div>
+  </div>`).join('');
+MANUALS.forEach((m,i)=>{
+  const box = document.getElementById('qr'+i);
+  try{
+    if(typeof QRCode === 'function'){
+      new QRCode(box,{text:m.url,width:104,height:104,colorDark:'#181B18',colorLight:'#ffffff'});
+    } else { box.innerHTML = '<div class="qr-ph"></div>'; }
+  }catch(e){ box.innerHTML = '<div class="qr-ph"></div>'; }
+});
+
+/* ---------------- service ---------------- */
+$('#maintRows').innerHTML = MAINT.map(m=>`
+  <div class="row">
+    <div><span class="nm">${m.n}</span><div class="sub">${m.due}</div></div>
+    <span class="rt">${m.s==='warn'?'<span class="pill p-warn">Due soon</span>'
+      : m.s==='done'?'<span class="pill p-ok">Complete</span>'
+      : '<span class="pill p-neutral">Scheduled</span>'}</span>
+  </div>`).join('');
+
+const WARR = [
+  {n:'Projector and lens', d:'12 Mar 2031', y:5},
+  {n:'Audio processing and control', d:'12 Mar 2029', y:3},
+  {n:'Wireless microphone system', d:'12 Mar 2029', y:3},
+  {n:'Amplifiers', d:'12 Mar 2031', y:5},
+  {n:'UPS', d:'04 Nov 2027', y:2},
+  {n:'Kane PC labour warranty', d:'12 Mar 2028', y:2}
+];
+$('#warrRows').innerHTML = WARR.map(w=>`
+  <div class="row">
+    <div><span class="nm">${w.n}</span><div class="sub">${w.y}-year coverage</div></div>
+    <span class="rt">${w.d}</span>
+  </div>`).join('');
+
+$('#ticketRows').innerHTML = TICKETS.map(t=>`
+  <tr>
+    <td class="mono"><strong>${t.id}</strong></td><td class="mono">${t.d}</td>
+    <td>${t.s}</td><td class="mono">${t.t}</td>
+    <td><span class="pill p-ok">${t.st}</span></td>
+  </tr>`).join('');
+
+/* ---------------- interactions ---------------- */
+function toast(msg){
+  let el = $('#toast');
+  if(!el){
+    el = document.createElement('div'); el.id='toast';
+    el.style.cssText = 'position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#181B18;color:#F7F4EC;'+
+      'font-family:var(--mono);font-size:12px;letter-spacing:.05em;padding:11px 18px;border-radius:3px;z-index:99;'+
+      'box-shadow:0 6px 22px rgba(0,0,0,.3);opacity:0;transition:opacity .2s';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  requestAnimationFrame(()=>{ el.style.opacity='1'; });
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>{ el.style.opacity='0'; }, 2600);
+}
+
+document.addEventListener('click', e=>{
+  const ack = e.target.closest('[data-ack]');
+  if(ack){ const a = ack.closest('.alert'); a.style.opacity='.45'; ack.disabled=true; ack.textContent='Acknowledged'; return; }
+
+  const sim = e.target.closest('[data-sim]');
+  if(sim){ toast(sim.dataset.sim); return; }
+
+  const rb = e.target.closest('[data-reboot]');
+  if(rb){
+    const name = rb.dataset.reboot;
+    if(!confirm(`Reboot ${name}?\n\nThe room will be unavailable for about 60 seconds. This action is logged against your account.`)) return;
+    const label = rb.textContent; rb.disabled = true; rb.textContent = 'Rebooting…';
+    toast(`${name} rebooting`);
+    setTimeout(()=>{ rb.disabled=false; rb.textContent=label; toast(`${name} back online`); }, 3200);
+  }
+});
+
+/* ---------------- gentle live simulation ---------------- */
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduce){
+  let t = 38;
+  setInterval(()=>{
+    t = Math.max(35, Math.min(43, t + (Math.random()-.5)*1.4));
+    const el = $('#projTemp'); if(!el) return;
+    el.childNodes[0].nodeValue = t.toFixed(0);
+    const pct = (t-25)/20*100;
+    $('#tempBar').style.width = pct.toFixed(0)+'%';
+    $('#tempBar').style.background = t>41 ? 'var(--amber)' : 'var(--green-glow)';
+    $('#tempMeta').textContent = t>41 ? 'Elevated · limit 45 °C' : 'Normal · limit 45 °C';
+    $('#lastSeen').textContent = 'Updated just now';
+  }, 4000);
+
+  setInterval(()=>{
+    let changed = false;
+    MICS.forEach(m=>{ if(m.p>0 && Math.random()<.3){ m.p = Math.max(0, m.p-1); changed = true; } });
+    if(changed) renderMics();
+  }, 9000);
+}
+</script>
+</body>
+</html>
