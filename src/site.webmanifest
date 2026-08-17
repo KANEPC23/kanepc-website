@@ -1,0 +1,15 @@
+{
+  "name": "Kane PC",
+  "short_name": "Kane PC",
+  "description": "Managed IT, cybersecurity, smart office systems, Control4 automation, and custom software for businesses across Westchester, NYC Metro, and the tri-state area.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#121710",
+  "theme_color": "#121710",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

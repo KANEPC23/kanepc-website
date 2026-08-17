@@ -1,0 +1,17 @@
+# Kane PC v7 — Netlify build configuration
+# The site is a static build: scripts/build.mjs copies src/ -> dist/, injects the
+# public Turnstile site key, and generates dist/_headers (CSP + security headers).
+# The contact form is a serverless function; it routes itself to /api/contact via
+# `export const config = { path: '/api/contact' }` in netlify/functions/contact.mjs.
+
+[build]
+  command   = "node scripts/build.mjs src dist"
+  publish   = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  # Functions v2 + global fetch need a modern runtime.
+  NODE_VERSION = "20"
+
+[functions]
+  node_bundler = "esbuild"
