@@ -1,0 +1,9 @@
+# Build output — generated on every deploy by scripts/build.mjs. Never commit.
+dist/
+
+# Tooling
+node_modules/
+.netlify/
+npm-debug.log*
+.DS_Store
+Thumbs.db
