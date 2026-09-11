@@ -15,3 +15,26 @@
 
 [functions]
   node_bundler = "esbuild"
+
+# onboarding.kanepc.com — a short, typeable host for setting up a new PC.
+# A machine fresh out of the box has no mail configured and is not domain-joined
+# yet, so "open the browser and type onboarding.kanepc.com" is the only
+# instruction that actually works on it. Rewrites (200) rather than redirects, so
+# the customer stays on the short host.
+#
+# ORDER MATTERS — first match wins. The /api rule must come first or the catch-all
+# would swallow the form's own POST to /api/onboard and the page would never work.
+# Requires: the domain added under Netlify ▸ Domain management, a grey-cloud
+# CNAME to kanepc.netlify.app in Cloudflare, and the host added to both
+# ALLOWED_ORIGINS and the Turnstile widget's hostname list.
+
+[[redirects]]
+  from = "https://onboarding.kanepc.com/api/*"
+  to = "/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "https://onboarding.kanepc.com/*"
+  to = "/onboard.html"
+  status = 200
+  force = true
