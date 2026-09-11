@@ -16,23 +16,22 @@
  *   node scripts/probe-ninja-installer.mjs --org 42
  *   node scripts/probe-ninja-installer.mjs --org 42 --location 7
  *
- * Env:
- *   NINJA_CLIENT_ID, NINJA_CLIENT_SECRET
+ * Credentials: taken from NINJA_CLIENT_ID / NINJA_CLIENT_SECRET if set,
+ * otherwise prompted for, with the secret masked as you type.
  * Optional:
  *   NINJA_BASE  defaults to https://us2.ninjarmm.com
  */
+
+import { requireEnv, credentialNotice } from '../lib/prompt-secret.mjs';
 
 const args = process.argv.slice(2);
 const arg = (n) => { const i = args.indexOf(`--${n}`); return i !== -1 ? args[i + 1] : undefined; };
 
 const BASE = process.env.NINJA_BASE || 'https://us2.ninjarmm.com';
-const ID = process.env.NINJA_CLIENT_ID;
-const SECRET = process.env.NINJA_CLIENT_SECRET;
 
-if (!ID || !SECRET) {
-  console.error('✗ NINJA_CLIENT_ID and NINJA_CLIENT_SECRET must be set.');
-  process.exit(1);
-}
+credentialNotice(`NinjaOne API credentials for ${BASE}`);
+const ID = await requireEnv('NINJA_CLIENT_ID', { secret: false, label: 'Client ID' });
+const SECRET = await requireEnv('NINJA_CLIENT_SECRET', { secret: true, label: 'Client secret' });
 
 async function token() {
   const res = await fetch(`${BASE}/ws/oauth/token`, {

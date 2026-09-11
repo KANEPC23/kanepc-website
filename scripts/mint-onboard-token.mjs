@@ -32,6 +32,7 @@
  */
 
 import { generateCode, formatCode, hashCode, normalizeCode } from '../lib/onboard-code.mjs';
+import { requireEnv, credentialNotice } from '../lib/prompt-secret.mjs';
 
 const args = process.argv.slice(2);
 const arg = (name, fallback = undefined) => {
@@ -39,15 +40,10 @@ const arg = (name, fallback = undefined) => {
   return i !== -1 && args[i + 1] ? args[i + 1] : fallback;
 };
 
-const SB_URL = process.env.SUPABASE_URL;
-const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const BASE = process.env.ONBOARD_BASE_URL || 'https://onboarding.kanepc.com';
 
-if (!SB_URL || !SB_KEY) {
-  console.error('✗ SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set.');
-  process.exit(1);
-}
-
+// Validate arguments before asking for credentials — no point prompting for a
+// service key only to fail on a missing --org a second later.
 const orgId = Number(arg('org'));
 const label = arg('label');
 if (!orgId || !label) {
@@ -62,6 +58,10 @@ const installerType = arg('type', 'WINDOWS_MSI');
 const prefix = normalizeCode(arg('prefix', ''));
 const length = Number(arg('length', '8'));
 const createdBy = process.env.USER || process.env.USERNAME || 'unknown';
+
+credentialNotice('Supabase credentials for project KANEPC-WEBSITE');
+const SB_URL = await requireEnv('SUPABASE_URL', { secret: false, label: 'Supabase URL' });
+const SB_KEY = await requireEnv('SUPABASE_SERVICE_ROLE_KEY', { secret: true, label: 'Service role key' });
 
 const code = generateCode({ prefix, length });
 const expiresAt = new Date(Date.now() + days * 86400000).toISOString();

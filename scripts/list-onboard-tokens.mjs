@@ -20,17 +20,15 @@
  *   SUPABASE_SERVICE_ROLE_KEY
  */
 
+import { requireEnv, credentialNotice } from '../lib/prompt-secret.mjs';
+
 const args = process.argv.slice(2);
 const has = (n) => args.includes(`--${n}`);
 const arg = (n) => { const i = args.indexOf(`--${n}`); return i !== -1 ? args[i + 1] : undefined; };
 
-const SB_URL = process.env.SUPABASE_URL;
-const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-if (!SB_URL || !SB_KEY) {
-  console.error('✗ SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set.');
-  process.exit(1);
-}
+credentialNotice('Supabase credentials for project KANEPC-WEBSITE');
+const SB_URL = await requireEnv('SUPABASE_URL', { secret: false, label: 'Supabase URL' });
+const SB_KEY = await requireEnv('SUPABASE_SERVICE_ROLE_KEY', { secret: true, label: 'Service role key' });
 
 const sb = async (path) => {
   const res = await fetch(`${SB_URL}/rest/v1/${path}`, {
