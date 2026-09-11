@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /onboard
 
 Sitemap: https://kanepc.com/sitemap.xml

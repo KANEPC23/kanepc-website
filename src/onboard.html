@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Set up your new PC · Kane PC</title>
+<meta name="description" content="Kane PC managed device setup.">
+<!-- Not marketing content, and indexing it invites misuse of the Kane PC brand
+     as a download lure. Also excluded in robots.txt and absent from sitemap.xml. -->
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=Fraunces:opsz,wght,WONK@9..144,400..600,0..1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#121710; --bg-2:#0D110C; --panel:#1B2118; --panel-2:#232B1F;
+  --line:rgba(178,186,166,.16); --line-2:rgba(178,186,166,.30);
+  --text:#EAECE2; --muted:#98A288;
+  --green:#9DC17A; --green-dim:#6E8C55;
+  --orange:#E07A3C; --orange-deep:#C4632A;
+  --cream:#FEFBF6;
+  --pad:clamp(1.25rem,5vw,4.5rem);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:'Archivo',system-ui,-apple-system,sans-serif;
+  font-size:clamp(1rem,.97rem + .18vw,1.06rem);line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{margin:0;font-family:'Archivo',system-ui,sans-serif;color:var(--cream);line-height:1.05;letter-spacing:-.03em}
+h1{font-size:clamp(2rem,1.2rem + 3.4vw,3.2rem);font-weight:700;font-variation-settings:'wdth' 92}
+h2{font-size:1.35rem;font-weight:700}
+h3{font-size:1rem;font-weight:600;letter-spacing:-.015em}
+p{margin:0 0 1rem}
+a{color:var(--green)}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+
+.wrap{max-width:760px;margin:0 auto;padding-inline:var(--pad)}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 1.2rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.eyebrow::before{content:"";width:1.8rem;height:2px;background:var(--orange);flex:none}
+
+header{border-bottom:1px solid var(--line);padding-block:1.4rem;background:var(--bg-2)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.word{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:1.5rem;color:var(--cream);line-height:1;letter-spacing:-.01em}
+.tag{display:block;font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-top:.35rem}
+header .tel{font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--green);text-decoration:none}
+
+main{padding-block:clamp(2.5rem,6vw,4.5rem)}
+.lede{color:var(--muted);max-width:52ch;margin-bottom:2.5rem}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:clamp(1.25rem,3vw,2rem);margin-bottom:1.5rem}
+.card.quiet{background:var(--panel-2)}
+
+.step{display:flex;align-items:baseline;gap:.7rem;margin-bottom:1.4rem}
+.step .n{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--orange);letter-spacing:.15em;flex:none}
+
+label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:.35rem;letter-spacing:.01em}
+.row{margin-bottom:1rem}
+.grid2{display:grid;gap:1rem;grid-template-columns:1fr 1fr}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}}
+input{
+  width:100%;padding:.7rem .85rem;border-radius:9px;
+  background:var(--bg-2);border:1px solid var(--line-2);color:var(--text);
+  font-family:inherit;font-size:.95rem;
+}
+input:focus{outline:2px solid var(--green-dim);outline-offset:1px;border-color:transparent}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+/* The code gets typed on a brand-new PC, often read aloud off a work order —
+   so it wants to be big, monospaced and hard to mistype. */
+.code-input{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-size:1.4rem;letter-spacing:.18em;text-transform:uppercase;
+  padding:.8rem .9rem;
+}
+.code-input::placeholder{letter-spacing:.18em;opacity:.35;text-transform:none}
+
+.btn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:var(--orange);color:#1a1207;border:0;border-radius:10px;
+  padding:.85rem 1.5rem;font-family:inherit;font-size:1rem;font-weight:600;
+  cursor:pointer;letter-spacing:-.01em;
+}
+.btn:hover:not(:disabled){background:var(--orange-deep)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+ul.plain{list-style:none;padding:0;margin:0}
+ul.plain li{padding-left:1.5rem;position:relative;margin-bottom:.55rem;font-size:.94rem}
+ul.plain li::before{content:"";position:absolute;left:0;top:.62em;width:.5rem;height:.5rem;border-radius:50%;background:var(--green-dim)}
+ul.plain li.no::before{background:var(--line-2)}
+
+.note{font-size:.85rem;color:var(--muted)}
+.msg{border-radius:9px;padding:.85rem 1rem;font-size:.92rem;margin-bottom:1rem;display:none}
+.msg.err{display:block;background:rgba(224,122,60,.12);border:1px solid var(--orange-deep);color:#F3C9AC}
+.msg.ok{display:block;background:rgba(157,193,122,.1);border:1px solid var(--green-dim);color:var(--green)}
+footer{border-top:1px solid var(--line);padding-block:2rem;color:var(--muted);font-size:.85rem}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div>
+      <span class="word">Kane PC</span>
+      <span class="tag">Managed IT</span>
+    </div>
+    <a class="tel" href="tel:+19146073313">914.607.3313</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <p class="eyebrow">New device setup</p>
+  <h1>Let&rsquo;s get this PC<br>set up.</h1>
+  <p class="lede">This takes about two minutes. Tell us which machine this is, then download
+     the Kane PC support agent. Run it once and you&rsquo;re done &mdash; we handle the rest from our end.</p>
+
+  <form id="form">
+    <div class="card">
+      <div class="step"><span class="n">01</span><h2>Your setup code</h2></div>
+      <p class="note" style="margin-top:-.6rem;margin-bottom:1.3rem">
+        Kane PC gave you a short code &mdash; it&rsquo;s on your work order, or we read it to you
+        over the phone. Letters and numbers only; dashes are optional.
+      </p>
+      <div class="row" style="max-width:20rem;margin-bottom:0">
+        <label for="f-code">Setup code</label>
+        <input id="f-code" name="code" class="code-input" type="text" required
+               autocomplete="off" autocapitalize="characters" autocorrect="off"
+               spellcheck="false" placeholder="K7P2-QX9M">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="step"><span class="n">02</span><h2>Which computer is this?</h2></div>
+      <p class="note" style="margin-top:-.6rem;margin-bottom:1.3rem">
+        So the machine shows up under the right person instead of something like
+        <span class="mono">DESKTOP-A4F3K2</span>.
+      </p>
+
+      <div class="grid2">
+        <div class="row">
+          <label for="f-name">Who will use this PC?</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required placeholder="Jane Smith">
+        </div>
+        <div class="row">
+          <label for="f-email">Their work email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required placeholder="jane@company.com">
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="row">
+          <label for="f-dept">Department or role <span style="opacity:.6">(optional)</span></label>
+          <input id="f-dept" name="department" type="text" placeholder="Accounting">
+        </div>
+        <div class="row">
+          <label for="f-asset">Asset tag <span style="opacity:.6">(optional)</span></label>
+          <input id="f-asset" name="asset_tag" type="text" placeholder="KPC-0142">
+        </div>
+      </div>
+
+      <div class="hp" aria-hidden="true">
+        <label for="f-bot">Leave this empty</label>
+        <input id="f-bot" name="bot-field" type="text" tabindex="-1" autocomplete="off">
+      </div>
+    </div>
+
+    <!-- Transparency panel. The customer is installing software that gives us
+         remote access to their machine; saying so plainly is both the decent
+         thing and useful documentation if it is ever questioned. -->
+    <div class="card quiet">
+      <div class="step"><span class="n">03</span><h2>What the agent does</h2></div>
+      <ul class="plain">
+        <li>Keeps Windows and your applications patched</li>
+        <li>Watches disk, memory and security health, and alerts us before things break</li>
+        <li>Lets a Kane PC technician connect for support &mdash; you get a prompt first</li>
+        <li class="no">Does not read your documents, email or browsing history</li>
+        <li class="no">Does not run on personal devices &mdash; only the PCs you enroll</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="step"><span class="n">04</span><h2>Download &amp; run</h2></div>
+
+      <div class="msg" id="msg" role="status" aria-live="polite"></div>
+
+      <div class="cf-turnstile" data-sitekey="__TURNSTILE_SITE_KEY__" data-theme="dark" style="margin-bottom:1.2rem"></div>
+
+      <button class="btn" id="submit" type="submit">Download the agent</button>
+
+      <p class="note" style="margin-top:1.2rem;margin-bottom:0">
+        Windows will ask for admin permission when you run it. That&rsquo;s expected.
+        After it finishes there&rsquo;s nothing else to do &mdash; the PC will check in with us
+        automatically within a few minutes.
+      </p>
+    </div>
+  </form>
+
+  <div class="card" id="done" hidden>
+    <div class="step"><span class="n">&#10003;</span><h2>Download started</h2></div>
+    <p>Find <span class="mono">NinjaOne&hellip;.msi</span> in your Downloads folder and run it.
+       Approve the Windows admin prompt when it appears.</p>
+    <p class="note" style="margin-bottom:0">
+      Nothing happened? <a href="#" id="retry">Try the download again</a>, or call
+      <a href="tel:+19146073313">914.607.3313</a>.
+    </p>
+  </div>
+
+</main>
+
+<footer class="wrap">
+  Kane PC &middot; Managed IT, security &amp; low-voltage &middot;
+  <a href="tel:+19146073313">914.607.3313</a> &middot;
+  <a href="mailto:info@kanepc.com">info@kanepc.com</a>
+</footer>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+(function () {
+  var form = document.getElementById('form');
+  var codeEl = document.getElementById('f-code');
+  var msg = document.getElementById('msg');
+  var submit = document.getElementById('submit');
+  var done = document.getElementById('done');
+  var lastUrl = null;
+
+  // ?c=CODE prefills for the case where we could email or text the link. Typing
+  // the code by hand is the primary path — a new PC has no mail set up yet.
+  var prefill = new URLSearchParams(location.search).get('c');
+  if (prefill) codeEl.value = prefill;
+
+  function show(kind, text) {
+    msg.className = 'msg ' + kind;
+    msg.textContent = text;
+  }
+
+  function go(url) {
+    lastUrl = url;
+    // Top-level navigation to the short-lived NinjaOne URL. Not a fetch, so the
+    // site's connect-src 'self' policy is not involved.
+    window.location.href = url;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    msg.className = 'msg';
+    submit.disabled = true;
+    submit.textContent = 'Preparing…';
+
+    var body = new FormData(form);
+
+    fetch('/api/onboard', { method: 'POST', body: body })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok || !res.d.url) {
+          show('err', res.d.error || 'Something went wrong. Please call 914.607.3313.');
+          submit.disabled = false;
+          submit.textContent = 'Download the agent';
+          if (window.turnstile) { try { window.turnstile.reset(); } catch (_) {} }
+          return;
+        }
+        form.hidden = true;
+        done.hidden = false;
+        go(res.d.url);
+      })
+      .catch(function () {
+        show('err', 'Could not reach Kane PC. Check your connection and try again.');
+        submit.disabled = false;
+        submit.textContent = 'Download the agent';
+        if (window.turnstile) { try { window.turnstile.reset(); } catch (_) {} }
+      });
+  });
+
+  document.getElementById('retry').addEventListener('click', function (e) {
+    e.preventDefault();
+    if (lastUrl) go(lastUrl);
+  });
+})();
+</script>
+</body>
+</html>
