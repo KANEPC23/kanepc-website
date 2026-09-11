@@ -1,0 +1,67 @@
+# Kane PC — secret scanning (tier 3: detection)
+#
+# Canonical copy lives in KANEPC-SOPS at ci/gitleaks.yml. Edit it there and
+# re-run ci/Add-Gitleaks.ps1; do not edit the copy in an individual repository.
+#
+# This is the layer that does not depend on anyone's machine being configured
+# correctly. The commit guard (tier 2) only runs where it is installed and where
+# bash exists; this runs on GitHub for every push regardless of who made it or
+# what client they used.
+#
+# Runs the gitleaks binary directly rather than gitleaks-action: the action is
+# free for personal accounts but requires a paid licence for GitHub
+# organizations, so every repo would break on the day Kane PC converts to an
+# org. The binary is MIT and has no such condition.
+
+name: gitleaks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    name: scan for secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history. Scanning only the latest commit would miss a secret
+          # that was committed months ago and is still live in the repository.
+          fetch-depth: 0
+
+      - name: Install gitleaks
+        env:
+          GITLEAKS_VERSION: 8.30.1
+        run: |
+          set -euo pipefail
+          curl -sSfL -o gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          tar -xzf gitleaks.tar.gz gitleaks
+          sudo install -m 0755 gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+
+      - name: Scan git history
+        run: |
+          # `git`, not the deprecated `detect` (hidden since v8.19.0).
+          # --redact is not optional: without it a found secret is printed in
+          # full into a CI log, which is itself a disclosure.
+          gitleaks git . \
+            --redact \
+            --no-banner \
+            --report-format sarif \
+            --report-path gitleaks.sarif \
+            --exit-code 1
+
+      - name: Upload findings
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: gitleaks-findings
+          path: gitleaks.sarif
+          if-no-files-found: ignore
+          retention-days: 7
